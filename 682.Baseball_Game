@@ -1,0 +1,42 @@
+/*Baseball game point recorder, integer -> add the value, + add the last two valid state values,
+c - remove the last state, d - double the last valid state.
+*/
+
+class Solution {
+    public int calPoints(String[] ops) {
+        int score = 0;
+        LinkedList<Integer> result = new LinkedList<>();
+        for(int i = 0; i < ops.length; i++) {
+            String t = ops[i];
+            switch(t) {
+                case "C": {
+                    int x = result.removeLast();
+                    score -= x;
+                    break;
+                } case "D": {
+                    int x = result.getLast();
+                    score += x * 2;
+                    result.addLast(x*2);
+                    break;
+                } case "+": {
+                    int a = result.removeLast();
+                    int b = result.getLast();
+                    int sumVal = a+b;
+                    result.addLast(a);
+                    result.addLast(sumVal);
+                    score += sumVal;
+                    break;
+                } default: {
+                    int val = Integer.parseInt(t);
+                    score += val;
+                    result.addLast(val);
+                    break;
+                }
+            }
+        }
+        return score;
+    }
+}
+
+Time Complexity - O(n) -> length of the String
+Space Complexity - O(1) -> only one operand in memory at a time.
