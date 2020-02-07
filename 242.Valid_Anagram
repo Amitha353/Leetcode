@@ -1,0 +1,22 @@
+/*Given two strings s and t , write a function to determine if t is an anagram of s.*/
+/* https://leetcode.com/problems/valid-anagram/ */
+
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if(s.length() != t.length()) return false;
+        
+        int[] alphaindex = new int[26];
+        for(int i = 0; i < s.length(); i++) {
+            alphaindex[s.charAt(i)-'a']++;
+        }
+        
+        for(int j = 0; j < t.length(); j++) {
+            alphaindex[t.charAt(j) - 'a']--;
+            if(alphaindex[t.charAt(j)-'a'] < 0) return false;
+        }
+        return true;
+    }
+}
+
+/*Use a alphabet counter, incease the frequencies corresponding to one string and decrease the frequencies corresponding
+to another string, incase there is a mismatch, value on counter enters negative range, return false, else true.*/
