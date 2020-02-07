@@ -1,0 +1,29 @@
+/*Reverse a Singly Linked List: 1 -> 2 -> 3 -> 4 -> 5 -> NULL => 5 -> 4 -> 3 -> 2 -> 1 -> NULL*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head==null) return head;
+        
+        ListNode prev = null;
+        ListNode curr = null;
+        ListNode temp = head;
+        
+        while(temp != null) {
+            prev = curr;
+            curr = temp;
+            temp = curr.next;
+            curr.next = prev;
+        }
+        return curr;
+    }
+}
+//pev = cur | cur -> temp | temp => curr.next | cur.next => prev
+// Time Complexity - O(n).
