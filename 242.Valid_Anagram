@@ -20,3 +20,6 @@ class Solution {
 
 /*Use a alphabet counter, incease the frequencies corresponding to one string and decrease the frequencies corresponding
 to another string, incase there is a mismatch, value on counter enters negative range, return false, else true.*/
+/* Time Complexity - O(n) - access the counter table is a constant time operation.
+Space Complexity - O(1) - counter size remains constants, no mater how large n is.
+*/
