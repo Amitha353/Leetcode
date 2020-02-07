@@ -1,0 +1,21 @@
+/* Design an algorithm to find the maximum profit. */
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+
+class Solution {
+    public int maxProfit(int[] prices) {
+       // One pass - calculate the min and maxprofit as we traverse the array
+        int minValue = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        
+        for(int i = 0; i < prices.length; i++) {
+            minValue = (prices[i] < minValue) ? prices[i] : minValue;
+            maxProfit = ((prices[i] - minValue) > maxProfit) ? (prices[i] - minValue) : maxProfit;
+        }
+        return maxProfit;
+    }
+}
+
+/* One pass - maximum difference between peaks and valleys
+Time Complexity - O(n), only single pass is needed.
+Space Complexity - O(1), two variables are used.
+*/
