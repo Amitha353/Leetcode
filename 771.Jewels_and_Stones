@@ -1,0 +1,14 @@
+//https://leetcode.com/problems/jewels-and-stones/
+
+class Solution {
+    public int numJewelsInStones(String J, String S) {
+        int count = 0; // counter - to track the number of jewels in the string S.
+        for(int i = 0; i < S.length(); i++) { 
+            if(J.indexOf(S.charAt(i)) > -1)
+                count++; // When there is a jewel increment the counter
+        }
+        return count; //return the counter
+    }
+}
+
+/* Time Complexity - O(S+J) and Space Complexity - O(1)*/ 
