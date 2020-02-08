@@ -54,5 +54,7 @@ public class practise {
 	}
 }
 // Similar -> https://leetcode.com/problems/top-k-frequent-words/
+// https://github.com/Amitha353/Leetcode/blob/master/692.Top_K_Frequent_Words
+
 Time Complexity -> O(q*q[0]*N log K)
 Space Complexity -> O(q*N) #N length of words, q -> length of the quotes.
