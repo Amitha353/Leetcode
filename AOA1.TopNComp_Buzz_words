@@ -1,0 +1,58 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.PriorityQueue;
+
+public class practise {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String[] words = { "elmo", "elsa", "legos", "drone", "tablet", "warcraft" };
+		String[] quotes = { "Elmo is the hottest of the season! Elmo will be on every kid's wishlist!",
+				"The new Elmo dolls are super high quality",
+				"Expect the Elsa tablet to be very popular this year, Elsa!",
+				"Elsa and Elmo are the toys I'll be buying for my kids, Elsa is good",
+				"For parents of older kids, look into buying them a drone",
+				"Warcraft is slowly rising in popularity ahead of the holiday season" };
+		int numToys = 6;
+		int topToys = 2;
+		int numQuotes = 6;
+
+		for (int i = 0; i < quotes.length; i++) {
+			quotes[i] = quotes[i].toLowerCase();
+			quotes[i] = quotes[i].replaceAll("\\p{Punct}", "");
+		}
+
+		HashMap<String, Integer> map = new HashMap<>();
+		for (String quote : quotes) {
+			String[] qt = quote.split(" ");
+			for (String q : qt) {
+				for (String word : words) {
+					if (q.equals(word)) {
+						map.put(word, map.getOrDefault(word, 0) + 1);
+					}
+				}
+			}
+		}
+
+		PriorityQueue<String> heap = new PriorityQueue<String>(
+				(w1, w2) -> (map.get(w1) == map.get(w2)) ? w2.compareTo(w1) : map.get(w1) - map.get(w2));
+
+		for (String word : map.keySet()) {
+			heap.offer(word);
+			if (heap.size() > topToys)
+				heap.poll();
+		}
+
+		List<String> result = new ArrayList<>();
+		while (!heap.isEmpty()) {
+			result.add(heap.poll());
+		}
+		Collections.reverse(result);
+		System.out.println(result);
+	}
+}
+// Similar -> https://leetcode.com/problems/top-k-frequent-words/
+Time Complexity -> O(q*q[0]*N log K)
+Space Complexity -> O(q*N) #N length of words, q -> length of the quotes.
