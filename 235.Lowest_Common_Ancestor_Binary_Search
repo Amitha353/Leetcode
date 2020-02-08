@@ -1,0 +1,33 @@
+//Q. Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+//https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while(root != null) { // If the nodes p and q are larger than root, check the right substree, if there are smaller, check left subtree else root found or null.
+            if(p.val < root.val && q.val < root.val)
+                root = root.left;
+            else if(p.val > root.val && q.val > root.val)
+                root = root.right;
+            else
+                return root;
+        }
+        return null;
+    }
+}
+
+/* Iterative Approach
+- Traverse down the tree ieratively. It just wants to find the split point. The point from where p and q ane not a part of the same subtree or when 
+one is the parent of the other.
+
+Time Complexity - O(N), where N is the number of nodes in the Binary search tree (BST).
+Space Complexity - O(1)
+*/
