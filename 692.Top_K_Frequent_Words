@@ -1,0 +1,44 @@
+//Given a non-empty list of words, return the k most frequent elements.
+//https://leetcode.com/problems/top-k-frequent-words/
+
+// Approach - Heap
+/* Count the frequency of each word, then add it to the heap that stores the best k candidates based on custom ordering (if the frequency count of the words are same, then perform lexicographical sort). At the end, we pop off the heap up to k times and reverse the result so that the best candidates are first.
+*/
+
+// Data Structure - Priority Queue
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        /* Use a priority Queue to keep track of k top words -> compare the word counts, if similar, check the lexographical representation 
+        of the word , else compare the count/frequency */
+        // Datastructure -> HashMap -> word : Key, frequeny of word : Value
+        //Priority queue to store the values, in value, lexiographical manner
+        //List returns the k top-most value
+        HashMap<String, Integer> map = new HashMap<>();
+        
+        for(String word: words) {
+            map.put(word, map.getOrDefault(word, 0)+1);
+        }
+        // compare count frequency, if similar compare the lexicographical order of the words.
+        PriorityQueue<String> heap = new PriorityQueue<String>(
+            (w1, w2) -> map.get(w1) == map.get(w2) ? w2.compareTo(w1) : map.get(w1) - map.get(w2)
+        );
+        
+        for(String word: map.keySet()) {
+            heap.offer(word);
+            if(heap.size() > k) heap.poll();
+        }
+        
+        List<String> result = new ArrayList<>();
+        while(!heap.isEmpty()) {
+            result.add(heap.poll());
+        }
+        Collections.reverse(result);
+        return result;
+    }
+}
+
+Time Complexity - O(N log k), where N is the length of the words.
+ - Count the frequency of each word in O(N) time.
+ - Then add N words to the heap, each in O(log k) time.
+ 
+Space Complexity - O(N), the space used to store the count.
