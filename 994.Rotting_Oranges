@@ -1,0 +1,54 @@
+/*Return the minimum number of minutes that must elapse until no cell has a fresh orange.
+If this is impossible, return -1 instead.*/
+// https://leetcode.com/problems/rotting-oranges/
+// Data struture -> Queue
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        if(grid == null || grid.length == 0) return 0;
+        
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int count_fresh = 0;
+        int min_minutes = 0;
+        
+        // Put the position of all the rotten oranges into the queue and count the number of fresh oranges.
+        Queue<int[]> queue = new LinkedList<>();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j <  cols; j++) {
+                if(grid[i][j] == 2) { //rotten -> needs to spread - add cell coordinates to queue
+                    queue.offer(new int[] {i, j});
+                } else if(grid[i][j] == 1) {
+                    count_fresh++; // tracks the fresh cells 
+                }
+            }
+        }
+        
+        //if count of fresh oranges in zero return 0
+        if(count_fresh == 0) return 0;
+        int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}}; // adjacent cell space needs to be explored and transformed when 1.        
+        
+        //bfs starting from the initial rotten oranges
+        while(!queue.isEmpty() && count_fresh > 0) {
+            min_minutes++;
+            int size = queue.size();
+            for(int i = 0; i < size; i++) {
+                int[] pos = queue.poll(); // get the rotten orange co-ordinates, and remove it from the queue - since it is processed.
+                for(int[] dir: directions) {
+                    int x = pos[0] + dir[0];
+                    int y = pos[1] + dir[1];
+                    // test boundary condition for fresh oranges
+                    if(x < 0 || y < 0 || x >= rows || y >= cols || grid[x][y] == 0 || grid[x][y] == 2) continue;
+                    grid[x][y] = 2;
+                    //add recently transformed cell coordinates into the queue.
+                    queue.offer(new int[] {x, y});
+                    count_fresh--; // since fresh orange is transformed;
+                }
+            }
+        }
+        return count_fresh == 0 ? min_minutes: -1;
+    }
+}
+
+// Time Complexity - O(N), where N si the number of cells in the grid.
+// Space Complexity - O(N)
