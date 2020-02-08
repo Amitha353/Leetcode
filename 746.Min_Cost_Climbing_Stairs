@@ -1,0 +1,20 @@
+/** On a staircase, the i-th step has some non-negative cost cost[i] assigned (0 indexed). /
+//https://leetcode.com/problems/min-cost-climbing-stairs/
+
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        /* Dynamic Programming - recursion -> f[i] = cost[i] + Math.min(f1, f2) - 1 step or 2 step - perform dunamic programming - from reverse - since values f1 and f2 are already available*/
+        int f1 = 0, f2 = 0;
+        for(int i = cost.length-1; i >= 0; i--) {
+            int f0 = cost[i] + Math.min(f1, f2);
+            f2 = f1;
+            f1 = f0;
+        }
+        return Math.min(f1, f2);
+    }
+}
+
+/*
+Time Complexity - O(N), where N is the length of the cost
+Space Complexity - O(1), the space used by f1 and f2.
+*/
