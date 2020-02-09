@@ -1,0 +1,63 @@
+/*Given a 2D grid, each cell is either a zombie 1 or a human 0. Zombies can turn adjacent (up/down/left/right) human beings into zombies every hour. Find out how many hours does
+it take to infect all humans*/
+//zombie ->  files with server | humans -> servers still din't recieve the file.
+
+// Approach - Breadth First Search
+
+//https://leetcode.com/discuss/interview-question/411357/
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class practise {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[][] grid = {{0, 1, 1, 0, 1}, {0, 1, 0, 1, 0},
+				{0, 0, 0, 0, 1}, {0, 1, 0, 0, 0}};
+		int hours = zombieTransform(grid);
+		System.out.println(hours);
+	}
+	
+	private static int zombieTransform(int[][] grid) {
+		if(grid==null || grid.length == 0) return 0;
+		int rows = grid.length;
+		int cols = grid[0].length;
+		int humans = 0;
+		int min_hours = 0;
+		Queue<int[]> queue = new LinkedList<>();
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				if(grid[i][j] == 1) {
+					queue.offer(new int[] {i, j}); // add the coordinates of the zombie cell to the queue, since the valid adjacent cells need to be transformed.
+				} else {
+					humans++;
+				}
+			}
+		}
+		
+		if(humans == 0) return 0;
+		
+		int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+		
+		while(!queue.isEmpty() && humans > 0) {
+			min_hours++;
+			int size = queue.size();
+			for(int i = 0; i < size; i++) {
+				int[] pos = queue.poll(); // remove the existing zombie cell value and explore the adjacent cell for transformation.
+				for(int[] dir: directions) {
+					int x = pos[0] + dir[0];
+					int y = pos[1] + dir[1];
+					if(x < 0 || y < 0 || x >= rows || y >= cols || grid[x][y] == 1) continue;
+					
+					grid[x][y] = 1; // convert humans into zombie
+					queue.offer(new int[] {x, y}); // add transformed cells into the queue.
+					humans--;
+				}
+			}
+		}
+		return (humans == 0) ? min_hours: -1;
+	}
+}
+
+
