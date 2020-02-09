@@ -61,3 +61,5 @@ public class practise {
 }
 
 
+Time Complexity - O(N) - N is the number of cells in the grid.
+Space Complexity - O(N) 
