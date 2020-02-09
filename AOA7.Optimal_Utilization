@@ -1,0 +1,42 @@
+//Given 2 lists a and b. Each element is a pair of integers where the first integer represents the unique id and the second integer represents a value. Your task is to find an element from a and an element form b such that the sum of their values is less or equal to target and as close to target as possible. Return a list of ids of selected elements. If no pair is possible, return an empty list.
+
+//https://leetcode.com/discuss/interview-question/373202
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.TreeMap;
+
+public class optimalUtilization {
+
+	public static void main(String[] args) {
+		int[][] a = { { 1, 8 }, { 2, 15 }, { 3, 9 } };
+		int[][] b = { { 1, 8 }, { 2, 11 }, { 3, 12 } };
+		int target = 20;
+		TreeMap<Integer, ArrayList<int[][]>> map = new TreeMap<>();
+		for(int i = 0; i < a.length; i++) {
+			for(int j = 0; j < b.length; j++) {
+				int sum = a[i][1] + b[j][1];
+				if(sum <= target) {
+					int[][] indices = {{a[i][0], b[j][0]}};
+					if(map.containsKey(sum)) {
+						map.get(sum).add(indices);
+					} else {
+						ArrayList<int[][]> res = new ArrayList<>();
+						res.add(indices);
+						map.put(sum, res);
+					}
+				}
+			}
+		}
+		for(int[][] x : map.get(map.lastKey()))
+			System.out.println(x[0][0] + " " + x[0][1]);
+	}
+}
+
+/*
+ * TreeSet is based on Red and Black Trees - Time Complexity -> O(log n) Space
+ * Complexity -> O(n) - just like BST - Binary Search Trees
+ 
+ Time complexity - O(log(n+m))
+ space complexity - O(n+m)
+ */
