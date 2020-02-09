@@ -1,5 +1,7 @@
 // Return list of lists of the suggested products after each character of searchWord is typed. 
 // https://leetcode.com/problems/search-suggestions-system/
+// Normal Trie with additional list containing indices of possible suggestions. 
+// Sort the products array and add words into TrieNode's list until its size is 3.
 
 class Solution {
     class TrieNode {
