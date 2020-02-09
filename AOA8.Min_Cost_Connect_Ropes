@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
  * The process is repeated until n ropes are connected into a single rope.
  * Find the min cost required to connect all ropes.
  * */
+//https://leetcode.com/discuss/interview-question/344677
 
 public class MinCosttoConnectRopes {
 
