@@ -1,0 +1,53 @@
+import java.util.PriorityQueue;
+
+/* Minimum Cost to Connect Ropes
+ * Given n ropes of different length, we need to connect these ropes into one rope. 
+ * We can connect only 2 ropes at a time, The cost required to connect 2 ropes is equal
+ * to the sum of their length. The length of this connected rope is also equal to the sum of their lengths.
+ * The process is repeated until n ropes are connected into a single rope.
+ * Find the min cost required to connect all ropes.
+ * */
+
+public class MinCosttoConnectRopes {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[][] testcases = {{8, 4, 6, 12}, {20, 4, 8, 2}, {1, 2, 5, 10, 35, 89}, {2, 2, 3, 3}};
+		for(int i = 0; i < testcases.length; i++) {
+			int result = minCost(testcases[i]);
+			System.out.println(result);
+		}
+	}
+	
+	public static int minCost(int[] ropes) {
+		PriorityQueue<Integer> pQueue = new PriorityQueue<>(); //priority queue based on min heap
+		for(int rope: ropes) {
+			System.out.println("rope = " + rope);
+			pQueue.offer(rope);
+		}
+		System.out.println("~~");
+		int cost = 0;
+		while(pQueue.size() != 1) {
+			int temp = pQueue.poll() + pQueue.poll(); // takes lowest values and adds
+			System.out.println("temp = " + temp);
+			cost += temp;
+			pQueue.offer(temp);
+		}
+		return cost;
+	}
+}
+
+/* Solution -> PriorityQueue (MinHeap)
+ * Time Complexity -> O(NlogN)
+ * Space Complexity -> O(N)
+ * Priority Queue -> when objects are supposed to be processed based on priority.
+ * queue -> FIFO , but sometimes the elements of the queue need to be processed
+ * according to the priority.
+ * Priority Queue -> Based on priority heap - elements of the priority queue
+ * are ordered according to their natural ordering, or by a comparator provided.
+ * 
+ * Operations:
+ * boolean add(E element) -> insert.
+ * public peek() -> retrieves and not removes the head of this queue or null/empty.
+ * public poll() -> retrieved and removes the head of the queue, or returns null/empty.
+ * */
