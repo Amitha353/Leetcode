@@ -1,0 +1,51 @@
+// Return list of lists of the suggested products after each character of searchWord is typed. 
+// https://leetcode.com/problems/search-suggestions-system/
+
+class Solution {
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26]; // Array for the 26 character range
+        List<Integer> order = new ArrayList<>(); // tracks prefix, for that particular trieNode - character, if occurs in the same position add the value.
+    }
+    
+    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        List<List<String>> result = new ArrayList<>(); // return the recommended products.
+        if(products == null || products.length == 0) return result;
+        Arrays.sort(products); // sort the arrays -> maintain lexicographial ordering
+        TrieNode root = new TrieNode();
+        TrieNode curr = root;
+        
+        for(int i = 0; i < products.length; i++) addWord(products[i], root, 0, i); //traverse through all the products.
+        for(int j = 0; j < searchWord.length(); j++) { // traverse through the search word
+            char ch = searchWord.charAt(j);
+            if(curr == null || curr.children[ch-'a'] == null) { // if there is no match for the character in search word and reaturn an empty arraylist
+                result.add(new ArrayList<>());
+                curr = null;
+            }
+            else {
+                List<String> list = new ArrayList<>();
+                for(int l: curr.children[ch-'a'].order) { //order entity contains all the matches for current character
+                    list.add(products[l]);
+                }
+                result.add(list); // add to list, result
+                curr = curr.children[ch-'a']; // assign the children to curr
+            }
+        }
+        return result;
+    }
+    
+    //for each product, build a trie model. continue until end of the word, if the root.children for that character is null create a trieNode and make it root.
+    // if root order < 3, add wordinx into the order
+    public void addWord(String word, TrieNode root, int idx, int wordIdx) {
+        if(idx == word.length()) return;
+        if(root.children[word.charAt(idx) - 'a'] == null) root.children[word.charAt(idx) - 'a'] = new TrieNode();
+        root = root.children[word.charAt(idx) - 'a'];
+        if(root.order.size() < 3) root.order.add(wordIdx);
+        addWord(word, root, idx+1, wordIdx);
+    }
+}
+
+/* Time Complexity - O(w * l) // w -> number of words/products and l - average length of te words.
+Space Complexity - O(w*l)
+
+AOA4. ProductSuggestions
+*/
