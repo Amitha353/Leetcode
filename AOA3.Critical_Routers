@@ -64,6 +64,8 @@ public class practise {
 	}
 }
 
+//Similar - https://leetcode.com/problems/critical-connections-in-a-network/
+
 /* Complexity analysis of array-based implementation
 E = total number of edges = connections.size()
 V = total number of vertices = n
