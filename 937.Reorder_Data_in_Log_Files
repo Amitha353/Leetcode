@@ -1,0 +1,44 @@
+//Reorder the logs so that all of the letter-logs come before any digit-log.  The letter-logs are ordered lexicographically ignoring identifier, with the identifier used in case of ties.  The digit-logs should be put in their original order.
+
+// https://leetcode.com/problems/reorder-data-in-log-files/
+
+class Solution {
+    public String[] reorderLogFiles(String[] logs) {
+        List<String> charList = new ArrayList<>();
+        List<String> digitList = new ArrayList<>();
+        
+        String[] result = new String[logs.length];
+        boolean isDigit = false;
+        
+        for(String log: logs) {
+            isDigit = Character.isDigit(log.split(" ", 2)[1].charAt(0));
+            if(isDigit)
+                digitList.add(log);
+            else
+                charList.add(log);
+        }
+        
+        Comparator<String> com = (w1, w2) -> { 
+            String[] s1 = w1.split(" ", 2);
+            String[] s2 = w2.split(" ", 2);
+            
+            if(s1[1].compareTo(s2[1]) == 0) // if the words after the identifier are the same
+                return s1[0].compareTo(s2[0]); // compare with respect to the identifier
+            return s1[1].compareTo(s2[1]); // compare with respect to the words in the log
+        };
+        
+        charList.sort(com);
+        
+        charList.addAll(digitList);
+        int idx = 0;
+        
+        for(String log: charList) {
+            result[idx++] = log;
+        }
+        return result;
+    }
+}
+
+/* Time Complexity - O(A log A), where A is the total content of logs
+Space Complexity - O(A)
+*/
