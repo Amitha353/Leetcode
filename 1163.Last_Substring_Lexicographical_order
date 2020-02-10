@@ -1,0 +1,36 @@
+//Given a string s, return the last substring of s in lexicographical order.
+
+//https://leetcode.com/problems/last-substring-in-lexicographical-order/
+
+class Solution {
+    public String lastSubstring(String s) {
+        int i = 0, j = 1, offset = 0;
+        while(i+offset < s.length() && j+offset < s.length()) {
+            char c = s.charAt(i+offset);
+            char d = s.charAt(j+offset);
+            if(c == d) ++offset;
+            else {
+                if(c < d) i += offset+1;
+                else j += offset+1;
+                if(i == j) ++i;
+                offset = 0;
+            }
+        }
+        return s.substring(Math.min(i, j));
+    }
+}
+
+/* 2 pointer
+offset is reset to 0 whenever c != d, and the code will keep searching for larger char by forward pointer i or j, depends on at which index the char is smaller;
+Obviously, only when charAt(i) == charAt(j) and their following chars are also equal, offset could be > 0;
+The chars in (i, ..., i + offset] and (j, ..., j + offset] are equal to each other, respectively; The key point is: they all have already been compared to charAt(i) or charAt(j)
+directly, or indirectly, and none greater than charAt(i) (or charAt(j)); That is why we can forward i/j by offset + 1, and attempt to search for next char that is at least 
+to charAt(i) (or charAt(j)).
+
+
+Analysis:
+
+Whenever comparing offset times, either i or j forward offset steps, so faster pointer at most visit each character twice.
+
+Time: O(n), space: O(1), n = s.length().
+*/
