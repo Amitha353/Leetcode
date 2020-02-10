@@ -1,0 +1,32 @@
+// Given a List of words, return the words that can be typed using letters of alphabet on only one row's of American keyboard like the image below
+
+// https://leetcode.com/problems/keyboard-row/
+
+class Solution {
+    // Maps each character to the row in the keyboard in which it occurs.
+    private int[] map = {2,3,3,2,1,2,2,2,1,2,2,2,3,3,1,1,1,1,2,1,1,3,1,3,1,3};
+    
+    public String[] findWords(String[] words) {
+        String[] wordInRows = new String[words.length]; // store filtered words
+        int index = 0; // where to insert the filtered words
+        for(String s: words) { // for each word
+            if(checkWord(s.toLowerCase())) { // convert to lowercase
+                wordInRows[index++] = s; // if occurs in the same row, add it
+            }
+        }
+        return Arrays.copyOfRange(wordInRows, 0, index); // simply return a copy of the array from 0 to index
+    }
+    
+    private boolean checkWord(String word) { // check if all chars in the word belong in the same row
+        int row = map[word.charAt(0) - 'a'];
+        for(char c: word.toCharArray()) {
+            if(map[c - 'a'] != row)
+                return false;
+        }
+        return true; // all chars in the same row, return
+    }
+}
+ /*
+Time complexity - O(n) // number of words
+Space complexity - O(1) - constant lookup
+*/
