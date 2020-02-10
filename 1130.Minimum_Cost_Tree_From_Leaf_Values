@@ -1,0 +1,34 @@
+//MathWorks
+
+//Among all possible binary trees considered, return the smallest possible sum of the values of each non-leaf node. 
+//It is guaranteed this sum fits into a 32-bit integer.
+
+//https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/
+
+class Solution {
+    public int mctFromLeafValues(int[] arr) {
+        Stack<Integer> stack = new Stack<>(); // Stack data structure
+        int result = 0;
+        
+        stack.push(Integer.MAX_VALUE); // push max value onto stack
+        
+        for(int a: arr) { // traverse through the array
+            while(a >= stack.peek()) { // if the value is greater than top of the stack
+                int current = stack.pop();
+                result += current * Math.min(a, stack.peek()); // multiply the top of the stack with adjacent minimum value.  6 | 2 | 4, when 4 is encountered 2 is top of stack
+                // adjacent sites are 6, and 4 both are greater than 2, but 4 is lower than 6, hence result  += 2 * 4
+            }
+            stack.push(a);
+        }
+        
+        while(stack.size() > 2) {
+            result += stack.pop() * stack.peek();
+        }
+        return result;
+    }
+}
+
+/* One Pass - Stack
+Time Complexity - O(N) 
+Space Complexity - O(N)
+*/
