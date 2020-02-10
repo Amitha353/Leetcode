@@ -1,0 +1,46 @@
+// Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+
+//https://leetcode.com/problems/reverse-nodes-in-k-group/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+       //check if head is not empty and count the nodes in the list, if k is greater the number of elements in the list, return
+       //traverse the list k elements at a time and reverse -> next ->  current.next, current.next-> node, node ->  cur, cur ->  next
+        if(head == null || head.next == null) return head;
+        ListNode curr = head;
+        int count = 0;
+        
+        while(curr != null) {
+            count++;
+            curr = curr.next;
+        }
+        if(k > count) return head;
+        curr = head;
+        ListNode node = null;
+        for(int i = 0; i < k; i++) {
+            ListNode nxt = curr.next;
+            curr.next = node;
+            node = curr;
+            curr = nxt;
+        }
+        head.next = reverseKGroup(curr, k);
+        return node;
+    }
+}
+
+/* node <- cur.prev, next <- cur.next
+Nxt = c.next 
+c.next = node
+node = c
+c = Nxt
+*/
+
+// Time O(N) & Space O(N/K)
