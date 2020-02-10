@@ -1,0 +1,35 @@
+// Task is to find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as nums.
+
+// https://leetcode.com/problems/degree-of-an-array/
+
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        if(nums.length == 0 || nums == null) return 0;
+        
+        Map<Integer, int[]> map = new HashMap<>();
+        for(int i = 0; i <  nums.length; i++) {
+            if(!map.containsKey(nums[i])) {
+                map.put(nums[i], new int[]{1, i, i}); // first element -> degree, sec cond -> first index, third -> last index
+            } else {
+                int[] temp = map.get(nums[i]); // reference - makes changes
+                temp[0]++; // increase the fequency
+                temp[2] = i; // index location
+            }
+        }
+        int degree = Integer.MIN_VALUE, result = Integer.MAX_VALUE;
+        for(int[] value : map.values()) {
+            if(value[0] > degree) { // check the value frequency
+                degree = value[0];
+                result = value[2] - value[1] + 1; // extract the content between the max and min index
+            } else if(value[0] ==  degree) {
+                // if the numbers of similar frequency appear later, choose the latter.
+                result = Math.min(value[2] - value[1] + 1, result);                
+            }
+        }
+        return result;
+    }
+}
+
+/* Time Complexity - O(n)
+Space Complexity - O(1)
+*/
