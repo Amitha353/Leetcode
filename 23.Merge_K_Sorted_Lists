@@ -1,0 +1,56 @@
+// Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists.length == 0 || lists == null) return null;
+        int interval = 1;
+        while(interval <= lists.length) {
+            for(int i = 0; i+interval < lists.length; i+= interval * 2) {
+                lists[i] = mergeTwoLists(lists[i], lists[i+interval]);
+            }
+            interval *= 2;
+        }
+        return lists[0];
+    }
+    
+    private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode check = new ListNode(0);
+        ListNode result = check;
+        while(l1 != null && l2 != null) {
+            if(l1.val < l2.val) {
+                check.next = l1;
+                check = check.next;
+                l1 = l1.next;
+            } else {
+                check.next = l2;
+                check = check.next;
+                l2 = l2.next;
+            }
+        }
+        if(l1 == null) check.next = l2;
+        if(l2 == null) check.next = l1;
+        return result.next;
+    }
+}
+
+/* Merge with Divide and Conquer
+- Pair up k lists and merge each pair
+- After the first pairing, k lists are merged into k/2 lists average 2N/k length, then k/4, k/8, etc.
+- Repeat this procedure until we get the final sorted linked list.
+- Thus we traverse almost N nodes per pairing and merging, and repeat this procedure about log k times.
+*/
+
+/*
+Time Complexity - O(Nlogk) - where k is the number of linked lists.
+    - merge two sorted linked lists in O(n) time where n is the total number of nodes in two lists.
+    - sum up the merge process and we ger O(Nlogk)
+Space Complexity - O(1) - we can merge two sorted linked lists in O(1) space.
+*/
