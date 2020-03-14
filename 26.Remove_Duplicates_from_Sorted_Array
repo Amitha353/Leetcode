@@ -1,0 +1,24 @@
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int i = 0;
+        for(int j = 1; j < nums.length; j++) {
+            if(nums[i] != nums[j]) {
+                i++;
+                nums[i] = nums[j];
+            }
+        }
+        return i + 1;
+    }
+}
+
+/* 2 Pointers
+- Array is always sorted, two pointers i and j, where i is the slow-runner while j is the fast-runner.
+- As long as nums[i] = nums[j], increment j to skip the duplicates.
+- When nums[i] != nums[j], the duplicate run has to end and copy value to nums[i+1].
+- i is incremented and repeat the process.
+*/
+
+/* Complexity Analysis
+1. Time - O(n) - n is the length of the array.
+2. Space - O(1) 
+*/
