@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean result = true;
+    public boolean isBalanced(TreeNode root) {
+        maxDepth(root);
+        return result;
+    }
+    public int maxDepth(TreeNode root) {
+        if(root == null || result == false)
+            return 0;
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        if(Math.abs(left - right) > 1)
+            result = false;
+        return 1 + Math.max(left, right);
+    }
+}
+
+/* Balanced Binary Search Tree
+Calculate the height of the tree in recursive manner
+Time complexity - O(n)
+*/
