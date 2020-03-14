@@ -1,0 +1,50 @@
+class MyStack {
+
+    /** Initialize your data structure here. */
+    public MyStack() {
+    }
+    
+    LinkedList<Integer> q1 = new LinkedList<>();
+    
+    /** Push element x onto stack. */
+    public void push(int x) {
+        q1.add(x);
+        for(int i = 1; i < q1.size(); i++) {
+            q1.add(q1.remove());
+        }
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        return q1.pop();
+    }
+    
+    /** Get the top element. */
+    public int top() {
+        return q1.peek();
+    }
+    
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+/* One queue, push - O(n), pop - O(1)
+- Push: When an element is pushed into the queue it is stored at back of the queue's properties.
+- In order to implement a stack, the last inserted element must be in front of the queue
+- We can invert the order of the queue elements when pushing new elements.
+- push() : Time - O(n), Space - O(1)
+- pop() : Time - O(1), Space - O(1)
+- Top() : Time - O(1), Space - O(1)
+- Peek() : Time - O(1), Space - O(1)
+*/
