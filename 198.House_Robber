@@ -1,0 +1,17 @@
+class Solution {
+    public int rob(int[] nums) {
+        int rob = 0; // max money can get if rob the current house
+        int notrob = 0; // max money can get if not rob current house
+        for(int i = 0; i < nums.length; i++) { // We go through all the values, maintain two counts, 1) we ron the cell, 2) if we don't rob the cell
+            int current = notrob + nums[i]; // if we rob the current cell, previousl cell should not be robbed
+            notrob = Math.max(rob, notrob); // if we don't rob the current cell, then the count should be max of previous cell robbed not robbed             
+            rob = current;// update the values for next round.
+        }
+        return Math.max(rob, notrob);
+    }
+}
+
+/*
+Time Complexity - O(n)
+Space Complexity - O(n)
+*/
