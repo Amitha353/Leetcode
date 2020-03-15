@@ -1,0 +1,17 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int result = nums[0];
+        int sum = nums[0];
+        
+        for(int i = 1; i < nums.length; i++) {
+            sum = Math.max(nums[i], sum + nums[i]);
+            result = Math.max(result, sum);
+        }
+        return result;
+    }
+}
+/*Approach -> Dynamic Programming
+- Check if previous sum is positive, if so append it to the current array element
+- If prev sum is negative then consider the current array alement as the sum.
+- We compare the global max with  sum w.r.t to array elements.
+*/
