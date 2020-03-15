@@ -1,0 +1,22 @@
+class Solution {
+    public boolean isPalindrome(int x) {
+        if(x < 0 || x != 0 && x % 10 == 0) { // negative numbers and numbers that end with 0 cannot be palindromes
+            return false;
+        }
+        
+        int reversed = 0;
+        int remainder = 0;
+        int original = x;
+        while( x != 0) {
+            remainder = x % 10;
+            reversed = reversed * 10 + remainder;
+            x = x / 10;
+        }
+        return original == reversed;
+    }
+}
+
+/* Give a number, revert and compare the number with the original number
+- Time Complexity  - O(log_10_(n)) // We divide input by 10 for every iteration, so time complexity is O(log_10_(n))
+- Space Complexity - O(1)
+*/
