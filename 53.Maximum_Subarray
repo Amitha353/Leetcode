@@ -14,6 +14,7 @@ class Solution {
 - Check if previous sum is positive, if so append it to the current array element
 - If prev sum is negative then consider the current array alement as the sum.
 - We compare the global max with  sum w.r.t to array elements.
+- Kadane Algorithm
 - Time complexity - O(n)
 - Space Complexity - O(n)  reduced to O(1).
 */
