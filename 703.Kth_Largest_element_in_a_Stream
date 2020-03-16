@@ -1,0 +1,36 @@
+class KthLargest {
+    final PriorityQueue<Integer> q;
+    final int k;
+    
+    public KthLargest(int k, int[] nums) {
+        q = new PriorityQueue<>(k);
+        this.k = k;
+        for(int n: nums) {
+            add(n);
+        }
+    }
+    
+    public int add(int val) {
+        if(q.size() < k)
+            q.offer(val);
+        else if(q.peek() < val) {
+            q.poll();
+            q.offer(val);
+        }
+        return q.peek();
+    }
+}
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * KthLargest obj = new KthLargest(k, nums);
+ * int param_1 = obj.add(val);
+ */
+/* MinHeap Solution
+- Build a MinHeap that contains only k largest elements.
+- On add:
+    - compare a new element x with min to decide if we should pop min and insert x.
+    - take into account a case when heap_size is less than k.
+- Time complexity : construct - O(N* logK), Adding - O(logk)
+- Space Complexity : O(k) -  can be reduced to O(1) by reusing memory of existing array.
+*/
