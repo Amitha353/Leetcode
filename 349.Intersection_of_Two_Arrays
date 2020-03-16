@@ -1,0 +1,19 @@
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashSet<Integer> set1 = new HashSet<>();
+        for(Integer n: nums1) set1.add(n);
+        HashSet<Integer> set2 = new HashSet<>();
+        for(Integer n: nums2) set2.add(n);
+        
+        set1.retainAll(set2);
+        int[] result = new int[set1.size()];
+        int idx = 0;
+        for(int s: set1) result[idx++] = s;
+        return result;
+    }
+}
+
+/* Two Sets Approach
+- Time Complexity - O(n + m) in the average case and O(n x m) in the worst case when load factor is high enough.
+- Space Complexity - O(n + m) in the worst case when a;; elements in the array are different.
+*/
