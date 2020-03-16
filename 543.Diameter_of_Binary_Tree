@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int diameter;
+    public int diameterOfBinaryTree(TreeNode root) {
+        diameter = 0;
+        depth(root);
+        return diameter;
+    }
+    
+    public int depth(TreeNode node) {
+        if(node == null) return 0;
+        int L = depth(node.left);
+        int R = depth(node.right);
+        diameter = Math.max(diameter, L+R);
+        return Math.max(L, R) + 1;
+    }
+}
+
+// Any path can be written as two arrays from some node, where an arrow is a path that starts at some node and only travels down
+// to child nodes.
+// Maximum length arrows - L, R for each child, then best path touches : L + R + 1 nodes.
+// Calculate the depth of a node in the usual way: max(depth of node.left, depth of node.right) + 1.
+// Time Complexity - O(N)
+// Space Complexity - O(N)
