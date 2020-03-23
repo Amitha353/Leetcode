@@ -1,0 +1,34 @@
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int leftIdx = BSearch(nums, target, true);
+        
+        if(leftIdx == nums.length || nums[leftIdx] != target) {
+            return new int[]{-1, -1};
+        }
+        
+        int rightIdx = BSearch(nums, target, false);
+        return new int[]{leftIdx, rightIdx-1};
+    }
+    
+    int BSearch(int[] nums, int target, boolean flag) {
+        int low = 0;
+        int high = nums.length;
+        
+        while(low < high) {
+            int mid = (low + high) / 2;
+            if(nums[mid] > target || (flag && nums[mid] == target)) {
+                high = mid;
+            } else {
+                low = mid+1;
+            }
+        }
+        return low;
+    }
+}
+
+/*
+* Approach : Binary Search
+- Time Complexity - O(log_10(n)) - Binary Search cuts the search space roughly in half on each iteration, there can be at most log_10(n) iterations.
+Binary Search is invoked twice, so the overall complexity is logarithmic.
+- Space Complexity - O(1)
+*/
