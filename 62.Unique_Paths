@@ -1,0 +1,25 @@
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[] dp = new int[n];
+        
+        for(int i = 0; i < n ; i++) {
+            dp[i] = 1;
+        }
+        
+        for(int i = 1; i < m; i++) {
+            for(int j = 1; j < n; j++) {
+                dp[j] = dp[j] + dp[j-1];
+            }
+        }
+        return dp[n-1];
+    }
+}
+
+/*DP (Bottom-up, Linear Space)
+Reduce the $O(MN)$ space complexity to $O(N)$ (a row) or $O(M)$ (a column). In terms of a row, we would update dp[j] by its old value plus dp[j - 1].
+
+Time: O(MN)
+Space: O(N) or O(M)
+
+https://leetcode.com/problems/unique-paths/discuss/405983/Easy-understand-Java-Solutions-with-Explanations-(DP-Top-down-Bottom-up-Linear-Space)
+*/
