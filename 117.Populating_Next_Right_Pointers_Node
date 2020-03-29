@@ -56,4 +56,6 @@ class Solution {
 
 // Time Complexity - O(n)
 // Space Complexity - O(1)
+// https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/discuss/364902/Simple-Java-O(1)-Space-and-O(n)-Time-With-Return-Type-Node
+// https://www.youtube.com/watch?v=vy2mnT3TEXQ
 */
