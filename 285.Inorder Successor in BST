@@ -1,0 +1,46 @@
+public class TreeNode {
+  int value;
+  TreeNode left;
+  TreeNode right;
+  TreeNode(int x) { value = x;}
+ }
+ 
+ public class Solution {
+  public TreeNode InOrderSuccessor(TreeNode root, TreeNode p) {
+    if(root == null || p == null) return null;
+    
+    if(p.right != null) {
+      TreeNode current = p.right;
+      while(current.left != null) {
+        current = current.left;
+      }
+      return current;
+    }
+    
+    TreeNode successor = null;
+    TreeNode proxy = root;
+    
+    while(proxy != null) {
+      if(proxy.val > p.val) { // check left sub-tree
+        sucessor = proxy;
+        proxy = proxy.left;
+      } else if(proxy.val < p.val) {
+        proxy = proxy.right;
+      } else break;
+    }
+    return sucessor;
+  }
+ }
+ 
+ 
+ /* Algorithm:
+ 2 cases to consider
+ 1. If the p.right != null, then the successor of p must be the minimum number of the right subtree.
+ 2. If the p.right == null, then the successor of p must be the minimum number which is greater than p's value. We could start from the root, if the root is greater is greater than p.val. Then we go to the left subtree because we eant to tey a smaller node. However we need to save this node because it is possible that the root.left would be smaller than the p.val. If the root's val is less than the p.val, then go to the right subtree.
+ 
+ Time Complexity - O(h), h ->  height of the binary search tree.
+ 
+ Reference: https://kennyzhuang.gitbooks.io/leetcode-lock/content/285_inordersuccessor_in_bst.html4
+ https://www.youtube.com/watch?v=JdmAYw5h3G8
+ 
+ */
