@@ -1,0 +1,69 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] preReqCourseCounter = new int[numCourses];
+        List<List<Integer>> adj = new ArrayList<>();
+        createGrapg(preReqCourseCounter, adj, prerequisites);
+        return solveBFS(preReqCourseCounter, adj);
+    }
+    
+    public void createGrapg(int[] preReqCourseCounter, List<List<Integer>> adj, int[][] prerequisites) {
+        int n = preReqCourseCounter.length;
+        while(n-- > 0) adj.add(new ArrayList<>());
+        for(int[] edge: prerequisites) {
+            preReqCourseCounter[edge[0]]++;
+            adj.get(edge[1]).add(edge[0]);
+        }
+    }
+    
+    public int[] solveBFS(int[] preReqCourseCounter, List<List<Integer>> adj) {
+        int[] order = new int[preReqCourseCounter.length];
+        Queue<Integer> queue = new ArrayDeque<>();
+        int visited = 0;
+        for(int i = 0; i < preReqCourseCounter.length; i++) {
+            if(preReqCourseCounter[i] == 0) queue.offer(i);
+        }
+        
+        while(!queue.isEmpty()) {
+            int from = queue.poll();
+            order[visited++] = from;
+            for(int to : adj.get(from)) {
+                preReqCourseCounter[to]--;
+                if(preReqCourseCounter[to] == 0) queue.add(to);
+            }
+        }
+        return visited == preReqCourseCounter.length ? order : new int[0];
+    }
+}
+
+
+/* The pe-requisite relation is an indication of directed graphs. The problem reduced to find a topological sort order of the courses -> It is an example of DAG - Directed Acyclic Graph.*/
+
+/* Algorithm:
+Given - numOfCourses, Course-Prequisite List
+1. create an array of length of numOfCourses to track the number of pre-requisites each course has.
+2. Create an adjacency list - to track the links from -> to interms of pre-requisites-courses.
+3. Create a method transform the arrays into a graph
+    3.1 for each course add an empty arraylist into the adjacency matrix.
+    3.2 for each edge in the prequisite list
+        3.2.1 increment the arrayindex for which a pre-requiste exists.
+        3.2.2 add the course to the adjacency matrix of a pre-requiste course index.
+4. Perform BFS
+    4.1 create an order matrix of th length of numOfCourses - to provide the topological order of the courses.
+    4.2 Create a Queue - to track course from no-prequisites to many pre-requisites.
+    4.3 Traverse the length of the array that bears the pre-requiste array, and add elements to the queue if it has no pre-requisite.
+    4.4 Create a boolean variable - visited to track order of nodes.
+    4.4. while the queue is not empty
+        4.4.1 poll the queue element - this is the pre-requisite element - 'from'.
+        4.4.2 add the from element to the order array with visited incremented as the index.
+        4.4.3 Traverse the adjacency matrix for the particular from element.
+            4.4.3.1 decrement the to index in pre-requisite counter array.
+            4.4.3.2 if the element value in pre-requisitecounter is 0 add it to the queue.
+    4.5 if visisted is equal to the pre-requisiteCourseCounter length return order array else new int[0];
+*/
+
+//https://leetcode.com/problems/course-schedule-ii/discuss/59317/Two-AC-solution-in-Java-using-BFS-and-DFS-with-explanation
+
+/*
+Time Complexity -> O(N) considering thee are N courses in all. # BFS with linear O(V+E) time and space
+Space Complexity -> O(N) - O(V+E).
+*/
