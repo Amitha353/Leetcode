@@ -1,0 +1,59 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+    
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+};
+*/
+class Solution {
+    public Node connect(Node root) {
+        Node parent = root;
+        Node dummy = new Node();
+        while(parent != null) {
+            Node current = dummy;
+            while(parent != null) {
+                if(parent.left != null) {
+                    current.next = parent.left;
+                    current = current.next;
+                }
+                if(parent.right != null) {
+                    current.next = parent.right;
+                    current = current.next;
+                }
+                parent = parent.next;
+            }
+            parent = dummy.next;
+            dummy.next = null;
+        }
+        return root;
+    }
+}
+
+/* Algorithm - No extra space
+- Since it is with no extra space - BFS is not recommended
+1. Create a parent node to track root.
+2. Create a dummy node to keep track of levels and next pointers in the levels.
+3. Create a while loop and traverse until parent is not null.
+4. Create a current node - to traverse the next pointers at each level, until it hits null at a level.
+5. Inner loop to traverse the parent until the next pointer at that level are done.
+6. once done traversing the inner loop, assign the next level pointer to the parent and make the dummynode.next null
+7. Return the transformed root.
+
+// Time Complexity - O(n)
+// Space Complexity - O(1)
+*/
