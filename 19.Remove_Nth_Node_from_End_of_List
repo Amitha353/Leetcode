@@ -1,0 +1,39 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode first = dummy;
+        ListNode second = dummy;
+        
+        for(int i = 1; i <= n+1; i++) {
+            first = first.next;
+        }
+        
+        while(first != null) {
+            first = first.next;
+            second = second.next;
+        }
+        
+        second.next = second.next.next;
+        return dummy.next;
+    }
+}
+
+/*Algorithm: // 2 - pointer - 1 pass
+1.Two Nodes first and second, initialized to a dummy Node.
+2. Move node first -> n+1 steps into the ListNode.
+3. Thereafter move the first and second node one step in unision until first node is null.
+4. skip the next immediate next for the second.
+5. Return dummy.next element.
+
+Time Complexity - O(L) - one trversal of the list of L Nodes.
+Space Complexity - O(1)
+*/
