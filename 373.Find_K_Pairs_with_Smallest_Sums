@@ -1,0 +1,53 @@
+class Solution {
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+		if (nums1.length == 0 || nums2.length == 0 || k == 0) return result;
+		
+
+		PriorityQueue<List<Integer>> queue = new PriorityQueue<>((a,b) -> (a.get(0) + a.get(1) - b.get(0) - b.get(1)));
+		for (int i = 0; i < nums1.length && i < k; i++) {
+			List<Integer> list = new ArrayList<>();
+			list.add(nums1[i]);
+			list.add(nums2[0]);
+			list.add(0);
+			queue.offer(list);
+		}
+
+
+
+		while (!queue.isEmpty() && k-- > 0) {
+			List<Integer> current = queue.poll(); 
+			List<Integer> list = new ArrayList<>();
+			list.add(current.get(0));
+			list.add(current.get(1));
+			result.add(list);
+
+
+			if (current.get(2) + 1 == nums2.length) continue;
+			
+
+			List<Integer> temp = new ArrayList<>();
+			temp.add(current.get(0));
+			temp.add(nums2[current.get(2) + 1]);
+			temp.add(current.get(2) + 1);
+			queue.offer(temp);
+		}
+
+		return result;
+    }
+}
+
+/* Algorithm
+** 'K' ->since K is mentioned -> need to use Heap. Since, we need to find Min -> Data Structure : Min Heap.
+1. Initialize List<List<Integers>> result, if either of input is null return empty result.
+2. Create a priority queue - implemented as a MinHeap -> difference of sum of integers in an array.
+3. Add k elements into the queue - since it is sorted - correspoinding to all the elements from the first array w.r.t to the first element in the second array. 3 element to trace the index of the nums2 array
+4. Iterate through a while loop for k elements testing w.r.t to nums2 elements.
+5.. Return the result.
+
+Time Complexity: O(k * log(k))
+
+Reference:
+https://letstalkalgorithms.com/find-k-pairs-with-smallest-sum-java-solution/
+https://leetcode.com/problems/find-k-pairs-with-smallest-sums/discuss/395721/Java-Solution-Using-PriorityQueue-with-ListlessListlessIntegergreatergreater
+*/
