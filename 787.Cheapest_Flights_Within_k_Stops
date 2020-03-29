@@ -1,0 +1,46 @@
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        
+        for(int i = 0; i <= K; i++) {
+            int[] temp = Arrays.copyOf(dist, dist.length);
+            for(int[] edge: flights) {
+                int u = edge[0];
+                int v = edge[1];
+                int w = edge[2];
+                if (dist[u] == Integer.MAX_VALUE) continue;
+                if (dist[u] + w < temp[v]) { // relax function
+                    temp[v] = dist[u] + w;
+                }
+            }
+            dist = temp;
+        }
+        return (dist[dst] == Integer.MAX_VALUE) ? -1 : dist[dst];
+    }
+}
+
+/* Algorithm - Bellman-Ford
+https://www.youtube.com/watch?v=FtN3BYH2Zes
+- Single Source Shortest Path - Dynamic Programming Strategy
+- Dynamic Programming /strategy - Try out all possible solutions and pick the best strategy
+- Idea - performe relaxation on all the edges for n-1 times where n is the number of vertices.
+- Relaxation: if(cost(from) + edge(from, to) < cost(to) , replace cost(to )= cost(from) + edge(from, to)).
+https://leetcode.com/problems/cheapest-flights-within-k-stops/discuss/163698/easy-java-Bellman-Ford
+
+Pseudocode:
+1. create a dist array of the size of cities.
+2. fill the dist array with inf, of max_integer.
+3. mark the sorce location as 0 id the dist array.
+4. perform relaxation on the edges k times here (rather than n/vertices -1 times)
+    4.1 Introduce a temporary array and copy dist array values into it.
+    4.2 traverse through the flights array, perform the relaxation idea
+        4.2.1 if the dist[from] is max cntinue
+        4.2.2 if dist[from] + edge < dist[to] -> dist[to] = dist[from] + edge.
+5. if the dist[destination] is inf/not reachable -> -1, else dist[dst]
+
+Time complexity: O(k*(n+m)) where m is the number of edges/flights and n is the number of cities. When the graph is very dense (m >> n), could be in O(km).
+
+Space complexity: O(n)
+*/
