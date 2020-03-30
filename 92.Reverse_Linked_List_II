@@ -1,0 +1,48 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if(head == null || m == n) return head;
+        ListNode dummy = new ListNode(0);
+        ListNode p = dummy;
+        dummy.next = head;
+        for(int i = 0; i < m-1; i++) {
+            p = p.next;
+        }
+        
+        ListNode tail = p.next;
+        
+        for(int i = 0; i < (n-m); i++) {
+            ListNode temp = p.next;
+            p.next = tail.next;
+            tail.next = tail.next.next;
+            p.next.next = temp;
+        }
+        return dummy.next;
+    }
+}
+
+/* Algorithm:
+1. If head is null or m is equal to n return head.
+2. Create a dummy Node ->  assigned -1.
+3. Create a node p and assign the dummy node to it.
+4. add head to the next of the dumy node.
+5. traverse the linked list until m-1 using a for loop, marks the prior beginning of a reversed linked list.
+6. mark the next node, from where the reversal begins as tail.
+7. create a for loop, to perform interation until (n-m)
+    7.1 tmp array -> p.next node.
+    7.2 p.next = tail.next;
+    7.3 tail.next = tail.next.next;
+    7.4 p.next.next = tmp
+8. return dummy.next
+
+// Time Complexity - O(N) - consists of N Nodes.
+// Space Complexity - O(1)
+Refer : https://leetcode.com/problems/reverse-linked-list-ii/discuss/30709/Talk-is-cheap-show-me-the-code-(and-DRAWING)
+*/
