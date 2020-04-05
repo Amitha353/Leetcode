@@ -1,0 +1,26 @@
+class Solution {
+    public String getHint(String secret, String guess) {
+        int bulls = 0;
+        int cows = 0;
+        int[] numbers = new int[10];
+        for (int i = 0; i<secret.length(); i++) {
+            if (secret.charAt(i) == guess.charAt(i)) bulls++;
+            else {
+                if (numbers[secret.charAt(i)-'0']++ < 0) cows++;
+                if (numbers[guess.charAt(i)-'0']-- > 0) cows++;
+            }
+        }
+        return bulls + "A" + cows + "B";
+    }
+}
+
+// One-pass
+// if the location and value are same, then  increment bulls,
+// else increment the array index corresponding to secret
+// and decrement the array index corresponding to guess
+// when the value in an array is negative in secret, increment count and set it back to 0.
+// when the value in an array is positive for guess, decrement count and set it back to 0.
+
+/* Time Complexity - O(n)
+Space Complexity - O(1)
+*/
