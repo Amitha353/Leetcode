@@ -43,4 +43,7 @@ public class Solution {
         - Infinite -> lhs and rhs -> 0;
         - No solution -> lhs is 0;
         - unique solution -> rhs / lhs;
+        
+Time Complexity -> O(n), Generating coefficients and finding lhs and rhs will take O(n).
+Space Complexity -> O(n), ArrayList res size can grow upto n.
 */
