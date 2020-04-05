@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int widthOfBinaryTree(TreeNode root) {
+        List<Integer> leftmost_positions = new ArrayList<>();
+        return dfs(root, 1, 0, leftmost_positions, "root");
+    }
+    private int dfs(TreeNode node, int position, int depth, List<Integer> leftmost, String val) {
+        if(node == null) return 0;
+        if(depth >= leftmost.size()) leftmost.add(position);
+        System.out.println("val = " + val + " node val " + node.val + " depth = " + depth + " position = " + position + " list val = " + leftmost.get(depth));
+        return Math.max(position+1 - leftmost.get(depth), Math.max(dfs(node.left, position * 2, depth+1, leftmost, "left"), dfs(node.right, position * 2 + 1, depth + 1, leftmost, "right")));
+    }
+}
+
+
+/* Algorithm - Depth First Search
+1. create a list to capture the left most position at every level.
+2. Recursive - DFS
+    2.1 if node is null return 0
+    2.2 if the depth is greater than the list of left position values, then the left node is being visited, so add the position of the left node at the particular depth into the list. since the size of the list will be grater than depth when traversing on the right side, right position will not be added to the list.
+    2.3 At each level, find the max distance between the rightmost (position[i] , 1 is for inclusiveness) and left most position, while traberse the other nodes of te tree as well.
+- Since it is a BST, next depth left node -> position * 2, right node is at position * 2 +1.
+
+* Time Complexity -> O(N) - N is the number of nodes in the input tree. 
+* Space Complexity -> O(N) - Size of the implicit call stack in the DFS.
+*/
