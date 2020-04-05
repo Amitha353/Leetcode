@@ -1,0 +1,36 @@
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        boolean[] visited = new boolean[nums.length];
+        List<Integer> list = new ArrayList<>();
+        Arrays.sort(nums);
+        dfs(nums, visited, list, result);
+        return result;
+    }
+    public void dfs(int[] nums, boolean[] visited, List<Integer> list, List<List<Integer>> result) {
+        if(list.size() == nums.length) {
+            result.add(new ArrayList<>(list));
+            return;
+        }
+        for(int i =0; i < nums.length; i++) {
+            if(visited[i]) continue;
+            if(i > 0 && nums[i-1] == nums[i] && !visited[i-1]) continue;
+            visited[i] = true;
+            list.add(nums[i]);
+            dfs(nums, visited, list, result);
+            visited[i] = false;
+            list.remove(list.size()-1);
+        }
+    }
+}
+
+/*
+if (i > 0 && nums[i] == nums[i - 1] && !use[i - 1]) continue; means, in other words, if previous identical number is used, then use the current number.
+because if you use the opposite way, if (i > 0 && nums[i] == nums[i - 1] && use[i - 1]) continue; which means if previous identical number is NOT used, use this number, you are going to have to keep running the program until the next identical number first populates the temp/list array before the previous identical number, and then you backtrack into the first identical number which then populates the temp/list array.
+
+Time complexity -> O(n!)
+Space complexity -> O(n)
+
+https://ibb.co/k4zv00 | https://ibb.co/ncMm7f
+
+*/
