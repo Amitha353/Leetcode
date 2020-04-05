@@ -4,14 +4,14 @@
 class PeekingIterator implements Iterator<Integer> {
     private Integer next;
     private Iterator<Integer> iterator;
-    // private boolean done = false;
+    private boolean done = false;
     
 	public PeekingIterator(Iterator<Integer> iterator) {
 	    // initialize any member here.
         if(iterator.hasNext()) {
             next = iterator.next();
-        // } else {
-        //     done = true;
+        } else {
+            done = true;
         }
         this.iterator = iterator;
 	}
@@ -29,17 +29,15 @@ class PeekingIterator implements Iterator<Integer> {
 	    if(iterator.hasNext()) {
             next = iterator.next();
         } else {
-            // done = true;
-            next = null;
+            done = true;
+            // next = null;
         }
         return temp;
 	}
 	
 	@Override
 	public boolean hasNext() {
-	    // return !done;
-        return next != null;
+	    return !done;
+        // return next != null;
 	}
 }
-
-//** Need to re-check
