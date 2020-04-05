@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> result = new ArrayList<>();
+        dfs(root, sum, new ArrayList<>(), result);
+        return result;
+    }
+    
+    private void dfs(TreeNode node, int sum, List<Integer> list, List<List<Integer>> result) {
+        if(node == null) return;
+        list.add(node.val);
+        
+        if(node.val == sum && node.left == null && node.right == null) {
+            result.add(list);
+            return;
+        }
+        dfs(node.left, sum - node.val, new ArrayList<>(list), result);
+        dfs(node.right, sum - node.val, new ArrayList<>(list), result);
+    }
+}
+
+/* Algorithm : DFS
+1. Traverse the tree from top - bottom.
+2. if the root node is null return.
+3. if it is a lead node, and its value is equal to target/sum , then add the list of node along the add to the result and return.
+4. continue to traverse -> LHS 
+5. continue top traverse -> RHS
+
+- Time Complexity -> O(N)
+- Space Complexity -> O(N) // re-check
+*/
