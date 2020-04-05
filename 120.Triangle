@@ -1,0 +1,18 @@
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        for(int i = n-2; i >= 0; i--) {
+            for(int j = 0; j <= i; j++) {
+                triangle.get(i).set(j, triangle.get(i).get(j) + Math.min(triangle.get(i+1).get(j), triangle.get(i+1).get(j+1)));
+            }
+        }
+        return triangle.get(0).get(0);
+    }
+}
+
+/* Dunamic Programming Approach - O(1) space, time -> O(n^2) [re-check]
+1. Begin from bottom to top
+2. Start from the row above the bottom row - [size()-2]
+3. Each number add the smaller number of the two numbers below it.
+4. Finally, get the smallest sum.
+*/
