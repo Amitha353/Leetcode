@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return helper(0, 0, inorder.length-1, preorder, inorder);
+    }
+    
+    private TreeNode helper(int preStart, int inStart, int inEnd, int[] preorder, int[] inorder) {
+        if(preStart > preorder.length-1 || inStart > inEnd) return null;
+        TreeNode root = new TreeNode(preorder[preStart]);
+        int inCurrent = 0;
+        for(int i = inStart; i <= inEnd; i++) {
+            if(root.val == inorder[i])
+                inCurrent = i;
+        }
+        root.left = helper(preStart+1, inStart, inCurrent-1, preorder, inorder);
+        root.right = helper(preStart+inCurrent - inStart + 1, inCurrent + 1, inEnd, preorder, inorder); // inCurrent-inStart -> size of the left subtree
+        return root;
+    }
+}
+
+/* Algorithm - Pseudocode:
+1. Preorder -> 1st element is the root;
+2. In the inorder find the root element, everything to the left of it, belongs to the left subtree, and everything to the right of it belongs to right subtree.
+3. perform this recursively and return the tree structure.
+
+// Re-check
+- Time Complexity -> O(n)
+- Space Complexity -> O(n)
+*/
