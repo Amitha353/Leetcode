@@ -1,0 +1,38 @@
+/* Q. Given a binary tree, return the values of its boundary in anti-clockwise direction starting from root. Boundary includes left boundary, leaves, and right boundary in order without duplicate nodes.
+https://www.lintcode.com/problem/boundary-of-binary-tree/description
+*/
+
+public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+  List<Integer> boundary = new ArrayList<>();
+  if(root == null) return;
+  boundary.add(root.val);
+  collectLeftBoundary(root.left, boundary);
+  collectLeaves(root, boundary);
+  collectRightBoundary(root.right, boundary);
+  return boundary;
+}
+
+private void collectLeftBoundary(TreeNode node, List<Integer> boundary) {
+  if(node == null || isLeaf(node)) return;
+  boundary.add(node.val);
+  collectLeftBoundary(node.left != null ? node.left : node.right, boundary);
+}
+
+private void collectRightBoundary(TreeNode node, List<Integer> boundary) {
+  if(node == null || isLeaf(node)) return;
+  collectRightBoundary(node.right != null ? node.right : node.left, boundary);
+  boundary.add(node.val);
+}
+
+private void collectLeaves(TreeNode node, List<Integer> boundary) {
+  if(node == null) return;
+  if(isLeaf(node)) boundary.add(node.val);
+  else {
+    collectLeaves(node.left, boundary);
+    collectLeaves(node.right, boundary);
+  }
+}
+
+
+Time Complexity: O(n), where n is the number of nodes in the tree.
+Space Complexity: O(h), where h is the height of the tree. If tree is balanced it will be O(logn). If tree is not balanced it will be O(n).
