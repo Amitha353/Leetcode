@@ -1,0 +1,25 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if(matrix == null || matrix.length == 0) return false;
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int low = 0;
+        int high = rows * cols -1;
+        while(low <= high) {
+            int mid = low + (high - low) /2;
+            if(matrix[mid/cols][mid%cols] == target) return true;
+            else if(matrix[mid/cols][mid%cols] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+         }
+        return false;
+    }
+}
+
+/* Treat the 2D Matrix -> like a soted linear list and perform binary search
+Treat the 2D array as a 1D array. matrix[index / cols][index % cols]
+
+Time complexity: O(log(rows * cols))
+Space complexity: O(1) */
