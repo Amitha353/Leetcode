@@ -1,0 +1,49 @@
+/** 362. Design a Hit Counter [Medium]
+ * Design a hit counter which counts the number of hits received in the past 5 minutes.
+ * 
+ * Each function accepts a timestamp parameter (in seconds granularity) and you may assume that calls are being made to the system in chronological order (i.e. the timestamp is monotonically increasing). You may assume that the earliest timestamo starts at 1.
+ * 
+ * It is possible that several hits arrive roughly at the same time.
+*/
+import java.util.LinkedList; 
+import java.util.Queue; 
+
+class HitCounter {
+        Queue<Integer> queue;
+        /** Initialize your data structure here. */
+        public HitCounter() {
+            queue = new LinkedList<Integer>();
+        }
+        
+        /** Record a hit. @param timestamp - The current timestamp (in seconds granurality). */
+        public void hit(int timestamp) {
+            queue.offer(timestamp);
+        }
+        
+        /** Return the number of hits in the past 5 minutes. @param timestamp - The current timestamp (in seconds granularity). */
+        public int getHits(int timestamp) {
+            while(!queue.isEmpty() && timestamp - queue.peek() >= 300) {
+                queue.poll();
+                }
+                return queue.size();
+    }
+    }
+    
+public class CounterDesign {
+     public static void main(String []args){
+        
+        HitCounter counter = new HitCounter();
+        counter.hit(1);
+        counter.hit(2);
+        counter.hit(3);
+        System.out.println(counter.getHits(4));
+        counter.hit(300);
+        System.out.println(counter.getHits(300));
+        System.out.println(counter.getHits(301));
+     }
+}
+
+/* Explanation:
+- Introduce a queue and add timestamps, if the 5 minutes / 300 seconds timestamp window is elapsed then slide the window and return 
+the queue size.
+*/
