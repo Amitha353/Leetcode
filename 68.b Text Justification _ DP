@@ -1,0 +1,84 @@
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        
+        int[][] cost = new int[words.length][words.length];
+        
+        for(int i = 0; i < words.length; i++) {
+            cost[i][i] = maxWidth - words[i].length();
+            
+            for(int j = i+1; j < words.length; j++) {
+                cost[i][j] = cost[i][j-1] - words[j].length() -1;
+            }
+        }
+        
+        for(int i = 0; i < words.length; i++) {
+            for(int j = i; j < words.length; j++) {
+                if(cost[i][j] < 0)
+                    cost[i][j] = Integer.MAX_VALUE;
+                else
+                    cost[i][j] = (int)Math.pow(cost[i][j], 2);
+            }
+        }
+        
+        int[] minCost = new int[words.length];
+        int[] result = new int[words.length];
+        
+        for(int i = words.length-1; i >= 0; i--) {
+            minCost[i] = cost[i][words.length-1];
+            result[i] = words.length;
+            for(int j = words.length-1; j > i; j--) {
+                if(cost[i][j-1] == Integer.MAX_VALUE)
+                    continue;
+                if(minCost[i] > minCost[j]+cost[i][j-1]) {
+                    minCost[i] = minCost[j] + cost[i][j-1];
+                    result[i] = j;
+                }
+            }
+        }
+        
+        int i = 0; int j;
+        List<String> finalResult = new ArrayList<>();
+        
+        do {
+            StringBuilder builder = new StringBuilder();
+            j = result[i];
+            int counter = 0;
+            for(int k = i; k < j; k++) {
+                builder.append(words[k]);
+                if(k < j-1) {
+                    counter++;
+                    builder.append(" ");
+                }
+            }
+            int accomodate = maxWidth - builder.length();
+            boolean checker = (accomodate % 2 == 0) ? false : true;
+            int refactor_size = (counter > 0) ? accomodate/counter : 0;
+            String value = builder.toString();
+            StringBuilder sb = new StringBuilder();
+            if(value.contains(" ") && j < words.length) {
+                for(int m = 0; m < value.length(); m++) {
+                    if(value.charAt(m) == ' ') {
+                        int n = 0;
+                        while(n < refactor_size) {
+                            sb.append(" ");
+                            n++;
+                        }
+                        if(checker) {
+                            sb.append(" ");
+                            checker = false;
+                        }
+                    }
+                    sb.append(value.charAt(m));
+                }
+            } else {
+                sb.append(value);
+                while(maxWidth != sb.toString().length()) {
+                    sb.append(" ");
+                }
+            }
+            finalResult.add(sb.toString());
+            i = j;
+        } while(j < words.length);
+        return finalResult;
+    }
+}
