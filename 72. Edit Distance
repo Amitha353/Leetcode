@@ -1,0 +1,40 @@
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int[][] cost = new int[word1.length()+1][word2.length()+1];
+        
+        for(int i = 0; i <= word1.length(); i++)
+            cost[i][0] = i;
+        for(int j = 0; j <= word2.length(); j++)
+            cost[0][j] = j;
+        
+        for(int i = 0; i < word1.length(); i++) {
+            for(int j = 0; j < word2.length(); j++) {
+                if(word1.charAt(i) == word2.charAt(j))
+                    cost[i+1][j+1] = cost[i][j];
+                else {
+                    cost[i+1][j+1] = Math.min(cost[i][j], Math.min(cost[i+1][j], cost[i][j+1])) + 1;
+                }
+            }
+        }
+        return cost[word1.length()][word2.length()];
+    }
+}
+
+/*
+Time complexity : If n is the length of word1, m of word2, because of the two indented loops, it is O(nm)
+Let following be the function definition :-
+
+f(i, j) := minimum cost (or steps) required to convert first i characters of word1 to first j characters of word2
+
+Case 1: word1[i] == word2[j], i.e. the ith the jth character matches.
+
+f(i, j) = f(i - 1, j - 1)
+
+Case 2: word1[i] != word2[j], then we must either insert, delete or replace, whichever is cheaper
+
+f(i, j) = 1 + min { f(i, j - 1), f(i - 1, j), f(i - 1, j - 1) }
+
+f(i, j - 1) represents insert operation
+f(i - 1, j) represents delete operation
+f(i - 1, j - 1) represents replace operation
+*/
