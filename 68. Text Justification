@@ -1,0 +1,55 @@
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<>();
+        int i = 0;
+       while(i < words.length){
+           StringBuilder sb = new StringBuilder();
+           int counter = 0;
+           while(i < words.length && counter+words[i].length() < maxWidth) {
+               sb.append(words[i]).append(" "); 
+               counter += words[i].length() + 1;
+               i++;
+           }
+           result.add(sb.toString());
+        }
+        List<String> finalResult = new ArrayList<>();
+        
+        for(int p = 0; p < result.size() ; p++) {
+            String info = result.get(p);
+            StringBuilder sbb = new StringBuilder();
+            String value = (info.charAt(info.length()-1) == ' ') ? info.substring(0, info.length() - 1) : info;
+            char[] ch = value.toCharArray();
+            int spaces = 0;
+            for(char c: ch) {
+                if(c == ' ')
+                    spaces++;
+            }
+            int accomodate = maxWidth - value.length();
+            int refactor = (spaces > 0 ) ? accomodate/spaces : spaces;
+            boolean checker = (accomodate%2 != 0) ? true : false;
+            if(value.contains(" ") && p < result.size()-1) {
+                for(int m = 0; m < value.length(); m++) {
+                    if(value.charAt(m) == ' ') {
+                        int n = 0;
+                        while(n < refactor) {
+                            sbb.append(" ");
+                            n++;
+                        }
+                        if(checker) {
+                        sbb.append(" ");
+                        checker = false;
+                    }
+                    }
+                    sbb.append(value.charAt(m));
+                }
+            } else {
+               sbb.append(value);
+                while(sbb.toString().length() < maxWidth) {
+                    sbb.append(" ");
+                }
+            }
+            finalResult.add(sbb.toString());
+        }
+        return finalResult;
+    }
+}
