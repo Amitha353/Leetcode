@@ -1,0 +1,48 @@
+class MedianFinder {
+    private PriorityQueue<Integer> small;
+    private PriorityQueue<Integer> large;
+    private boolean even = true;
+
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        small = new PriorityQueue<>(Collections.reverseOrder());
+        large = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        if(even) {
+            large.offer(num);
+            small.offer(large.poll());
+        } else {
+            small.offer(num);
+            large.offer(small.poll());
+        }
+        even = !even;
+    }
+    
+    public double findMedian() {
+        if(even)
+            return (small.peek() + large.peek()) / 2.0;
+        else
+            return small.peek();
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+
+
+/* The invariant of the algorithm is two heaps - small and large, each representing half the current list.
+- The length of the smaller heap is always kept at n/2 while the larger heap can fluctuate n/2 or n/2+1 depending on n's parity.
+- Hence need to only peek the two heap's numbers to calculate the median.
+
+* Time complexity: O(5 \cdot \log n) + O(1) \approx O(\log n)O(5⋅logn)+O(1)≈O(logn).
+    * At worst, there are three heap insertions and two heap deletions from the top. Each of these takes about O(\log n)O(logn) time.
+Finding the mean takes constant O(1)O(1) time since the tops of heaps are directly accessible.
+
+* Space complexity: O(n)O(n) linear space to hold input in containers.
+*/
