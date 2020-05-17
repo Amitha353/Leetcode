@@ -1,0 +1,53 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        if(s == null || s.length() < t.length() || s.length() == 0)
+            return "";
+        HashMap<Character, Integer> map = new HashMap<>();
+        for(char ch: t.toCharArray()) {
+            if(map.containsKey(ch))
+                map.put(ch, map.get(ch)+1);
+            else
+                map.put(ch, 1);
+        }
+        
+        int left = 0;
+        int minLeft = 0;
+        int minLength = s.length()+1;
+        int count  = 0;
+        
+        for(int right = 0; right < s.length(); right++) {
+            if(map.containsKey(s.charAt(right))) {
+                map.put(s.charAt(right), map.get(s.charAt(right))-1);
+                if(map.get(s.charAt(right)) >= 0) {
+                    count++;
+                }
+            }
+            while(count == t.length()) {
+                if(right-left+1 < minLength) {
+                    minLength = right-left+1;
+                    minLeft = left;
+                }
+                if(map.containsKey(s.charAt(left))) {
+                    map.put(s.charAt(left), map.get(s.charAt(left))+1);
+                    if(map.get(s.charAt(left)) > 0) {
+                        count--;
+                    }
+                }
+                left++;
+            }
+        }
+        if(minLength > s.length())
+            return "";
+        return s.substring(minLeft, minLeft+minLength);
+    }
+}
+// Traverse the search string s, if the element in s matches an element in t, increase the right pointer until all the elements in t are found.
+// decrease the value of the dictionary count when the right pointer moves ahead and increase the count variable
+// if the count equals the length of t string, check if the substring found is least and replace the minLength with substring value, and minLeft with be marked with the left pointer.
+// reset the dictionary counter to the original t dictionary value by increases the left index until the count is not equal to t.length.
+// If the minLength gretaer than s.length - then no substring is found.
+// Else return s.substring(minLeft, minLeft+minLength)
+
+/* Time Complexity = O(S+T)
+Space Complexity = O(S+T)
+*/
