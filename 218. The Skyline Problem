@@ -1,0 +1,107 @@
+class Solution {
+    // Represents ths start and end of the building
+    enum Position {
+        START, END;
+    }
+    
+    class BuildingPoints implements Comparable<BuildingPoints> {
+        int x;
+        int h;
+        Position position;
+
+        BuildingPoints(int x, int h, Position position) {
+            this.x = x;
+            this.h = h;
+            this.position = position;
+        }
+        /*
+        first compare x, if they are not same return the lower one.
+        if the x are same
+            - if the two starts are comparable then higher height building should be picked first.
+            - if the two ends are comparable then lower height building should be picked first.
+            - if one is start and the other is end then start should appear before end.
+        */
+        @Override
+        public int compareTo(BuildingPoints o) {
+            if (this.x != o.x) {
+                return this.x - o.x;
+            }
+
+            if (this.position == Position.START && o.position == Position.START) {
+                return o.h - this.h;
+            }
+
+            if (this.position == Position.END && o.position == Position.END) {
+                return this.h - o.h;
+            }
+
+            if (this.position == Position.END && o.position == Position.START) {
+                return 1;
+            }
+            return -1;
+        }
+    }
+    
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        // For all start and end of building put them into List of BuildingPoints.
+        BuildingPoints[] buildingPoints = new BuildingPoints[buildings.length * 2];
+        int index = 0;
+        for (int[] building : buildings) {
+            buildingPoints[index++] = new BuildingPoints(building[0], building[2], Position.START);
+            buildingPoints[index++] = new BuildingPoints(building[1], building[2], Position.END);
+        }
+        
+        Arrays.sort(buildingPoints);
+        
+        // Use TreeMap because it gives log time performance.
+        // PriorityQueue in Java does not support remove(object) operation in log time.
+        TreeMap<Integer, Integer> queue = new TreeMap<>();
+
+        queue.put(0, 1);
+
+        int prevMaxHeight = 0;
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        for (BuildingPoints buildingPoint : buildingPoints) {
+            // Start of the Building, then add the height to the map, if height already exists then increment the value.
+            if (buildingPoint.position == Position.START) {
+
+                queue.compute(buildingPoint.h, (k, v) -> {
+                    if (v != null) {
+                        return v + 1;
+                    }
+                    return 1;
+                });
+
+            } else {
+                //If it  is the end of the building then decrement or remove the height from the map.
+                queue.compute(buildingPoint.h, (k, v) -> {
+                    if (v == 1) {
+                        return null;
+                    }
+                    return v - 1;
+                });
+            }
+            
+            // Peek the current height afer addition or removal of the building x.
+            int currentMaxHeight = queue.lastKey();
+            
+            //if the height changes from previous height then this building x becomes critical to x and so add it to the result.
+            if (prevMaxHeight != currentMaxHeight) {
+                result.add(new ArrayList<>(){{
+                    add(buildingPoint.x);
+                    add(currentMaxHeight);
+                }});
+                                
+                prevMaxHeight = currentMaxHeight;
+            }
+        }
+        return result;
+    }
+}
+
+/*
+Time Complexity - O(n log(n))
+Space Complexity - O(n)
+*/
