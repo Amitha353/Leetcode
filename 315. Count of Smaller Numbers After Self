@@ -1,0 +1,73 @@
+class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        int[] res = new int[nums.length];
+        int[] index = new int[res.length];
+        for (int i = 0; i < res.length; i++) {
+            index[i] = i;
+        }
+        mergeSort(nums, index, 0, nums.length-1, res);
+        List<Integer> list = new LinkedList<>();
+        for (int i : res) {
+            list.add(i);
+        }
+        return list;
+    }
+    
+    private void mergeSort(int[] nums, int[] index, int l, int r, int[] res) {
+        if (l >= r) {
+            return;
+        }
+        int mid = (l+r)/2;
+        mergeSort(nums, index, l, mid, res);
+        mergeSort(nums, index, mid+1, r, res);
+        merge(nums, index, l, mid, mid+1, r, res);
+    }
+    
+    private void merge(int[] nums, int[] index, int l1, int r1, int l2, int r2, int[] res) {
+        int start = l1;
+        int[] tmp = new int[r2-l1+1];
+        int count = 0;
+        int p = 0;
+        while (l1 <= r1 || l2 <= r2) {
+            if (l1 > r1) {
+                tmp[p++] = index[l2++];
+            } else if (l2 > r2) {
+                res[index[l1]] += count;
+                tmp[p++] = index[l1++];
+            } else if (nums[index[l1]] > nums[index[l2]]) {
+                tmp[p++] = index[l2++];
+                count++;
+            } else {
+                res[index[l1]] += count;
+                tmp[p++] = index[l1++];
+            }
+        }
+        for (int i = 0; i < tmp.length; i++) {
+            index[start+i] = tmp[i];
+        }
+    }
+}
+
+
+
+/*
+- Perform Merge Sort to nums[]
+- Preserve the index of each number in the original array. Therefore sort the indexes and not the numbers.
+- consider the left and right parts are sorted.
+- while merging:
+    ** use a temporary array to keep track of the sorted indices.
+    - if l1 > r1 or nums[index[l1]] > nums[index[l2]]
+        - temp[p++] = index[l2++];
+    - if l2 > r2 or nums[index[l1]] <= nums[index[l2]]
+        - temp[p++] = index[l1++]
+    ** res -> right counter - gets updated to record how many numbers from the right are sorted and gets incremented by 1.
+        - it's a count of the number of elements to the right of each element that get moved to the left of that element when sorting.
+        - l2 > r2 (right half merge)
+        - nums[index[l1]] <= nums[index[l2]] (nums on the right)
+    ** When a number is moved from left[] into the sorted array, increase count.
+    
+    Use the idea of the merge sort at the time of merging two arrays. When higher index element is less than the lower index element, it represents that the higher index element is smaller than all the elements after that lower index because the left part is already sorted. Hence add up to all the elements after the lower index element for the required count.
+    
+Time Complexity - O(nlogn)
+Space Complexity - O(n)
+*/
