@@ -1,0 +1,26 @@
+class Solution {
+    private int dis(int[] p1, int[] p2) {
+        int a = p1[0] - p2[0];
+        int b = p1[1] - p2[1];
+        return a*a + b*b;
+    }
+    
+    public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+        int[] disArray = new int[] {dis(p1, p2), dis(p1, p3), dis(p1, p4), dis(p2, p3), dis(p2, p4), dis(p3, p4)};
+        Arrays.sort(disArray);
+        System.out.println(disArray[0] + " " + disArray[1] + " " + disArray[2] + " " + disArray[3] + " " + disArray[4] + " " + disArray[5]);
+        return disArray[0] != 0
+            && disArray[0] == disArray[1] && disArray[1] == disArray[2] && disArray[2] == disArray[3]
+            && disArray[4] == disArray[5] && disArray[0] * 2 == disArray[4];
+    }
+}
+
+/*
+Sort the given set of points based on their x-coordinate values, and in the case of a tie, based on their y-coordinate value.
+- 4 sides of equal length
+- 2 diagonal of equal length
+- Each diagonal - 2 * side length
+
+Time complexity : O(1). Sorting 4 points takes constant time.
+Space complexity : O(1). Constant space is required.
+*/
