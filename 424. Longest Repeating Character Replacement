@@ -1,0 +1,22 @@
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int[] count = new int[91];
+        int max = 0, start = 0;
+        for(int end = 0; end < s.length(); end++) {
+            max = Math.max(max, ++count[s.charAt(end)]);
+            System.out.println(s.charAt(end) + " " + count[s.charAt(end)] + " " + max + " " + start + " " + end);
+            if(max+k <= end-start)
+                count[s.charAt(start++)]--;
+        }
+        return s.length()-start;
+    }
+}
+
+/* Steps: (sliding Window)
+- Extend the window to its limit - longest we can get to with maximum number of modifications. Until then the start variable will remain at 0. 
+- Then as the end increases, the whole substring from 0 to end will violate the rule, so we need to update start accordingly (slide the window).
+- We move start to the right until the whole string satisfies the constrain again.
+
+* Time Complexity - O(n)
+* Space Complexity - O(n)
+*/
