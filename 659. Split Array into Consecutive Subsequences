@@ -1,0 +1,36 @@
+class Solution {
+    public boolean isPossible(int[] nums) {
+        HashMap<Integer, Integer> mapper = new HashMap<>();
+        for(int num: nums) mapper.put(num, mapper.getOrDefault(num, 0) + 1);
+        
+        for(int num: nums) {
+            if(mapper.get(num) == 0) continue;
+            int count = 0;
+            while(mapper.containsKey(num) && mapper.get(num) > 0) {
+                count++;
+                if(count > 3 && mapper.get(num) <= mapper.get(num-1)) break;
+                mapper.put(num, mapper.get(num)-1);
+                num++;
+            }
+            if(count < 3) return false;
+        }
+        return true;
+    }
+}
+
+/* Pseudocode
+- Create a HashMap and map the numbers and their frequencies.
+- traverse through the numbers
+    - if the frequency of the number is 0 then continue.
+    - initialize count = 0
+    while map has the nume and num frequency is greater than 0
+        - increment the count;
+        - if the count is greater than 3 and frequency of the current number is less than or equal to previous number then break;
+        - reduce the frequency in the mapper.
+        - increment the number
+    - if the count < 3 return false;
+- return true
+
+* Time Complexity - O(n)
+* Space Complexity - O(n)
+*/
