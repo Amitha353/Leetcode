@@ -1,0 +1,33 @@
+class Solution {
+    public boolean hasGroupsSizeX(int[] deck) {
+        HashMap<Integer, Integer> counter = new HashMap<>();
+        for(int i = 0; i < deck.length; i++){
+            if(counter.containsKey(deck[i])) {
+                counter.put(deck[i], counter.get(deck[i])+1);
+            } else {
+                counter.put(deck[i], 1);
+            }
+        }
+        
+        List<Integer> values = new ArrayList<Integer>(counter.values());
+        int g = -1;
+        for(int val: values) {
+            if(val > 0) {
+                if(g == -1)
+                    g = val;
+                else
+                    g = gcd(g, val);
+            }
+        }
+        return g >= 2;
+    }
+    
+    public int gcd(int x, int y) {
+        return x == 0 ? y : gcd(y%x, x);
+    }
+}
+
+/* GCD
+- Time Complexity - O(N log^2 N) - Where N number of votes, if there are Ci cards with number i, then each gcd operation is naively O(log^2 Ci), Better bounds exist.
+- Space Complexity - O(N)
+*/
