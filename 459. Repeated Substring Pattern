@@ -1,0 +1,55 @@
+class Solution {
+    public boolean repeatedSubstringPattern(String str) {
+        if(str == null || str.length() == 0) return true; // corner cases
+        char[] s = str.toCharArray();
+        int[] pre = new int[s.length];
+        pre[0] = -1;
+        for(int i = 1; i < s.length; i++) {
+            int j = pre[i-1];
+            while(j != -1 && s[j + 1] != s[i])
+                j = pre[j];
+            
+            pre[i] = s[j+1] == s[i] ? j+1 : j;
+            System.out.println(i+" "+j +" "+ pre[i] + " " + s[j+1] + " " + s[i]);
+        }
+        int period = s.length - 1 - pre[s.length - 1];
+        return s.length % period == 0 && s.length/period > 1;
+    }
+ }
+
+/* 
+Solution 1: KMP - Knuth-Moris-Pratt
+* O(N) time
+* O(N) space
+
+- s-> abab
+- prev -> [-1, -1, 0, 1] , prev[0] = -1
+- i=1, j = prev[i-1] = -1; s[i] = b; s[j+1] = a; (s[i] != s[j+1]), prev[1] = j = -1
+- i=2, j = prev[i-1] = -1; s[i] = a; s[j+1] = a; (s[i] == s[j+1]), prev[2] = j+1 = 0
+- i=3, j = prev[i-1] = 0; s[i] = b; s[j+1] = b; (s[i] == s[j+1]), prev[3] = j+1 = 1
+* period =  4 - 1 - 1 = 2 | String is divisible by period and can have pattern it can be true.
+
+Solution 2:
+        int n = s.length();
+        for(int x = 1; x<= n/2; x++) { // pattern must repeat atleast twice
+            if(n % x != 0) continue;// s must be divided by the pattern length
+            String pattern = s.substring(0, x); // pattern string
+            int i = x; // start index of 2nd pattern
+            int j = i+x-1; // end index of 2nd pattern
+            while(j < n) {
+                String substr = s.substring(i, j+1);
+                if(!pattern.equals(substr)) break; // failed for the pattern, try next pattern
+                i += x;
+                j += x;
+            }
+            if(i == n) return true;
+        }
+        return false;
+Pseudo code
+- Check for corner cases.
+- The pattern must repeat atleast twice in the string.
+- traverse step-by-step until the first-half of the string.
+- at each step of the first half traversal assign it to pattern.
+- let i be the start index of the second pattern and j be end of the second pattern.
+- if the follow up substring matches the pattern, the increment in the length of pattern until the end of the string.
+*/
