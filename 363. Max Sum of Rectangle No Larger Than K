@@ -1,0 +1,102 @@
+class Solution {
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        int[] sumColumn = new int[matrix[0].length];
+        int max = Integer.MIN_VALUE;
+        
+        for(int l = 0; l < matrix.length; l++) {
+            sumColumn = new int[matrix[0].length];
+            
+            for(int r = l; r < matrix.length; r++) {
+                
+                for(int i = 0;i < matrix[0].length; i++) {
+                    sumColumn[i] += matrix[r][i];
+                }
+                System.out.println(sumColumn[0] + " " +sumColumn[1] + " " + sumColumn[2]);
+                max = Math.max(max, kadanes(sumColumn, k));
+            }
+        }
+        return max;
+    }
+    
+    private int kadanes(int[] arr, int k) {
+        int max = Integer.MIN_VALUE;
+        int curr = 0;
+        TreeSet<Integer> set = new TreeSet<>();
+        set.add(0);
+        for(int i = 0; i < arr.length; i++) {
+            curr += arr[i];
+            Integer ceil = set.ceiling(curr - k);
+            if(ceil != null)
+                max = Math.max(max, curr - ceil);
+            set.add(curr);
+        }
+        return max;
+    }
+}
+
+/* Pseudo code - Based on Kadabe's algorithm - maximum subarray
+- Reset sum column very time we move left index.
+- Iterate through combinations of left and right boundaries for columns.
+- Sum all cell values across columns, starting from left moving toward right.
+- Calculate the local maximum using kadane's and take the max between previous max and new value.
+- Kadanes Algorithm - Use treeset to find local maximu with respect to k.
+    - populate with 0 for the case where curr - k is smaller than 0.
+    - use the previous sums to determine the smallest previous sum,
+    - that can be subtracted from the current sum to stay under the value k, by taking the ceiling value fr curr - k.
+
+Example:
+///kadanes([1, 0, 1], 2):
+curr = 1
+ceil = (1 - 2) = -1 < 0 = 0;
+max = curr - ceil = 1 - 0 = 1
+set(0, 1)
+-------
+curr = 1+0 = 1
+ceil = -1 < 0 = 0
+max = 1
+set(0, 1,1)
+-------
+curr = 1+1 = 2
+ceil = 2-2 = 0
+max = max(1, 2-0) = 2
+set(0, 1, 1, 2)
+return 2
+================
+* kadanes([1, -2, 4], 2):
+curr = 1
+ceil = (1-2) = -1<0 = 0
+max = curr-ceil = 1-0 = 1
+set(0, 1)
+--------
+curr = 1-2 = -1
+ceil = (-1-2) = -3 < 0 = 0
+max = 1
+set(0, 1, -1)
+--------
+curr = -1+4 = 3
+ceil = (3-2) = 1
+max = max(1, 3-1) = 2
+set(0, 1, -1, 3)
+return 2
+------------
+* kadane([0, -2, 3], 2)
+curr = 0
+ceil = 0-2 = -2 < 0 = 0
+max = 0
+set(0, 0)
+------
+curr = -2
+ceil = -2-2 < 0 = 0
+max = 0
+set(0, 0, -2)
+-------
+curr = -2+3 = 1
+ceil = 1-2 = -1 < 0 = 0
+max = max(0, 1-0) = 1
+set(0, 0, -2, 1)
+return 1
+===========
+
+Time Complexity - O(col x col x row) -> every column, right one to left and kadanes for every row.
+Space Complexity - O(rows).
+*/
