@@ -1,0 +1,35 @@
+class Solution {
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        List<Integer>[] graph = new List[n];
+        for(int i = 0; i < n; i++) graph[i] = new ArrayList<>();
+        for(int i = 0; i < n; i++) if(manager[i] != -1) graph[manager[i]].add(i);
+        
+        Queue<int[]> q = new LinkedList<>(); // Since it is a tree, there is no need to introduce visited array.
+        q.offer(new int[]{headID, 0});
+        int ans = 0;
+        while(!q.isEmpty()) {
+            int[] top = q.poll();
+            int superior = top[0];
+            int time_spread = top[1];
+            ans = Math.max(ans, time_spread);
+            for(int subordinate : graph[superior])
+                q.offer(new int[]{subordinate, time_spread+ informTime[superior]});
+        }
+        return ans;
+    }
+}
+
+/* Pseudocode: BFS
+- Create a ArrayList array of the size n
+- Traverse through the length n and initialize an arraylist for each array entry.
+- Traverse the array of siz n, if the manager id is not -1 then assign the emplyess associated to each manager.
+- Initialize the queue to the headId and assignTime to inform 0.
+- while queue is not empty:
+    - poll the queue entry
+    - let u hold the employee_id and w holde the time to inform.
+    - ans is the cumulative maximum.
+    - traverse through the suboridinate employees by adding to the queue and appending the time to inform.
+    
+    Time Complexity - O(n)
+    Space Complexity - O(n)
+*/
