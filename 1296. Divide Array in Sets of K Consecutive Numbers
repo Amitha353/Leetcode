@@ -1,0 +1,35 @@
+class Solution {
+    public boolean isPossibleDivide(int[] nums, int k) {
+        Map<Integer, Integer> mapper = new TreeMap<>();
+        for(int i : nums)
+            mapper.put(i, mapper.getOrDefault(i, 0)+1);
+        
+        Queue<Integer> queue = new LinkedList<>();
+        int last_checked = -1;
+        int opened = 0;
+        for(int i : mapper.keySet()) {
+            //cond1 - frequency of previous element > 0 and current element is greater than the previous element+1 - hence not consecutive.
+            // cond2 - frequency of previous element is greater than frequency of current element.
+            if (opened > 0 && i > last_checked + 1 || opened > mapper.get(i)) return false;
+            queue.add(mapper.get(i) - opened);
+            last_checked = i;
+            opened = mapper.get(i);
+            if(queue.size() == k)
+                opened -= queue.remove();
+        }
+        return opened == 0;
+    }
+}
+
+/*Pseudocode
+- TreeMap - Frequency Map - to track the frequency of integers inside the nums[].
+- TreeMap ensures that all the numbers are sorted in ascending.
+- Introduce the queue to append the difference of the frequency between the current element and previous element.
+- lastChecked tracks the key - check if the values are consecutive.
+- opened - checks the frequency of the current element.
+- if the size of queue exceeds k, then remove an element from the queue.
+- once done traversing the queue elements check if opened == 0.
+
+Time Complexity - nlogn
+Space Complexity - n / k
+*/
