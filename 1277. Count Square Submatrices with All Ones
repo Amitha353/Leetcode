@@ -1,0 +1,25 @@
+class Solution {
+    public int countSquares(int[][] matrix) {
+        int result = 0;
+        for(int i = 0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[0].length; j++) {
+                if(matrix[i][j] > 0 && i > 0 && j > 0) {
+                    matrix[i][j] = Math.min(matrix[i-1][j-1],
+                                           Math.min(matrix[i-1][j], matrix[i][j-1])) + 1;
+                }
+                result += matrix[i][j];
+            }
+        }
+        return result;
+    }
+}
+
+/* Dynamic Programming
+- dp[i][j] - denotes the size of the biggest square with matrix[i][j] as bottom-right corner.
+- matrix[i][j] == 0 , no possible squares.
+- matrix[i][j] == 1, compare the size of the squares  dp[i-1][j-1], dp[i-1][j], dp[i][j-1]
+- take the minimum and add 1.
+
+Time Complexity - O(rows * cols)
+Space Complexity - O(1)
+*/
