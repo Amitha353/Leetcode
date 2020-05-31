@@ -1,0 +1,30 @@
+class Solution {
+    public int longestStrChain(String[] words) {
+        Map<String, Integer> dp = new HashMap<>();
+        Arrays.sort(words, (a, b) -> a.length() - b.length());
+        int res = 0;
+        for(String word: words) {
+            int best = 0;
+            for(int i = 0; i < word.length(); i++) {
+                String prev = word.substring(0, i) + word.substring(i+1);
+                System.out.println(word + " 1. " + word.substring(0, i) + " 2. " + word.substring(i+1));
+                best = Math.max(best, dp.getOrDefault(prev, 0) + 1);
+            }
+            dp.put(word, best);
+            System.out.println("best = " + best + " ==============");
+            res = Math.max(res, best);
+        }
+        return res;
+    }
+}
+
+/*Pseudocode
+1. Sort the words by word length - can apply bucket sort.
+2. For each word, loop all possible previous words with 1 letter missing.
+3. If we have seen this previous word, updat the longest chain for the current word.
+4. Finally return the longest word chain.
+
+- Time Complexity - O(NlogN) for sorting.
+- Time - O(NSS) for the for loop, where second S refers to the string generation and S <= 16. where N number of words and S - average length of each word.
+- Space - O(NS)
+*/
