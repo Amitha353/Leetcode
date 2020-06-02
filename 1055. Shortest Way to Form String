@@ -1,0 +1,73 @@
+/*From any string, we can form a subsequence of that string by deleting some number of characters (possibly no deletions).
+
+Given two strings source and target, return the minimum number of subsequences of source such that their concatenation equals target. If the task is impossible, return -1.
+
+Example 1:
+
+Input: source = "abc", target = "abcbc"
+Output: 2
+Explanation: The target "abcbc" can be formed by "abc" and "bc", which are subsequences of source "abc".
+*/
+
+import java.util.*;
+
+public class Main {
+    
+    public static int shortestWay(String source, String target) {
+        if(source == null || target == null) {
+            return -1;
+        }
+        
+        if(target.length() == 0) {
+            return 0;
+        }
+        
+        int res = 0;
+        int curr = 0;
+        int m = source.length();
+        int n = target.length();
+        
+        while(curr < n) {
+            int temp = curr;
+            
+            for(int i = 0; i < m && curr < n; i++) {
+                if(source.charAt(i) == target.charAt(curr)) {
+                    curr++;
+                }
+            }
+            
+            if(temp == curr) {
+                return -1;
+            }
+            res++;
+        }
+        return res;
+    }
+    
+    public static void main(String[] args) {
+        int result = Main.shortestWay("xyz", "xzyxz");
+        System.out.println(result);
+    }
+}
+
+
+/* Approach
+-> Iterate through the source to move pointer in target as much as possible.
+-> After one iteration, res++;
+-> If we would come to the end of the target, return result.
+-> If go through one iteration, the pointer in the target is not changed, then return -1.
+
+source -> abc
+target -> abcbc
+
+i = 0, curr = 0  |a = a|
+i = 1, curr = 1  |b = b|
+i = 2, curr = 2  |c = c|
+res = 1
+i = 0, curr = 3 |a != b|
+i = 1, curr = 3 |b = b|
+i = 2, curr = 4 |c = c| 
+res = 2
+* Time Complexity - O(n + res * m); m -> source.length(); n -> target.length();
+* Space Complexity - O(1)
+*/
