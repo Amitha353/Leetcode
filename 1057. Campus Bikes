@@ -1,0 +1,94 @@
+On a campus represented as a 2D grid, there are Nworkers and Mbikes, with N <= M. Each worker and bike is a 2D coordinate on this grid.
+Our goal is to assign a bike to each worker. Among the available bikes and workers, we choose the (worker, bike) pair with the shortest Manhattan distance between each other, and assign the bike to that worker. (If there are multiple (worker, bike) pairs with the same shortest Manhattan distance, we choose the pair with the smallest worker index; if there are multiple ways to do that, we choose the pair with the smallest bike index). We repeat this process until there are no available workers.
+The Manhattan distance between two points p1and p2is Manhattan(p1, p2) = |p1.x - p2.x| + |p1.y - p2.y|. Return a vector ansof length N, where ans[i]is the index (0-indexed) of the bike that the i-th worker is assigned to.
+
+https://ttzztt.gitbooks.io/lc/sort/bucket-sort/campus-bikes.html
+
+import java.util.*;
+
+public class Main {
+    
+    public static int[] assignBikes(int[][] workers, int[][] bikes) {
+        List<int[]>[] buckets = new List[2001];
+        for(int i = 0; i < workers.length; i++) {
+            for(int j = 0; j <  bikes.length; j++) {
+                int dis = Math.abs(bikes[j][0] - workers[i][0]) + Math.abs(bikes[j][1] - workers[i][1]);
+                if(buckets[dis] == null) {
+                    buckets[dis] = new ArrayList<>();
+                }
+                buckets[dis].add(new int[] {i, j});
+                // System.out.println(dis + " " + i + " " + j);
+            }
+        }
+        
+        int[] res = new int[workers.length];
+        Arrays.fill(res, -1);
+        Set<Integer> assignedBike = new HashSet<>();
+        for (int i = 0; i < buckets.length && assignedBike.size() < workers.length; i++) {
+            int count = 0;
+            if (buckets[i] != null) {
+                for (int[] pair : buckets[i]) {
+                    System.out.println(count + " " + pair[0] + " " + pair[1]);
+                    if (res[pair[0]] < 0 && !assignedBike.contains(pair[1])) {
+                        res[pair[0]] = pair[1];
+                        assignedBike.add(pair[1]);
+                    }
+                    count++;
+                }
+            }
+        }
+        return res;
+    }
+    
+    public static void main(String[] args) throws Exception {
+        int[][] workers = {{0, 0}, {2, 1}};
+        int[][] bikes = {{1, 2}, {3, 3}};
+        
+        int[] result = Main.assignBikes(workers, bikes);
+        for(int val: result) {
+            System.out.println(val);
+        }
+    }
+}
+
+
+/* Approach - Bucket Sort
+-> Create through the workers array and within it traverse through the bikes array
+-> calculate the manhattan distance with respect to each worker bike pair 
+    and store the distance (buckets) in list of array and add the coordinates (i, j);
+-> create a result array and fill with -1.
+-> Create a HashSet() [assignedBike]
+-> for i from 0 to buckets.length and until assignedBike.size() < workers.length
+    -> if the (worker) first entry of a pair is not in result and the 
+       (bike) second entry is not in assignedBike set, then assign it respectively.
+-> Return result.
+
+
+Workers -> [[0,0], [2,1]]
+Bikes -> [[1,2], [3,3]]
+
+Manhattan Distance
+i  j 
+0  0 (0,0) (1, 2)   = 3
+0  1 (0,0) (3, 3)   = 6
+1  0 (2,1) (1, 2)   = 2
+1  1 (2,1) (3, 3)   = 3
+
+Sort buckets
+* 2 [1, 0]
+* 3 [0, 0] , [1, 1]
+* 6 [0, 1]
+
+res[1] = 0  assignedBike(0)
+[0,0] -> 0 already assignedBike
+[1, 1] -> 1 in res pair
+res[0] = 1
+
+result [1, 0]
+
+
+* M ->  length of workers array
+* N -> length of bikes array
+Time Complexity -> O(M * N)
+Space Complexity -> O(M * N)
+*/
