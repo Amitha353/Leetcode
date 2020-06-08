@@ -1,0 +1,28 @@
+class Solution {
+    public int[][] kClosest(int[][] points, int K) {
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>((p1, p2) -> p2[0] * p2[0] + p2[1] * p2[1] - p1[0] * p1[0] - p1[1] * p1[1]);
+        
+        for(int[] p: points) {  //[3, 3] , [5, -1], [-2, 4]
+            pq.offer(p);  // [3, 3] , [-2, 4], [5, -1]
+            if(pq.size() > K) {
+                pq.poll();
+            }
+        }
+        
+        int[][] result = new int[K][2];
+        while (K > 0) {
+            result[--K] = pq.poll();  //[-2, 4], [3, 3]
+        }
+        return result;
+    }
+}
+
+/* Pseudocode:
+Maintain a max heap with size k.
+-> For each point, add it to the heap.
+-> Once the size is greater than K, extract one from the max heap to ensure the sze of the heap is always K.
+-> The max heap always maintains top k smallest elements from the first one to the current.
+
+Time Complexity : O(N log K), N is the length of the points (only k points are fit into the queue).
+Space Complexity : O(N) 
+*/
