@@ -1,0 +1,44 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        
+        if (matrix.length == 0) {
+            return result;
+        }
+        
+        int startRow = 0, endRow = matrix.length-1, startCol = 0, endCol = matrix[0].length-1;
+        while(startRow <= endRow && startCol <= endCol) {
+            //Right
+            for(int i = startCol; i <= endCol; i++)
+                result.add(matrix[startRow][i]);   //[0][0], [0][1], [0][2]
+            startRow++;                            //2nd instance [1][1]           
+            //Down
+            for(int i = startRow; i <= endRow; i++)
+                result.add(matrix[i][endCol]);     //[1][2], [2][2]
+            endCol--;
+            //Left
+            if(startRow <= endRow) {
+                for(int i = endCol; i >= startCol; i--)
+                    result.add(matrix[endRow][i]);  //[2][1], [2][0]
+            }
+            endRow--;
+            //Up
+            if(startCol <= endCol) {
+                for(int i = endRow; i >= startRow; i--)
+                    result.add(matrix[i][startCol]);  //[1][0]
+            }
+            startCol++;
+        }
+        return result;
+    }
+}
+
+/*
+Time Complexity -> O(n*m) // rows * cols
+Space Complexity -> O(n*m) 
+
+-> startRow - goRight, 
+-> reach LastCol - gobottom
+-> reach lastRow - go left
+-> reach startCol - goUp (new StartRow)
+*/
