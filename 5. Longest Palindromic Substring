@@ -1,0 +1,82 @@
+// Dynamic Programming
+
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 2) {
+            return s;
+        }
+ 
+        int length = s.length();
+        
+        boolean[][] isPalindrome = new boolean[length][length];
+        
+        int left = 0;
+        int right = 0;
+        
+        for (int j = 1; j < length; j++) {
+            for (int i = 0; i < j; i++) {
+                boolean isInnerWordPalindrome = isPalindrome[i + 1][j - 1] || j - i <= 2;
+                
+                if (s.charAt(i) == s.charAt(j) && isInnerWordPalindrome) {
+                    
+                    
+                    isPalindrome[i][j] = true;
+                    
+                    if (j - i > right - left) {
+                        left = i;
+                        right = j;
+                    }
+                }                
+            }            
+        }
+        
+        return s.substring(left, right + 1);
+        
+    }
+}
+
+// Time Complexity: O(n ^ 2)
+// Space Complexity: O(n ^ 2)
+
+/* Tracing the code:
+String: -> abba
+length -> 4
+isPalindrome:
+
+    a  b   b  a
+ a |  |  |  |  |
+ b |  |  |  |  |
+ b |  |  |  |  |
+ a |  |  |  |  |
+ 
+i = 0, j = 1; innerWord = 1-0 <= 2   (a,b)
+s.charAt(0) != s.charAt(1)  a != b
+--------------
+i = 0, j = 2; innerword = 2-0 <= 2 (a,b,b)
+s.charAt(0) != s.charAt(2)  a != b
+
+i = 1, j = 2; innerword = 2-1 == 1 (b,b)
+s.charAt(1) == s.charAt(2)  b == b
+isPalindrome[1][2] = true
+left = 1, right = 1
+
+
+i =0, j=3; innerword= 3-0 <= 2 nope (isPalindrome[1][2] == true)  (abba)
+s.charAt(0) == s.charAt(3)  => a == a
+isPalidrome[0][3] = true
+
+right - left = 1
+j - i = 3
+left =  i = 0
+right = j = 3
+
+    a  b   b  a
+ a |  |  |  |1 |
+ 
+ 
+ b |  |  |1 |  |
+ b |  |  |  |  |
+ a |  |  |  |  |
+
+return (abba)
+*/
