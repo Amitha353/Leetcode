@@ -1,0 +1,119 @@
+/* We are given some website visits: the user with name username[i] visited the website website[i] at time timestamp[i].
+
+A 3-sequence is a list of websites of length 3 sorted in ascending order by the time of their visits.  (The websites in a 3-sequence are not necessarily distinct.)
+
+Find the 3-sequence visited by the largest number of users. If there is more than one solution, return the lexicographically smallest such 3-sequence.
+*/
+
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+
+class Pair {
+  String user;
+  int time;
+  String web;
+  public Pair(String user, int time, String web) {
+    this.user = user;
+    this.time = time;
+    this.web = web;
+  }
+}
+
+class Solution {
+  public List<String> mostVisitedPattern(String[] username, int[] timestamp, String[] website) {
+    int n = username.length;
+    List<Pair> datas = new ArrayList<>();
+    System.out.println("Associating the user - time - website");
+    for(int i =0; i < n; i++) {
+      datas.add(new Pair(username[i], timestamp[i], website[i]));
+      System.out.println(username[i] + " " + timestamp[i] + " " + website[i]);
+    }
+    System.out.println();
+    System.out.println("Sort the data based on timestamp");
+    Collections.sort(datas, (a, b) -> a.time - b.time);
+    
+    System.out.println("Create a HashMap -> to correlate the user with the websites visited");
+    HashMap<String, List<String>> userToWebs = new HashMap<>();
+    for(Pair data: datas) {
+      userToWebs.putIfAbsent(data.user, new ArrayList<String>());
+      userToWebs.get(data.user).add(data.web);
+    }
+
+    HashMap<String, Integer> seqToCount = new HashMap<>();
+
+    int maxCount = 0;
+    String maxSeq = "";
+    System.out.println("Relation between user and websites visted");
+    System.out.println("-----------------------------------------");
+    for(Map.Entry<String, List<String>> entry : userToWebs.entrySet()) {
+        System.out.println("user = " + entry.getKey() + " websites visited = " + entry.getValue());
+      Set<String> seqCom = getCom(entry.getValue());
+      for(String seq: seqCom) {
+        seqToCount.put(seq, seqToCount.getOrDefault(seq, 0) + 1);
+        System.out.println("Sequence = " + seq + " count = " + seqToCount.get(seq));
+        if(seqToCount.get(seq) > maxCount) {
+          maxCount = seqToCount.get(seq);
+          maxSeq = seq;
+        } else if(seqToCount.get(seq) == maxCount && seq.compareTo(maxSeq) < 0) {
+          maxSeq = seq;
+        }
+      }
+      System.out.println("===================");
+    }
+
+    List<String> res = new ArrayList<>();
+    String[] webs = maxSeq.split(",");
+    for(String w: webs) {
+      res.add(w);
+    }
+    return res;
+  }
+
+  private HashSet<String> getCom(List<String> webs) {
+      System.out.println("3-tuple websites visited");
+      HashSet<String> res = new HashSet<>();
+    int n = webs.size();
+    for(int i = 0; i < n-2; i++) {
+      for(int j = i+1; j < n-1; j++) {
+        for(int k = j+1; k < n; k++) {
+          res.add(webs.get(i) + "," + webs.get(j) + "," + webs.get(k));
+          System.out.println(webs.get(i) + " " + webs.get(j) + " " + webs.get(k));
+        }
+      }
+    }
+    return res;
+  }
+}
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		String[] username = {"joe","joe","joe","james","james","james","james","mary","mary","mary"};
+		int[] timestamp = {1,2,3,4,5,6,7,8,9,10};
+		String[] website = {"home","about","career","home","cart","maps","home","home","about","career"};
+		Solution sol = new Solution();
+		List<String> result = sol.mostVisitedPattern(username, timestamp, website);
+		for(String res: result) {
+		    System.out.print(res + ", ");
+		}
+	}
+}
+
+/*Pseudocode:
+1. Try to get the website sequence visited by mist different users. Sequence here is chronological/timestamp.
+2. First sort by timestamp.
+3. Put user and corrsponding websites into HashMap<String, List<String>>.
+4. For each user, find all its combination of 3 websites.
+5. Each sequence within this combination, check its count of different users. If count is higher or lexicographically smaller, updat the max sequence.
+6. The max Sequence is the result.
+
+Time Complexity: O(n^3) - n = username.length. sort takes O(n logn) . getCom - O(n^3).
+Space Complexity: O(n^3)
+*/
