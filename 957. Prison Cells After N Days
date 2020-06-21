@@ -1,0 +1,79 @@
+class Solution {
+    public int[] prisonAfterNDays(int[] cells, int N) {
+        Map<String, Integer> observed = new HashMap<>();
+        while(N > 0) {
+            int[] cells2 = new int[8];
+            System.out.println(Arrays.toString(cells)+ " "+ N);
+            observed.put(Arrays.toString(cells), N--);
+            for(int i = 1; i < 7;++i)
+                cells2[i] = cells[i-1] == cells[i+1] ? 1 : 0;
+            cells = cells2;
+            if(observed.containsKey(Arrays.toString(cells))) {
+                int val = N;
+                int obs = observed.get(Arrays.toString(cells));
+                int res = observed.get(Arrays.toString(cells)) - N;
+                int fval = N%res;
+                System.out.println();
+                N %= observed.get(Arrays.toString(cells)) - N;
+                System.out.println(val + " " + obs + " " + res + " " + fval + " " + N);
+            }
+        }
+        return cells;
+    }
+}
+
+/* Algorithm
+1. Create a HashMap to hols unique patterns
+2. while N is greater than 0 continue
+3. create cell2 array of length 8, cells.length = 8 and cells[0] and cells[7] will become 0.
+4. the remaining cells are dependent on the adjacent cells, if they are same then it becomes 1 else it becomes 0.
+5. Assigne cells2 to cells.
+6. if the cells pattern exists within the hashMap then get then retrieve the correponding value associated with the pattern.
+7. Subtract the obtained value with the current N value.
+8. Final take the modulos of the current N value with the previously obtained value to get the index of the pattern.
+
+
+Tracing the code:
+1. [1, 0, 0, 1, 0, 0, 1, 0] 1000000000
+# Store the unique patterns in the HashMap -> There are in total 14 patterns as shown below
+2. [0, 0, 0, 1, 0, 0, 1, 0] 999999999
+3. [0, 1, 0, 1, 0, 0, 1, 0] 999999998
+4. [0, 1, 1, 1, 0, 0, 1, 0] 999999997
+5. [0, 0, 1, 0, 0, 0, 1, 0] 999999996
+6. [0, 0, 1, 0, 1, 0, 1, 0] 999999995
+7. [0, 0, 1, 1, 1, 1, 1, 0] 999999994
+8. [0, 0, 0, 1, 1, 1, 0, 0] 999999993
+9. [0, 1, 0, 0, 1, 0, 0, 0] 999999992
+10. [0, 1, 0, 0, 1, 0, 1, 0] 999999991
+11. [0, 1, 0, 0, 1, 1, 1, 0] 999999990
+12. [0, 1, 0, 0, 0, 1, 0, 0] 999999989
+13. [0, 1, 0, 1, 0, 1, 0, 0] 999999988
+14. [0, 1, 1, 1, 1, 1, 0, 0] 999999987
+15. [0, 0, 1, 1, 1, 0, 0, 0] 999999986
+
+# After 4 values the pattern repeats,
+-> N = 999999985  -> Pattern observed at  999999999  -> diff: (999999999 - 999999985) = 14  -> N = N%diff (999999985 % 14) = 5
+999999985 999999999 14 5 5
+[0, 0, 0, 1, 0, 0, 1, 0] 5
+
+4 999999998 999999994 4 4
+[0, 1, 0, 1, 0, 0, 1, 0] 4
+
+3 999999997 999999994 3 3
+[0, 1, 1, 1, 0, 0, 1, 0] 3
+
+2 999999996 999999994 2 2
+[0, 0, 1, 0, 0, 0, 1, 0] 2
+
+1 999999995 999999994 1 1
+[0, 0, 1, 0, 1, 0, 1, 0] 1
+
+0 999999994 999999994 0 0
+
+Note that cells.length = 8, and cells[0] and cells[7] will become 0.
+In fact, cells have only 2 ^ 6 = 64 different states.
+
+Time Complexity -> O(1)
+Space Complexity -> O(1)
+Because the underlying regularity guarantees the same state will show up again within 14 simulations.
+*/
