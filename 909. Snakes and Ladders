@@ -1,0 +1,83 @@
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int N = board.length;
+
+        Map<Integer, Integer> dist = new HashMap();
+        dist.put(1, 0);
+
+        Queue<Integer> queue = new LinkedList();
+        queue.add(1);
+
+        while (!queue.isEmpty()) {
+            int s = queue.remove();
+            // System.out.println(s);
+            if (s == N*N) return dist.get(s);
+
+            for (int s2 = s+1; s2 <= Math.min(s+6, N*N); ++s2) {
+                int rc = get(s2, N);
+                int r = rc / N, c = rc % N;
+                int s2Final = board[r][c] == -1 ? s2 : board[r][c];
+                // System.out.println("row = " + r + " col = " + c + " s2 = " + s2 + " s2final = " + s2Final);
+                if (!dist.containsKey(s2Final)) {
+                    dist.put(s2Final, dist.get(s) + 1);
+                    System.out.println(s2Final);
+                    queue.add(s2Final);
+                }
+            }
+            // System.out.println("-----------------------");
+        }
+        return -1;
+    }
+
+    public int get(int s, int N) {
+        // Given a square num s, return board coordinates (r, c) as r*N + c
+        int quot = (s-1) / N;
+        int rem = (s-1) % N;
+        int row = N - 1 - quot;
+        int col = row % 2 != N % 2 ? rem : N - 1 - rem;
+        int val = row * N + col;
+        // System.out.println("S = " + s + " N = " + N + " quot = " + quot + " rem = " + rem + " row = " + row + " col = " + col + " val = " + val);
+        return row * N + col;
+    }
+}
+
+/*Algorithm: Breadth First Search
+(Shortest Path - BFS is ideal)
+1. Initialize N to the length of the board.
+2. Create a HashMap -> inorder to place (current cell, number of moves )-> initially -> on cell1 and number of moves in 0. dist(1,0)
+3. Initialize a Queue as linked list -> track the cell number we are on.
+4. While Queue is not empty
+ 4.1 pop queue element.
+ 4.2 check if the queue element correponds to the final cell on board if so return the minimum  numbers value (s) from map.
+ 4.3 else, for each queue entry check the six immediate the neighbours 
+    4.3.1 get the corresponding row and col val
+    4.3.2 since the board in arranged in boustrophedonically, it is essential to calculate col from opposite side for even rows
+     0  |   1   |   2   |   3   |   4   |   5   |
+     ---------------------------------------------
+   0| 36    35      34      33      32      31
+     ---------------------------------------------
+   1| 25    26      27      28      29      30
+     ---------------------------------------------
+   2| 24    23      22      21      20      19
+     ---------------------------------------------
+   3| 13    14      15      16      17      18
+     ---------------------------------------------
+   4| 12    11      10      9       8       7
+     ---------------------------------------------
+   5| 1     2       3       4       5       6
+     ---------------------------------------------
+     s2 -> 2  (quo -> (2-1)/6 = 0; rem -> (2-1)%6 = 1; row = N-1-quo = 6-1-0 = 5; col = (row is odd) = rem = 1;  (row, col)  = (5, 1) = 2)
+     4.3.3. -> returned value is in the form : row*N+col = 5*6+1 = 31; 
+   4.4 get the appropriate row and column index
+   4.5 if the current cell contains -1 then copy the cells val -> s2
+    else -> copy the destination value
+   4.6 If the hashMap already contains the current cell position -> continue
+    else -> place the current cell poistion on the board as well as increase the number of moves (value in the hashmap);
+   4.7 Add the S2 final value to the queue
+     -> queue(1)
+     -> queue(15, 3, 4, 5, 6, 7| 16, 13, 18, 19, 20, 21 |, 8, 9 |, 10 |, 11 |, 12|, 22|, 35,23, 24, 25, 26, 27, 28, 36, 29, 30, 31, 32, 33, 34)
+   4.8 If the final cell is not reachable -> return -1;
+   
+   Time Complexity : O(N^2), where N is the length of the board
+   Space Complexity : O(N^2)
+*/
