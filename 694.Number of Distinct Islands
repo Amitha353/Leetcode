@@ -1,0 +1,59 @@
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+class Solution {
+    public int numDistinctIslands(int[][] grid) {
+        if(grid == null || grid.length ==0 || grid[0].length == 0) {
+            return 0;
+        }
+        
+        HashSet<List<Integer>> shapes = new HashSet<>();
+        for(int i = 0; i < grid.length; i++) {
+            for(int j = 0; j < grid[0].length; j++) {
+                if(grid[i][j] == 1) {
+                    List<Integer> shape = new ArrayList<>();
+                    System.out.println("i = " + i + " j = " + j);
+                    dfs(grid, i, j, shape, 0);
+                    shapes.add(shape);
+                }
+            }
+        }
+        return shapes.size();
+    }
+    
+    private void dfs(int[][] grid, int i, int j, List<Integer> shape, int direction) {
+        if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] != 1) {
+            return;
+        }
+        
+        grid[i][j] = 0;
+        shape.add(direction);
+        System.out.println("i = " + i + " j = " + j + " direction = " + direction);
+        dfs(grid, i-1, j, shape, 1);
+        dfs(grid, i+1, j, shape, 2);
+        dfs(grid, i, j-1, shape, 3);
+        dfs(grid, i, j+1, shape, 4);
+        shape.add(0);
+    }
+}
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		int[][] shapes = {{1, 1, 0, 0, 0}, {1, 1, 0, 0, 0}, {0, 0, 0, 1, 1}, {0, 0, 0, 1, 1}};
+		Solution soln = new Solution();
+		int result = soln.numDistinctIslands(shapes);
+		System.out.println(result);
+	}
+}
+
+/* 
+Time Complexity -> O(m*n)
+Space Complexity -> O(m*n)
+*/
