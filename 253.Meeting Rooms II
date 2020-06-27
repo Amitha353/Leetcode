@@ -1,0 +1,84 @@
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+
+class Interval
+{
+  int start;
+  int end;
+    Interval ()
+  {
+    start = 0;
+    end = 0;
+  }
+  Interval (int s, int e)
+  {
+    start = s;
+    end = e;
+  }
+}
+
+class Solution {
+    public int minMeetingRoom(Interval[] intervals) {
+        Arrays.sort(intervals, (a,b) -> a.start - b.start);
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        
+        for(Interval i: intervals) {
+            if(!heap.isEmpty() && heap.peek() <= i.start) {
+                // if the meeting gets over before the start of
+                // the next meeting, then can remove the meeting slot.
+                heap.poll();
+            }
+            heap.offer(i.end);
+        }
+        return heap.size();
+    }
+}
+
+public class Main
+{
+  public static void main (String[]args)
+  {
+    System.out.println ("Hello World");
+
+    Interval inter1 = new Interval (0, 30);
+    Interval inter2 = new Interval (5, 10);
+    Interval inter3 = new Interval (15, 20);
+      Interval[] intv =
+    {
+    inter1, inter2, inter3};
+  for (Interval i:intv)
+      {
+	System.out.println (i.start + " " + i.end);
+      }
+      
+     Solution sol = new Solution();
+     int result = sol.minMeetingRoom(intv);
+     System.out.println("The minimum meeting rooms required are = " + result);
+  }
+}
+
+/*
+Time Complexity 
+ -> Sorting takes O(nlogn)
+ -> Offering to min heap takes - O(logn)
+ -> for loop takes - O(nlogn)
+ -> Overall time complexity -> O(nlogn)
+
+Space Complexity -> O(k) , k is the size of the priority queue.
+
+Tracing:
+Intervals -> [[0, 30], [5, 10], [15, 20]]
+Sort by start time: [0, 30], [5, 10], [15, 20]
+remove from heap if:
+  -> heap is not empty and the top element is the heap is smaller 
+  then next interval start time. (say meeting begins at 5 and ends at 10,
+  and another meeting begins at 15 and ends at 20, so there is no conflict,
+  since 10 (end - prev interval) <= 15 (start - next interval) hence the 
+  meeting room need not be blocked.)
+*/
