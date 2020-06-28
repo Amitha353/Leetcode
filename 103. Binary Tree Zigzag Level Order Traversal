@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        Deque<TreeNode> queue = new LinkedList<>();
+        if(root != null) queue.push(root);
+        int idx = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> level = new ArrayList<>();
+            for(int i = 0; i < size; i++) {
+                TreeNode curr = queue.poll();
+                if(idx%2 == 0)
+                    level.add(curr.val);
+                else
+                    level.add(0, curr.val);
+                if(curr.left != null) queue.offer(curr.left);
+                if(curr.right != null) queue.offer(curr.right);
+            }
+            result.add(new ArrayList<>(level));
+            idx++;
+        }
+        return result;
+    }
+}
+
+/*
+Deque
+Time Complexity -> O(N) N -> length of Binary Tree
+Space Complexity -> O(N) 
+
+------Tracing -------
+idx = 0 | root 3 | queue = []
+  queue[3] | size = 1, 0%2 == 0 | lvl <3> | queue [9, 20] | res<3> | idx = 1
+  --------------------------------------------
+    queue[9, 20] | size = 2, 1%2 == 1 (insert at beginning)
+       i = 0 | lvl <9> |queue = [20]
+       i = 1 | lvl <20, 9> | queue [15, 7]
+       res = <<3>, <20, 9>>, idx = 2
+            ---------------------------------
+            queue = [15, 7], idx = 2 | size = 2 | 2%2 == 0 (insert at end)
+             i = 0 | lvl <15> | queue = [7]
+             i = 1 | lvl <15, 7> | queue = []
+             res = <<3>, <20, 9>, <15, 7>>, id = 3
+return res
+*/
