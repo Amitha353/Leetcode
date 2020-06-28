@@ -1,0 +1,54 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordAsList) {
+        if(!wordAsList.contains(endWord)) return 0;
+        
+        Set<String> wordList = new HashSet<String>(wordAsList);
+        Set<String> start = new HashSet<String>();
+        Set<String> end = new HashSet<String>();
+        int length = 1;
+        start.add(beginWord); end.add(endWord);
+        wordList.remove(beginWord); wordList.remove(endWord);
+        
+        while(!start.isEmpty()){
+            Set<String> next = new HashSet<String>();
+            for(String word: start){
+                char[] wordArray = word.toCharArray();
+                for(int i=0; i<word.length(); i++){
+                    char old = wordArray[i];
+                    for(char c='a'; c<='z'; c++){
+                        wordArray[i] = c;
+                        String str = String.valueOf(wordArray);
+                        if(end.contains(str))
+                            return length+1;
+                        if(wordList.contains(str)){
+                            next.add(str);
+                            wordList.remove(str);
+                        }
+                    }
+                    wordArray[i] = old;
+                }
+            }
+            start = next.size() < end.size() ? next: end;
+            end = start.size() < end.size() ? end : next;
+            length++;
+        }
+        return 0;
+    }
+}
+
+/* Pseudocode: (Two ended BFS)
+1. Create -> beginSet, endSet, len = 1;
+2. Add the beginWord to beginSet and endWord to endSet.
+3. while beginSet and endSet are not empty
+    3.1 If beginSet.size() > endSet.size() -> then swap the sets.
+    3.2 Create a temp set to create a new beginSet
+    3.3 convert the word in the begin set into character array.
+    3.4 keep changing characters in the word and check if they exist in the endSet, if so return len+1
+    3.5 If the target exists in the wordList, then add it to temp and visited array
+    3.6 Reset the transformed word
+    3.7 Assign the generated temp to beginSet and increase len
+4. Else return 0
+
+Time Complexity: O({M}^2 * N), where M is the length of words and N is the total number of words in the input word list. 
+Space Complexity: O({M}^2 * N), where M is the length of words and N is the total number of words in the input word list.
+*/
