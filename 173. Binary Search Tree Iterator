@@ -1,0 +1,68 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class BSTIterator {
+    Stack<TreeNode> s;
+    
+    public BSTIterator(TreeNode root) {
+        s = new Stack<>();
+        fill(root);
+    }
+    
+    public void fill(TreeNode node) {
+        while(node != null) {
+            s.push(node);
+            node = node.left;
+        }
+    }
+    
+    /** @return the next smallest number */
+    public int next() {
+        TreeNode p = s.pop();
+        fill(p.right); 
+        return p.val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    public boolean hasNext() {
+        return !s.isEmpty();
+    }
+}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
+
+/* Tracing the code:
+-> stack is used, when the Binary Search Tree is initialized the root is added to the stack, and the fill method is called.
+-> The fill method continue to add the left element in the most recent position.
+-> When next method is called, the top most elemnet of the stack/ smallest is popped and if ther is possible right element 
+it is added to the stack.
+-> hasNext() - just checks if the stack is empty or not.
+----------------------------
+-> 7 is added to stack
+-> since 3 is left : 3 | 7 on the stack.
+-> next -> 3 is out and since it has no right element nothing is added -> 7
+-> next -> 7, and then right element is add 15, since 15 has a left element -> stack : 9 | 15
+-> next -> 9
+-> next -> 15 and then right element 20 is added to the stack
+-> next 20
+------------------------------
+Time Complexity: O(1)
+Space Complexity: O(h) // h -> height of the tree
+*/
