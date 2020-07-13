@@ -53,4 +53,35 @@ Time Complexity - O(Nlogk) - where k is the number of linked lists.
     - merge two sorted linked lists in O(n) time where n is the total number of nodes in two lists.
     - sum up the merge process and we ger O(Nlogk)
 Space Complexity - O(1) - we can merge two sorted linked lists in O(1) space.
+
+=======================================
+Trace the code
+lists = [[1,4,5],[1,3,4],[2,6]]
+interval = 1
+1 < 3
+i= 0, 0+1 = 1 < 3; i += 2
+    - lists[0] = merge([1,4,5],[1,3,4])
+        - 1 < 1
+            - else block 1
+        - 1 < 3
+            - if block 1 - 1
+        - 4 < 3
+            - else block 1 - 1 - 3
+        - 4 < 4
+            - else block 1 - 1 - 3 - 4
+        - 4 < 5
+            - if block 1 - 1 - 3 - 4 - 4
+        null condition:  1 - 1 - 3 - 4 - 4 - 5
+    - result = [1, 1, 3, 4, 4, 5]
+interval = 2;
+-------------------------------------------------
+i = 2 (2+2 = 4 < 3) out of for loop
+---------------------------------------------------
+interval = 2
+2 < 3
+i = 0; 0+2 < 3; i += 4
+    - lists[0] = merge(lists[0], lists[2]) // [1, 1, 3, 4, 4, 5], [2,6]
+        - [1, 1, 2, 3, 4, 4, 5, 6] //result
+interval = 4
+--------------------------------------------
 */
