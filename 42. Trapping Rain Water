@@ -1,0 +1,41 @@
+class Solution {
+    public int trap(int[] height) {
+        if(height.length < 3) return 0;
+        
+        int l = 0, r = height.length-1, ans = 0;
+        
+        while(l < r && height[l]<= height[l+1]) l++; // If the subsequennt elevation are greater compared to preceding, increment the index, since no water can be contained.
+        while(l < r && height[r] <= height[r-1]) r--; // If the subsequent elevation from the other end are greater, decrease the index
+        
+        while(l<r) {
+            int left = height[l];
+            int right = height[r];
+            if(left <= right) { // corner elevation - traverse from the smaller end, cause it will limit the water store capacity.
+                while(l < r && left >= height[++l]) ans += left - height[l]; // difference in height of the depression and lower of the two corner max 
+            } else {
+                while(l < r && right >= height[--r]) ans += right - height[r]; // if the right side elevation is lower then the left side, repeat.
+            }
+        }
+        return ans;
+    }
+}
+/*Time - O(n), space - O(1)
+Need to compare heights on both side, traverse from the height of lower end to higher end.
+2 pointer approach, in case the subsequent  index, is at a higher elevation, shift towards it.
+in case it is at a lower elevation, subtract the value from the lower corner value.
+
+Trace the code
+[  0,  1,  0,  2,  1,  0,  1,  3,  2,  1,  2,  1]
+  0   1    2   3  4   5    6   7  8    9  10   11
+  l                                             r  //0<11, h[0] < h[1], l = 1
+     l                                          r  //1<11, h[11] < h[10] r =10
+     l                                     r       //1<10, left = 1, right = 2
+     left  l                               r       // ans = left-h[l] = 1-0 = 1
+     left      l                           r       //l=3, r=10, left=2, right=2
+              left l                       r       //ans = 1, l = 5
+              left    l                    r       //ans=2-0 = 2, l = 6
+              left         l               r       //ans=2-1 = 1, l = 7
+              left            l            r       //left < height[7], l = 7, r = 10, left = 3, right = 10
+                              left     r   right   // right >= h[r], ans = 1 (2-1), r = 9
+                              left  r      right   //ans = 0
+*/
