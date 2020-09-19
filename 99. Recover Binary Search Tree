@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    TreeNode first, last, prevNode;
+    
+    public void recoverTree(TreeNode root) {
+        findSegments(root);
+        int temp = first.val;
+        first.val = last.val;
+        last.val = temp;
+    }
+    
+    public void findSegments(TreeNode root) {
+        if(root == null) return;
+        findSegments(root.left);
+        if(prevNode != null) {
+            if(prevNode.val > root.val) {
+                if(first == null) {
+                    first = prevNode;
+                }
+                last = root;
+            }
+        }
+        prevNode = root;
+        findSegments(root.right);
+    }
+}
+
+/*
+Time Complexity - O(n)
+Space Complexity - O(1)
+*/
