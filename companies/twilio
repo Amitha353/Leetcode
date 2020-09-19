@@ -1,0 +1,44 @@
+
+def printSequence(arr, input): 
+    n = len(input) 
+    output = "" 
+    for i in range(n): 
+        if(input[i] == ' '): 
+            output = output + "0"
+        else:        
+            position = ord(input[i]) - ord('A') 
+            output = output + arr[position] 
+    return output 
+      
+str = ["2", "2", "2", 
+       "3", "3", "3", 
+       "4", "4", "4", 
+       "5", "5", "5", 
+       "6", "6", "6", 
+       "7", "7", "7", "7", 
+       "8", "8", "8", 
+       "9", "9", "9", "9" ] 
+ 
+ 
+code = ["TWLO", "CODE", "HTCH"]
+char_num = {}
+
+code = ["TWLO", "CODE", "HTCH"]
+mob_num = ["+17474824380", "+14157088956", "919810155555", "+15109926333", "+1415123456"]
+
+def vanity(str, code, mob):
+    char_num = {}
+    for c in code:
+        char_num[c] = printSequence(str, c)
+    print(char_num)
+    for num in mob_num:
+        for w in char_num:
+            if(char_num[w] in num):
+            # print(w, char_num[w], num)
+                i = num.find(char_num[w])
+                if(i+len(w) < len(num)):
+                    print(num[:i] + "-" +w+ "-"+ num[i+len(w):])
+                else:
+                    print(num[:i] + "-" +w)
+
+vanity(str, code, mob_num)        
