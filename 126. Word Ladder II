@@ -1,0 +1,90 @@
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        List<List<String>> res = new ArrayList<>();
+        Set<String> words = new HashSet<>(wordList);
+        if (!words.contains(endWord)) {
+            return res;
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        Set<String> startSet = new HashSet<>();
+        Set<String> endSet = new HashSet<>();
+        startSet.add(beginWord);
+        endSet.add(endWord);
+        bfs(startSet, endSet, map, words, false);
+        List<String> path = new ArrayList<>();
+        path.add(beginWord);
+        dfs(beginWord, endWord, map, path, res);
+        return res;
+    }
+    
+    private void dfs(String beginWord, String endWord, Map<String, List<String>> map, List<String> path, List<List<String>> res) {
+        if (beginWord.equals(endWord)) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for (String next : map.getOrDefault(beginWord, new ArrayList<>())) {
+            path.add(next);
+            // System.out.println(next);
+            dfs(next, endWord, map, path, res);
+            path.remove(path.size() - 1);
+        }
+    }
+    
+    private void bfs(Set<String> startSet, Set<String> endSet,
+                     Map<String, List<String>> map, Set<String> words, boolean reverse) {
+        if (startSet.size() == 0) {
+            return;
+        }
+        if (startSet.size() > endSet.size()) {
+            bfs(endSet, startSet, map, words, !reverse);
+            return;
+        }
+        Set<String> temp = new HashSet<>();
+        words.removeAll(startSet);
+        boolean found = false;
+        for (String s : startSet) {
+            char[] chs = s.toCharArray();
+            for (int i = 0; i < chs.length; ++i) {
+                char old = chs[i];
+                for (char k = 'a'; k <= 'z'; ++k) {
+                    if (k == old) {
+                        continue;
+                    }
+                    chs[i] = k;
+                    String newWord = new String(chs);
+                    if (words.contains(newWord)) {
+                        if (endSet.contains(newWord)) {
+                            found = true;
+                        } else {
+                            temp.add(newWord);
+                        }
+                        String key = !reverse ? s : newWord;
+                        String val = !reverse ? newWord : s;
+                        map.putIfAbsent(key, new ArrayList<>());
+                        map.get(key).add(val);
+                    }
+                }
+                chs[i] = old;
+            }
+        }
+        if (!found) {
+            bfs(temp, endSet, map, words, reverse);
+        }
+    }
+}
+
+/*
+Time Complexity-O(min(26^L, size(wordList)), Space Complexity-O(min(26^L, size(wordList)), L is the word length.
+
+Approach:
+Startset ->  to hold elements from the begin word transformation.
+Endset -> to hold the lastelement, in case the startsize grows larger than the end element, then reverse the sets
+Map -> identify the transformation path from the startset to the endset.
+Path -> list of transformation from the startset to the endset.
+bfs ->
+    - start with begin word, transform 1 step, if the endword is reach then found, else new transformation - startset
+    - each step, add the mapping to the map element.
+    - if startset size grows larger than the endset size, reverse the size.
+    - continue until, found is true (start set element contains end set element)
+dfs -> given the begin word, end word, map, deep dive to identify the transformations - creat possible lists and return.
+*/
