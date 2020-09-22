@@ -1,0 +1,32 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        int[] result = new int[n-k+1];
+        Deque<Integer> q = new ArrayDeque<>();
+        int ri = 0;
+        for(int i = 0; i < n; i++) {
+            while(!q.isEmpty() && q.peek() < i-k+1) {
+                q.poll();
+            }
+            while(!q.isEmpty() && nums[q.peekLast()] < nums[i]) {
+                q.pollLast();
+            }
+            q.offer(i);
+            if(i >= k-1) {
+                result[ri++] = nums[q.peek()];
+            }
+        }
+        return result;
+    }
+}
+
+/*
+Time Complexity - O(n)
+Space Complexity - O(k)
+
+Deque only stores number which has potential to become maximum.
+when a new number comes, all smaller numbers earlier than it has no potential to become maximum therefore they should be discarded
+invariant: items in deque is in nonincreasing order.
+when i>=k-1 we start to fill maxWindow array, also nums[i - k + 1] is the item should go out of window, if it matches front of deque
+we should remove it from the deque as well.
+*/
