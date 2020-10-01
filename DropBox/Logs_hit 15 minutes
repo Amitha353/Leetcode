@@ -1,0 +1,19 @@
+public class HitCounter {
+    
+    Queue<Integer> queue;
+    
+    public HitCounter() {
+        queue = new LinkedList<Integer>();
+    }
+    
+    public void hit(int timestamp) {
+        queue.offer(timestamp);
+    }
+    
+    public int getHits(int timestamp) {
+        while(!queue.isEmpty() && timestamp-queue.peek() >= 900) {
+            queue.poll();
+        }
+        return queue.size();
+    }
+}
