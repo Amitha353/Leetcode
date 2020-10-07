@@ -74,3 +74,14 @@ on a particular row, column or diagonal.
 Time Complexity : O(L+Q), where L -> number of lamps and Q -> number of queries.
 Space Complexity : O(L)
 */
+
+/*
+1. List the directions above
+2. create maps tocount rows, cols, fdiag, bdiag, lamptoggled
+3. traverse through the lamps, add the count to the rows, columns, fdiag, bdiad and indicate the lamp turned on.
+4. create ans array of size query.
+5. Traverse through the queries array.
+    5.1 - If a row, col, fdiag or bdiag is lit, based on the count in the maps- set it to 1 else 0.
+    5.2 - From the query point,traverse the diagonal, if we reach the lamp point, then reduce the row, col, fdiag, bdiag count, lamp is turned off.
+6. return answer.
+*/
