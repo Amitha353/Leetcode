@@ -101,4 +101,14 @@ class AutocompleteSystem {
 tags: Design, Trie, Hash Table, MinHeap, PriorityQueue
 time: input: O(x), where x = possible words, constructor: O(mn) m = max length, n = # of words
 space: O(n^2), n = # of possible words, n = # of trie levels; mainlay saving the `Map<S, freq>`
+
+Methodology:
+1. Create a Trie for each sentence. The TrieNode has two maps, 
+ - 1 map to store character, and it's children chain.
+ - 2 map to strore the sentence and count for that character of a sentence.
+ - isEnd boolean value to mark the end of character.
+2. insert method create the trie model.
+3. input a character - need to return a list of results that match the input prefix of k length (priorityQueue)
+4. Use a priorityQueue to retrieve the top k results.
+
 */
