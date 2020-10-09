@@ -1,0 +1,28 @@
+class Solution {
+    public int findCircleNum(int[][] M) {
+       int count = 0;
+        for(int row = 0; row < M.length; row++) {
+            count += dfs(M, row);
+        }
+        return count;
+    }
+    
+    public int dfs(int[][] M, int row) {
+        if(M[row][row] == 0) return 0;
+        M[row][row]= 0;
+        for(int col = 0; col < M[0].length; col++) {
+            if(M[row][col] != 0) {
+                M[row][col] = M[col][row] = 0;
+                dfs(M, col);
+            }
+        }
+        return 1;
+    }
+}
+
+/*
+DFS:
+// Time complexity: O(n^2), where n is the length of the grid
+// Space complexity: O(n)
+https://zxi.mytechroad.com/blog/graph/leetcode-547-friend-circles/
+*/
