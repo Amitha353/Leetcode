@@ -1,0 +1,46 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(nums == null || k == 0) {
+            return new int[0];
+        }
+        
+        Deque<Integer> queue = new ArrayDeque<>();
+        int n= nums.length;
+        int[] result = new int[n-k+1];
+        int ridx = 0;
+        
+        for(int i = 0; i < n; i++) {
+            
+            while(!queue.isEmpty() && queue.peek() < i-k+1) {
+                queue.poll();
+            }
+            
+            while(!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {
+                queue.pollLast();
+            }
+            
+            queue.offer(i);
+            
+            if(i >= k-1) {
+                result[ridx++] = nums[queue.peek()];
+            }
+        }
+        return result;
+    }
+}
+
+/*
+1. Given input nums array and k, windoe length, the result will be (n-k+1) length
+2. Create a queue to hold the numbers in a sequential order.
+3. loop through the array
+    3.1 if the queue is not empty, and q.peek() < [window.length given i]
+        - poll the element from the front of the queue -> slid through the window
+    3.2 if the queue is not empty and num[queue last] < num[given i]
+        - poll from the end of the queue.
+    3.3 Insert element into the queue
+    3.4 if current index >= k-1:
+     - add max element from front the queue to resultant array
+
+Time Complexity - O(n)
+Space Complexity - O(k)
+*/
