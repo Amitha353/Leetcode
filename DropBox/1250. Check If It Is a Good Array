@@ -1,0 +1,39 @@
+class Solution {
+    public boolean isGoodArray(int[] nums) {
+        int x = nums[0], y;
+        for(int n: nums) {
+            while(n> 0) {
+                y = x%n;
+                x = n;
+                n = y;
+            }
+        }
+        return x == 1;
+    }
+}
+
+/*
+- Let a % x = 0 => Q * x = a;
+- Let b % x = 0 => P * x = b;
+- a + b = 0
+    => Q * x + P * x = 0
+    => x * (Q + P) = 0
+    => (a + b) % x = 0
+    => (Xa + Yb) % x = 0, Xa + Yb != 1
+* GCD
+Time Complexity - O(n)
+SpaceComplexity - O(1)
+
+[12, 5, 7, 23]
+- x =12
+i. x=12, a = 12 | y = x%a = 12%12 = 0; x = a=  12 , a = y = 0
+ x = 12, a =0
+ii. x = 12, a = 5 | y = x%a = 12%5 = 2; x = a = 5, a = y = 2
+                  | y = x%a = 5%2 = 1; x = a = 2, a = y = 1
+                  | y = x%a = 2%1 = 0; x = a = 1; a = y = 0
+iii. x = 1, a = 7 | y = x%a = 1%7 = 1; x = a = 7; a = y = 1
+                  | y = x%a = 7%1 = 0; x = a = 1; a = y = 0
+iv. x = 1, a = 23 | y = x%a = 1%23 = 1; x = a = 23; a = y = 1
+                  | y = x%a = 23%1 = 0; x = a = 1; a =y= 0;
+return x == 1// true
+*/
