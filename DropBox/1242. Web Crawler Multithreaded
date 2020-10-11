@@ -1,0 +1,75 @@
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		String startUrl = "http://news.yahoo.com/news/topics/";
+// 		startUrl = "http://news.google.com";
+		String[] val = {
+                "http://news.yahoo.com",
+                "http://news.yahoo.com/news",
+                "http://news.yahoo.com/news/topics/",
+                "http://news.google.com",
+                "http://news.yahoo.com/us"
+		};
+		List<String> urls = Arrays.asList(val);
+        Solution sol = new Solution();
+        List<String> result = sol.crawl(startUrl, urls);
+        for(String res: result) {
+            System.out.println(res);
+        }
+	}
+}
+
+class Solution {
+    private final Set<String> set = Collections.newSetFromMap(new HashMap<String, Boolean>());
+    private final List<String> result = Collections.synchronizedList(new ArrayList<String>());
+    private String HOSTNAME = null;
+
+    public boolean judgeHostname(String url) {
+        int idx = url.indexOf('/', 7);
+        String hostName = (idx != -1) ? url.substring(0, idx) : url;
+        return hostName.equals(HOSTNAME);
+    }
+
+    private void initHostName(String url) {
+        int idx = url.indexOf('/', 7);
+        HOSTNAME = (idx != -1) ? url.substring(0, idx) : url;
+    }
+
+    public void getUrl(String startUrl, List<String> urls) {
+        result.add(startUrl);
+        List<String> res = urls; //htmlParser.getUrls(startUrl);
+        List<Thread> threads = new ArrayList<>();
+        for (String url : res) {
+            if (judgeHostname(url) && !set.contains(url)) {
+                set.add(url);
+                threads.add(new Thread(() -> {
+                    getUrl(url, urls);
+                }));
+            }
+        }
+        for (Thread thread : threads) {
+            thread.start();
+        }
+        try {
+            for (Thread thread : threads) {
+                thread.join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public List<String> crawl(String startUrl, List<String> urls) {
+        initHostName(startUrl);
+        set.add(startUrl);
+        getUrl(startUrl, urls);
+        return result;
+    }
+}
+
+/* https://zhang0peter.com/2020/02/12/LeetCode-1242-Web-Crawler-Multithreaded/
+
+*/
