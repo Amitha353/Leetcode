@@ -1,0 +1,45 @@
+class Solution {
+    public List<Integer> findNumOfValidWords(String[] words, String[] puzzles) {
+        Map<Character, List<Integer>>  map = new HashMap<>();
+        for(int i = 0; i < 26; i++) {
+            map.put((char)('a'+i), new ArrayList<>());
+        }
+        
+        for(String word: words) {
+            int mask = 0;
+            for(char ch: word.toCharArray()) {
+                mask |= (1<<(ch-'a'));
+            }
+            Set<Character> unique = new HashSet<>();
+            for(char ch: word.toCharArray()) {
+                if(unique.contains(ch)) {
+                    continue;
+                }
+                unique.add(ch);
+                map.get(ch).add(mask);
+            }
+        }
+        
+        List<Integer> result = new ArrayList<>();
+        for(String puzzle: puzzles) {
+            int pmask = 0;
+            int count = 0;
+            for(char ch: puzzle.toCharArray()) {
+                pmask |= (1<<(ch-'a'));
+            }
+            char fch = puzzle.charAt(0);
+            List<Integer> wordsToCheck = map.get(fch);
+            for(int wmask: wordsToCheck) {
+                if((wmask & pmask) == wmask) {
+                    count++;
+                }
+            }
+            result.add(count);
+        }
+        return result;
+    }
+}
+
+/*
+Bit Manipulation
+*/
