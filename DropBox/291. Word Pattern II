@@ -47,3 +47,18 @@ public class Solution {
         return false;
     }
 }
+
+
+/*
+Time Complexity
+O(N^M) Where
+N is total number of characters in an input pattern
+M is total number of characters in an input string
+f(n) = n*(n-1)*... *1=n^n.
+Recursion, break the pattern and string. Use map and set.
+https://www.programcreek.com/2014/07/leetcode-word-pattern-ii-java/
+Space Complexity:
+O(N + M) Where
+N is total number of characters in an input pattern
+M is total number of characters in an input string
+*/
