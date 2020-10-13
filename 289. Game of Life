@@ -1,0 +1,48 @@
+class Solution {
+    // 8 possible directions
+        int[][] dirs = {{1, -1}, {1, 0}, {1, 1}, {0, -1}, {0, 1}, {-1, -1}, {-1, 0}, {-1, 1}};
+    public void gameOfLife(int[][] board) {
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[0].length; j++) {
+                int live = 0;
+                
+                //count the live neigbors for a cell from possible 8 neighbors
+                for(int[] d:dirs) {
+                    //if the neigbors is out of matrix -> continue
+                    if(d[0]+i<0 || d[0]+i >= board.length || d[1]+j <0 || d[1]+j >= board[0].length) continue;
+                    if(board[d[0]+i][d[1]+j] == 1 || board[d[0]+i][d[1]+j] == 2) live++;
+                }
+                if(board[i][j] == 0 && live==3) board[i][j] = 3;
+                if(board[i][j] == 1 && (live < 2 || live > 3)) board[i][j] = 2;
+            }
+        }
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[0].length; j++) {
+                board[i][j] %= 2;
+            }
+        }
+    }
+}
+
+/*
+
+State Transition 
+0: dead to dead 
+1: live to live  - two or three neighbors are live
+2: live to dead  - underpopulation ( <2 live neighbors) or overpopulation ( >3 live neighbors)
+3: dead to live - three neighbors are live
+
+-> Begin:
+1, 2 -> alive
+0, 3 -> dead
+
+-> End:
+1, 3 -> alive
+0, 2 -> dead
+
+-> even category dead
+-> odd category live
+
+Time: O(m*n)
+Space: O(1)
+*/
