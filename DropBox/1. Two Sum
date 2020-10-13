@@ -1,0 +1,29 @@
+public class Solution {
+    /**
+     * @param numbers: An array of Integer
+     * @param target: target = numbers[index1] + numbers[index2]
+     * @return: [index1 + 1, index2 + 1] (index1 < index2)
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        // write your code here
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < numbers.length; i++) {
+            int com = target - numbers[i];
+            if(map.containsKey(com)) {
+ 
+                return new int[] {map.get(com), i};
+            } else {
+                map.put(numbers[i], i);
+            }
+        }
+        return new int[]{};
+    }
+}
+/*
+Complexity Analysis:
+
+Time complexity : O(n). We traverse the list containing nn elements only once. Each look up in the table costs only O(1) time.
+
+Space complexity : O(n)O(n). The extra space required depends on the number of items stored in the hash table, which stores at most nn elements.
+
+*/
