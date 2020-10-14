@@ -2,9 +2,11 @@ class Solution {
     public List<List<String>> findDuplicate(String[] paths) {
         List<List<String>> result = new ArrayList<>();
         HashMap<String, List<String>> map = new HashMap<>();
+        
         for(String path: paths) {
             String[] vals = path.split(" ");
             String file_dir = vals[0];
+        
             for(int i = 1; i < vals.length; i++) {
                 String[] file_info = vals[i].split("\\(");
                 String file_name = file_info[0];
@@ -13,12 +15,17 @@ class Solution {
                 list.add(file_dir+"/"+file_name);
                 map.put(file_content, list);
             }
+            
         }
+        
         for(String key: map.keySet()) {
+        
             if(map.get(key).size() > 1 ) {
                 result.add(map.get(key));
             }
+            
         }
+        
         return result;
     }
 }
@@ -26,4 +33,6 @@ class Solution {
 /*Explaination
 - The directory path is broken into -> pathname, filename -> content
 - Hash -> content and filename
+-> Time Complexity : O(n * x). n strings of average length x is parsed.
+-> Space Complexity : O(n * x). map and res size grows upto n * x
 */
