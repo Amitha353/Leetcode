@@ -1,0 +1,51 @@
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		 HitCounter obj = new HitCounter();
+		 obj.hit(1);
+		 obj.hit(2);
+		 obj.hit(3);
+		 int param_2 = obj.getHits(4);
+		 obj.hit(300);
+		 int param_3 = obj.getHits(300);
+		 int param_4 = obj.getHits(301);
+		 System.out.println(param_2 + " - " + param_3 + " - " + param_4);
+	}
+}
+
+class HitCounter {
+    int[] hits;
+    int[] ts;
+    /** Initialize your data structure here. */
+    public HitCounter() {
+        //Since it is five minutes -> array allocated -> 300
+        hits = new int[300];
+        ts = new int[300];
+    }
+
+    /** Record a hit.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public void hit(int timestamp) {
+        //if the timestamp exceeds 300 -> take modulous
+        int i = timestamp % 300;
+        if(ts[i] != timestamp) {
+            ts[i] = timestamp;
+            hits[i] = 1;
+        } else {
+            hits[i]++;
+        }
+    }
+
+    /** Return the number of hits in the past 5 minutes.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public int getHits(int timestamp) {
+        int result = 0;
+        for(int i = 0; i < hits.length; i++) {
+            if(timestamp - ts[i] < 300) {
+                result += hits[i];
+            }
+        }
+        return result;
+    }
+}
