@@ -1,0 +1,68 @@
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		PhoneDirectory obj = new PhoneDirectory(3);
+		int param_1 = obj.get();
+		boolean param_2 = obj.check(0);
+		System.out.println(param_1 + " - " + param_2); 
+		int param_3 = obj.get();
+		boolean param_4 = obj.check(1);
+		System.out.println(param_3 + " - " + param_4); 
+		int param_5 = obj.get();
+		boolean param_6 = obj.check(2);
+		System.out.println(param_5 + " - " + param_6); 
+		boolean pre_7 = obj.check(0);
+		obj.release(0);
+		boolean post_7 = obj.check(0);
+		System.out.println(0 + " - " + pre_7 + " - " + post_7); 
+		boolean pre_8 = obj.check(1);
+		obj.release(1);
+		boolean post_8 = obj.check(1);
+		System.out.println(1 + " - " + pre_8 + " - " + post_8); 
+		boolean pre_9 = obj.check(2);
+		obj.release(2);
+		boolean post_9 = obj.check(2);
+		System.out.println(2 + " - " + pre_9 + " - " + post_9); 
+	}
+}
+
+class PhoneDirectory {
+    private HashSet<Integer> used;
+    private Queue<Integer> available;
+    /** Initialize your data structure here
+        @param maxNumbers - The maximum numbers that can be stored in the phone directory. */
+    public PhoneDirectory(int maxNumbers) {
+        available = new LinkedList<Integer>();
+        used = new HashSet<Integer>();
+        for (int i = 0; i < maxNumbers; i ++) {
+            available.add(i);
+        }
+    }
+
+    /** Provide a number which is not assigned to anyone.
+        @return - Return an available number. Return -1 if none is available. */
+    public int get() {
+        if (available.isEmpty()) {
+            return -1;
+        }
+        int next = available.poll();
+        used.add(next);
+        return next;
+    }
+
+    /** Check if a number is available or not. */
+    public boolean check(int number) {
+        return !used.contains(number);
+    }
+
+    /** Recycle or release a number. */
+    public void release(int number) {
+        if (used.contains(number)) {
+           used.remove((Integer) number);
+            available.add(number); 
+        }
+    }
+}
