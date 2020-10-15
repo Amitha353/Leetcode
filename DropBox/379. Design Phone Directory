@@ -30,39 +30,45 @@ public class Main
 }
 
 class PhoneDirectory {
-    private HashSet<Integer> used;
-    private Queue<Integer> available;
+    private Set<Integer> set;
+    private Queue<Integer> queue;
+    
     /** Initialize your data structure here
         @param maxNumbers - The maximum numbers that can be stored in the phone directory. */
     public PhoneDirectory(int maxNumbers) {
-        available = new LinkedList<Integer>();
-        used = new HashSet<Integer>();
-        for (int i = 0; i < maxNumbers; i ++) {
-            available.add(i);
+        set = new HashSet<>();
+        queue = new LinkedList<>();
+        for(int i = 0; i < maxNumbers; i++) {
+            queue.offer(i);
         }
     }
 
     /** Provide a number which is not assigned to anyone.
         @return - Return an available number. Return -1 if none is available. */
     public int get() {
-        if (available.isEmpty()) {
+        if(queue.isEmpty()) {
             return -1;
         }
-        int next = available.poll();
-        used.add(next);
-        return next;
+        
+        int newval = queue.poll();
+        set.add(newval);
+        return newval;
     }
 
     /** Check if a number is available or not. */
     public boolean check(int number) {
-        return !used.contains(number);
+        return !set.contains(number);
     }
 
     /** Recycle or release a number. */
     public void release(int number) {
-        if (used.contains(number)) {
-           used.remove((Integer) number);
-            available.add(number); 
+        if(set.contains(number)) {
+            set.remove(number);
+            queue.offer(number);
         }
     }
 }
+
+/*
+https://cheonhyangzhang.gitbooks.io/leetcode-solutions/content/379-design-phone-directory.html
+*/
