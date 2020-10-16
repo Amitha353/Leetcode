@@ -1,0 +1,26 @@
+class Solution {
+    public int maximumSum(int[] arr) {
+        int del = arr[0], keep= arr[0], result = arr[0];
+        
+        for(int i = 1; i < arr.length; i++) {
+            //state - del : Already deleted one element 
+            // - value of the previous element -> keep
+            // - add the current element to del
+            del = Math.max(keep, del+arr[i]);
+            
+            //Have to delete an element
+            // - add current value to previous keep
+            // - start subarray over
+            keep = Math.max(keep + arr[i], arr[i]);
+            result = Math.max(result, Math.max(del, keep));
+        }
+        return result;
+    }
+}
+
+/*
+Try thinking of it as being in one of two states: have yet to delete an element, and already deleted one element. keep is the state where we have yet to delete any elements. For keep, we either add the current value to the previous keep, OR we start our subarray over and just use arr[i]. In the above solution, del is the "already deleted one element" state. There's two ways we can get to that del state: using the value of our previous keep state and deleting the current element (which is the same thing as not including the element in the sum) and we can do this because in the keep state we are allowed to delete something, OR we can add the current element to the previous del state. This is why we can never "delete more than one element in the array", because the previous del is not included as an option for the Math.max, only del + arr[i] and keep are. Hope this helps clarify things!
+
+Time Complexity - O(n)
+Space Complexity - O(1)
+*/
