@@ -1,0 +1,27 @@
+class Solution {
+    public int superEggDrop(int K, int N) {
+        int[][]  dp = new int[N+1][K+1];
+        int moves = 0;
+        while(dp[moves][K] < N) {
+            moves++;
+            for(int k = 1; k <= K; ++k) {
+                dp[moves][k] = dp[moves-1][k-1] + dp[moves-1][k]+1;
+            }
+        }
+        return moves;
+    }
+}
+
+/*
+Dynamic programming:
+* Time Complexity : O(NK) decalre the space, O(KlogN) runnin
+* Space Complexity : O(NK)
+
+dp[m][k] = dp[m - 1][k - 1] + dp[m - 1][k] + 1.
+- The dp[m][k] -bit means the highest levels we can confirm. 
+- 1 move to a floor and the egg will break or not. 
+- If the egg breaks, it means we should find the answer under this level, and it also means this level can not be higher than dp[m-1][k-1] + 1 otherwise we will unable to get the answer. 
+- If the egg doesn't break, we will use the k eggs and m-1 moves to go higher. 
+- So the largest level we can touch is dp[m-1][k-1] + 1 + dp[m-1][k]. 
+- We can find the answer use k eggs and m moves in any level which not higher than it.
+*/
