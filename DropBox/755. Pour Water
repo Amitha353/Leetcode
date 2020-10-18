@@ -1,0 +1,32 @@
+public class Solution {
+    /**
+     * @param heights: the height of the terrain
+     * @param V: the units of water
+     * @param K: the index
+     * @return: how much water is at each index
+     */
+    public int[] pourWater(int[] heights, int V, int K) {
+        // Write your code here
+        int n = heights.length;
+        
+        for(int l = 0; l < V; l++) {
+            int idx = K;
+            while(idx > 0 && heights[idx] >= heights[idx-1]) {
+                idx--;
+            }
+            while(idx+1 < n && heights[idx] >= heights[idx+1]) {
+                idx++;
+            }
+            while(idx > K && heights[idx] == heights[idx-1]) {
+                idx--;
+            }
+            heights[idx]++;
+        }
+        return heights;
+    }
+}
+
+/*
+Time: O(VK)
+Space: O(1)
+*/
