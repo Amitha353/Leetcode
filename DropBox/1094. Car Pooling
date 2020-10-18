@@ -1,0 +1,24 @@
+class Solution {
+    Map<Integer, Integer> map = new TreeMap<>();
+    
+    public boolean carPooling(int[][] trips, int capacity) {
+        for(int[] trip: trips) {
+            map.put(trip[1], map.getOrDefault(trip[1], 0) + trip[0]);
+            map.put(trip[2], map.getOrDefault(trip[2], 0) - trip[0]);
+        }
+        
+        for(int v: map.values()) {
+            capacity -= v;
+            if(capacity < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+/*
+Consider a number line - start and end, even if there is overlap, capacity must not exceed
+Time Complexity - O(NlogN) , N -> number of trips
+Space Complexity - O(N)
+*/
