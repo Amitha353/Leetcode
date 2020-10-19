@@ -1,0 +1,52 @@
+class Solution {
+    public List<Integer> busiestServers(int k, int[] arrival, int[] load) {
+        
+        int fre[] = new int[k], availability[] = new int[k], max = 0;
+        
+        TreeSet<Integer> free = new TreeSet<>();
+        PriorityQueue<Integer> busy = new PriorityQueue<>((a, b) -> availability[a] - availability[b]);
+        
+        for(int i = 0; i < k; i++) free.add(i);
+        
+        for(int i = 0; i < arrival.length; i++) {
+            // try to get all free nodes
+            while(!busy.isEmpty() && availability[busy.peek()] <= arrival[i]) {
+                free.add(busy.poll());
+            }
+            
+            if(free.isEmpty()) continue ; // drop
+            
+            
+            if(free.contains(i % k)) { // i + k server is free
+                free.remove(i % k);
+                availability[i % k] = arrival[i] + load[i];
+                busy.add(i % k);
+                
+                fre[i % k]++;
+                max = Math.max(max, fre[i % k]);
+            } else { // find next free server
+                Integer nxt = free.ceiling(i % k); // try to find a free server next to i
+                if(nxt == null) nxt = free.first(); // no free server with index larger than i. So we use a server with minimum index
+                
+                free.remove(nxt);
+                availability[nxt] = arrival[i] + load[i];
+                busy.add(nxt);
+                
+                fre[nxt]++;
+                max = Math.max(max, fre[nxt]);
+            }
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < k; i++) if(fre[i] == max) res.add(i);
+        
+        return res;
+    }
+}
+
+/*
+Time Complexity - O(nlogk) 
+About time complexity, iterating the N elements in A and L takes O(N), within each iteration, the amortized time complexity is O(logK). 
+It's because the sizes of the free and busy are at most K, so each push and pop operation takes O(logK) time.
+Space Complexity - Space: O(K)
+*/
