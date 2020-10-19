@@ -1,0 +1,67 @@
+import java.util.*;
+
+class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello world!");
+    Queue<Character> nums = new LinkedList<>();
+    Stack<Character> opers = new Stack<>();
+
+    String orgs = "(-(+33)2";
+
+    for(int i = 0; i < orgs.length(); i++) {
+      if(orgs.charAt(i) == '(' || orgs.charAt(i) == ')') continue;
+      else if(Character.isDigit(orgs.charAt(i))) {
+        nums.offer(orgs.charAt(i));
+      } else {
+        opers.push(orgs.charAt(i));
+      }
+    }
+    char first = nums.poll();
+    char oper = opers.pop();
+    char second = nums.poll();
+    int result = getCalculation(first, oper, second);
+    while(!nums.isEmpty()) {
+      char sec = nums.poll();
+      char operand = opers.pop();
+      result = getCalculation(result, operand, sec);      // System.out.println
+    }
+    System.out.println(result);
+  }
+
+  public static int getCalculation(char first, char sign, char second) {
+    int firstNumber = Integer.parseInt(String.valueOf(first));
+    int secondNumber = Integer.parseInt(String.valueOf(second));
+    int result = 0;
+    if (sign == '+'){
+      result = firstNumber + secondNumber;
+    } else if (sign == '-') {
+      result = firstNumber - secondNumber;
+    } else if(sign == '*') {    
+      result = firstNumber * secondNumber;
+    } else if (sign == '/'){
+      result = firstNumber / secondNumber;
+    } else {
+      System.out.println("unknown operation");  
+    }
+    return result;
+  }
+
+  public static int getCalculation(int firstNumber, char sign, char second) {
+    // int firstNumber = Integer.parseInt(String.valueOf(first));
+    int secondNumber = Integer.parseInt(String.valueOf(second));
+    int result = 0;
+    if (sign == '+'){
+      result = firstNumber + secondNumber;
+    } else if (sign == '-') {
+      result = firstNumber - secondNumber;
+    } else if(sign == '*') {    
+      result = firstNumber * secondNumber;
+    } else if (sign == '/'){
+      result = firstNumber / secondNumber;
+    } else {
+      System.out.println("unknown operation");  
+    }
+    return result;
+  }
+}
+  
