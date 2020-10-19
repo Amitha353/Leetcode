@@ -1,0 +1,44 @@
+class Solution {
+    public int knightDialer(int n) {
+        if(n == 1) return 10;
+        int MOD = 1000000007;
+        
+        double[][] dp = new double[n][10];
+        int paths[][] = {{4, 6}, {6, 8}, {7, 9}, {4, 8}, {0, 3, 9}, {}, {0, 1, 7}, {2, 6}, {1, 3}, {2, 4}}; // Previous moves of knight-> For instance, if a knight is at 0, it reached from either 4 or 6. Similarly if it is at 1, it is reached from 7 or 9  & so on
+
+        
+        for(int i = 0; i < 10; i++) {
+            dp[0][i] = 1;//populate the base case for n =1
+        }
+        
+        for(int i = 1; i < n; i++) { // no of steps taken by knight to reach i
+            for(int j = 0; j < 10; j++) {// no of digits
+                for(int path: paths[j]) {// Previous move of knight in order to reach digit j
+                    dp[i][j] += dp[i-1][path];// cumulatively add from the previous knight move. For instance., F(2, 0) -> F(1,4) +  F(1,6) F(2,6) -> F(1,0) + F(1,1) + F(1,7)
+                }
+                dp[i][j] %= MOD;
+            }
+        }
+        
+        double sum = 0d;
+        for(int i = 0; i < 10; i++) {
+            sum += dp[n-1][i];
+        }
+        return (int)(sum%MOD);
+    }
+}
+
+/*
+Time Complexity - O(N)
+Space Complexity - O(1)
+
+11-digit will result in int overflow, thus we need a 10-digit number.
+2 numbers less than 1e9+7 is safe to sum since 2 * (1e9 + 7) < 2^31 - 1.
+1e9 + 7 is prime, which is helpful when you need modular division.
+
+cur[i]: how many ways to to get to position 0.
+Inside the loop, we can declare that long[] next = new long[10], copy of the cur array is not necessary.
+next[0] = cur[4] + cur[6]: if the next position is 0, it could from position 4 or position 6. Thus we add them up.
+
+At first, what I trying to do is if the current position is X, get the next position. But for DP, we should try to get the next state based on the current known state.
+*/
