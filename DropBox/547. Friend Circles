@@ -1,3 +1,57 @@
+class UnionFind {
+    int[] parent;
+    public UnionFind(int n) {
+        parent = new int[n];
+        for(int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+    
+    public void union(int x, int y) {
+        int rootx = find(x);
+        int rooty = find(y);
+        if(rootx == rooty) return;
+        parent[rootx] = rooty;
+    }
+    
+    public int find(int x) {
+        if(parent[x] == x) {
+            return x;
+        }
+        return parent[x] = find(parent[x]);
+    }
+}
+
+class Solution {
+    public int findCircleNum(int[][] M) {
+        if(M.length == 0 || M[0].length == 0 || M == null) {
+            return 0;
+        }
+        
+        int r = M.length, c = M[0].length;
+        Set<Integer> set = new HashSet<>();
+        UnionFind uf = new UnionFind(r);
+        
+        for(int i = 0; i < r; i++) {
+            for(int j = 0; j < c; j++) {
+                if(M[i][j] == 1) {
+                    uf.union(i, j);
+                }
+            }
+        }
+        
+        for(int i = 0; i < r; i++) {
+            uf.parent[i] = uf.find(i);
+            set.add(uf.parent[i]);
+        }
+        return set.size();
+    }
+}
+
+/*
+Union-Find above
+*/
+
 class Solution {
     public int findCircleNum(int[][] M) {
        int count = 0;
