@@ -50,4 +50,9 @@ We check in group of 3, if they are the same absolute value, we mark them for cr
 Time complexity O((rc)^2), because it costs 3rc to scan the whole board then we call at most rc/3 times
 Space complexity O(1)
 - https://just4once.gitbooks.io/leetcode-notes/content/leetcode/two-pointers/723-candy-crush.html
+
+Check if the curent grid value is 0 , continue;
+if three in row or column are same value , then negate.
+
+for each column, begin from bottom,if positive, retain, else fill with zeros.
 */
