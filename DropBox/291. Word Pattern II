@@ -29,7 +29,7 @@ public class Solution {
         char ch = pattern.charAt(i);
         for(int k = j+1; k <= str.length(); k++) {
             String sub = str.substring(j, k);
-            if(!map.containsKey(ch)) {
+            if(!map.containsKey(ch) && !map.containsValue(sub)) {
                 map.put(ch, sub);
                 if(helper(pattern, str, i+1, k, map)) {
                     return true;
