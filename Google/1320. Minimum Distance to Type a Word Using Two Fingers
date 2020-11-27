@@ -57,4 +57,7 @@ DFS with Memoization
             cond2 = getDist(null, K)//0
             call2 = (CAKE, 3, A, K);
         -------------------------------
+Time Complexity : O(n*27^m) m : number of fingers
+Space Complexity : O(n*27^m) m : number of fingers
+ 
 */
