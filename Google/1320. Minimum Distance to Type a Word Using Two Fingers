@@ -1,0 +1,30 @@
+class Solution { 
+    int[][][] dp = new int[27][27][301];
+    
+    public int minimumDistance(String word) {
+        return minDist(word, 0, null, null);
+    }
+    
+    public int minDist(String word, int pos, Character c1, Character c2) {
+        if(pos >= word.length()) return 0;
+        int idx1 = c1 == null ? 0 : c1 - 'A'+1;
+        int idx2 = c2 == null ? 0 : c2 - 'A'+1;
+        if(dp[idx1][idx2][pos] == 0) {
+            int cond1 = getDist(c1, word.charAt(pos));
+            int call1 = minDist(word, pos+1, word.charAt(pos), c2);
+            int cond2 = getDist(c2, word.charAt(pos));
+            int call2 = minDist(word, pos+1, c1, word.charAt(pos));
+            dp[idx1][idx2][pos] =  Math.min(cond1+call1, cond2+call2);
+        }
+        return dp[idx1][idx2][pos];
+    }
+    
+    public int getDist(Character c1, Character c2) {
+        if(c1 == null || c2 == null) return 0;
+        int i = c1-'A';
+        int j = c2-'A';
+        int x1 = i/6, y1 = i%6, x2 = j/6, y2 = j%6;
+        return Math.abs(x1-x2) + Math.abs(y1-y2);
+    }
+}
+
