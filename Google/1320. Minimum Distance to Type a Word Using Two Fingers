@@ -28,3 +28,33 @@ class Solution {
     }
 }
 
+/*
+DFS with Memoization
+(CAKE, 0, null, null) 
+-----------------------
+    cond1 = getDist(C, null) //0
+    call1 = (CAKE, 1, C, null)
+    -----------------------------
+    (CAKE, 1, C, null)
+    -------------------
+        cond1 = getDist(C, A)
+        call1 = (CAKE, 2, A, null)
+        ---------------------------
+        (CAKE, 2, A, null)
+        -------------------
+            cond1 = getDist(A, K)
+            call1 = (CAKE, 3, K, null)//0
+            ---------------------------
+            (CAKE, 3, K, null)
+            ------------------
+                cond1 = getDist(K, E)
+                call1 = (CAKE, 4, E, null) // 0
+                cond2 = getDist(null, E) // 0
+                call2 = (CAKE, 4, K, E) // 0
+            ------------------
+            return 0
+            ---------------------
+            cond2 = getDist(null, K)//0
+            call2 = (CAKE, 3, A, K);
+        -------------------------------
+*/
