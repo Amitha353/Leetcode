@@ -1,0 +1,51 @@
+class Solution {
+    public boolean isPossibleDivide(int[] nums, int k) {
+        Map<Integer, Integer> map = new TreeMap<>();
+        for(int n: nums) {
+            map.put(n, map.getOrDefault(n, 0)+1);
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        int frequency = 0;
+        int prev = -1;
+        for(int n: map.keySet()) {
+            if(frequency > 0 && n > prev+1 || frequency > map.get(n)) return false;
+            queue.offer(map.get(n)-frequency);
+            frequency = map.get(n);
+            prev = n;
+            if(queue.size() == k) {
+                frequency -= queue.remove();
+            }
+        }
+        return frequency == 0;
+    }
+}
+
+/*Pseudocode
+- TreeMap - Frequency Map - to track the frequency of integers inside the nums[].
+- TreeMap ensures that all the numbers are sorted in ascending.
+- Introduce the queue to append the difference of the frequency between the current element and previous element.
+- lastChecked tracks the key - check if the values are consecutive.
+- opened - checks the frequency of the current element.
+- if the size of queue exceeds k, then remove an element from the queue.
+- once done traversing the queue elements check if opened == 0.
+
+Time Complexity - nlogn
+Space Complexity - n / k
+
+Trace the code:
+---------------
+<1, 1>, <2, 1>, <3, 2>, <4, 2>, <5, 1>, <6, 1>
+-------------
+frequency = 0, prev = -1
+q(1-0)          | frequency = 1 | prev = 1
+q(1, 1-1)       | frequency = 1 | prev = 2
+q(1, 0, 2-1)    | frequency = 2 | prev = 3
+q(1, 0, 1, 2-2) | frequency = 2 | prev = 4
+q.size() == k (4) == q(0, 1, 0) ~ frequency = 2 - 1 = 1
+q(0, 1, 0, 1-1) | frequency = 1 | prev = 5
+q.size() == k (4) == q(1, 0, 0) ~ frequency = 1 - 0 = 1
+q(1, 0, 0, 1-1) | frequency = 1 | prev = 5
+q.size() == k (4) == q(0, 0, 0) ~ frequency = 1 - 1 = 0
+return frequency == 0 (0);
+*/
