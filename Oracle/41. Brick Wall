@@ -1,0 +1,22 @@
+class Solution {
+    public int leastBricks(List<List<Integer>> wall) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+        for(List<Integer> l : wall) {
+            int sum = 0;
+            for(int i = 0; i < l.size()-1; i++) {
+                sum += l.get(i);
+                map.put(sum, map.getOrDefault(sum, 0)+1);
+                count = Math.max(count, map.get(sum));
+                // System.out.println(sum + " | " +map.get(sum) + " - " + count);
+            }
+        }
+        return wall.size()-count;
+    }
+}
+
+/*
+HashMap
+Time Complexity - O(N) / All element of List
+Space Complexity - O(N) / HashMap
+*/
