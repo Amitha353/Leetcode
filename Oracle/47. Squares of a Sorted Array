@@ -1,0 +1,19 @@
+class Solution:
+    def sortedSquares(self, A: List[int]) -> List[int]:
+        l = 0
+        r = len(A)-1
+        
+        result = list()
+        while l <= r:
+            if abs(A[l]) > abs(A[r]):
+                result.append(A[l]**2)
+                l += 1
+            else:
+                result.append(A[r]**2)
+                r -= 1
+        return result[::-1]
+
+""" Two pointer Approach
+Time Complexity - O(N)
+Space Complexity - O(N)
+"""
