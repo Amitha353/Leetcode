@@ -1,0 +1,11 @@
+class Solution {
+    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+//         In the below four cases, the rectangle is not overlapping - otherwise the rectangle is overlapping
+//         Maximum of rec1 in x is less than or equal to minimum of rec2 
+//         Maximum of rec1 in y is less than or equal to minimum of rec2
+//         Maximum of rec2 in x is less than or equal to minimum of rec1
+//         Maximum of rec2 in y is less than or equal to minimum of rec1
+        // return (!(rec1[2]<=rec2[0] ||rec1[3]<=rec2[1]|| rec2[2]<=rec1[0]||rec2[3]<=rec1[1]));
+        return (!(rec1[2]<=rec2[0] || rec1[3] <= rec2[1] || rec2[2] <= rec1[0] || rec2[3] <= rec1[1]));
+    }
+}
