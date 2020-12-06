@@ -1,0 +1,34 @@
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        /* Use a priority Queue to keep track of k top words -> compare the word counts, if similar, check the lexographical representation 
+        of the word , else compare the count/frequency */
+        // Datastructure -> HashMap -> word : Key, frequeny of word : Value
+        //Priority queue to store the values, in value, lexiographical manner
+        //List returns the k top-most value
+        HashMap<String, Integer> map = new HashMap<>();
+        
+        for(String word: words) {
+            map.put(word, map.getOrDefault(word, 0)+1);
+        }
+        
+        PriorityQueue<String> heap = new PriorityQueue<String>(
+            (w1, w2) -> map.get(w1) == map.get(w2) ? w2.compareTo(w1) : map.get(w1) - map.get(w2)
+        );
+        
+        for(String word: map.keySet()) {
+            heap.offer(word);
+            if(heap.size() > k) heap.poll();
+        }
+        
+        List<String> result = new ArrayList<>();
+        while(!heap.isEmpty()) {
+            result.add(heap.poll());
+        }
+        Collections.reverse(result);
+        return result;
+    }
+}
+
+/* Time Complexity -> O(N log K)
+Space Complexity -> O(N) , space to store the map.
+*/
