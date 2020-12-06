@@ -1,0 +1,132 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int pathSum(TreeNode root, int sum) {
+        Map<Integer, Integer> preSum = new HashMap<>();
+        preSum.put(0, 1);
+        return helper(root, 0, sum, preSum);
+    }
+    
+    public int helper(TreeNode root, int currentSum, int target, Map<Integer, Integer> map) {
+        if(root == null)
+            return 0;
+        
+        currentSum += root.val;
+        int result = map.getOrDefault(currentSum - target, 0);
+        map.put(currentSum, map.getOrDefault(currentSum, 0)+1);
+        
+        result += helper(root.left, currentSum, target, map) + helper(root.right, currentSum, target, map);
+        map.put(currentSum, map.get(currentSum)-1);
+        return result;
+    }
+}
+
+/*
+Time Complexity - O(n)
+Space Complexity - O(n) - HashMap
+
+The prefix stores the sum from the root to the current node in the recursion
+The map stores <prefix sum, frequency> pairs before getting to the current node. We can imagine a path from the root to the current node. The sum from any node in the middle of the path to the current node = the difference between the sum from the root to the current node and the prefix sum of the node in the middle.
+We are looking for some consecutive nodes that sum up to the given target value, which means the difference discussed in 2. should equal to the target value. In addition, we need to know how many differences are equal to the target value.
+Here comes the map. The map stores the frequency of all possible sum in the path to the current node. If the difference between the current sum and the target value exists in the map, there must exist a node in the middle of the path, such that from this node to the current node, the sum is equal to the target value.
+Note that there might be multiple nodes in the middle that satisfy what is discussed in 4. The frequency in the map is used to help with this.
+Therefore, in each recursion, the map stores all information we need to calculate the number of ranges that sum up to target. Note that each range starts from a middle node, ended by the current node.
+To get the total number of path count, we add up the number of valid paths ended by EACH node in the tree.
+Each recursion returns the total count of valid paths in the subtree rooted at the current node. And this sum can be divided into three parts:
+- the total number of valid paths in the subtree rooted at the current node's left child
+- the total number of valid paths in the subtree rooted at the current node's right child
+- the number of valid paths ended by the current node
+
+1. (TN(10), 0, 8, <(0, 1)>)
+ - currentsum = 0+10 = 10
+ - res = map.get(10-8) = 0
+ - <(0, 1), (10, 1)>
+ res + LHS(TN(5), 10, 8, <(0, 1), (10, 1)>) + RHS(TN(-3), 10, 8, <(0, 1), (10, 1)>)
+
+    2. (TN(5), 10, 8, <(0, 1), (10, 1)>)
+        - currentSum = 10 +5 = 15
+        - res = map.get(15-8) = map.get(7) = 0
+        - <(0, 1), (10, 1), (15, 1)>
+        res + LHS(TN(3), 15, 8, <(0, 1), (10, 1), (15, 1)>) + RHS(TN(2), 15, 8, <(0, 1), (10, 1), (15, 1)>)  
+        
+        3. TN(3), 15, 8, <(0, 1), (10, 1), (15, 1)>
+            - currentSum = 15+3 = 18
+            - res = map.get(18-8) = map.get(10) = 1
+            - <(0, 1), (10, 1), (15, 1), (18, 1)>
+            res+ LHS(TN(3), 18, 8, <(0, 1), (10, 1), (15, 1), (18,1)>) + RHS(TN(-2), 18, 8, <(0, 1), (10, 1), (15, 1), (18,1)>)  
+            
+            4. TN(3), 18, 8, <(0, 1), (10, 1), (15, 1), (18,1)>
+                - currentSum = 18+3 = 21
+                - res = map.get(21-8) = map.get(13) = 0
+                - <(0, 1), (10, 1), (15, 1), (18,1), (21, 1)>
+                res = res + LHS(null) + RHS(null) = 0
+                - <(0, 1), (10, 1), (15, 1), (18,1), (21, 0)>
+                return res(0)
+            
+            4. TN(-2), 18, 8, <(0, 1), (10, 1), (15, 1), (18,1)>
+                - currentSum = 18-2 = 16
+                - res = map.get(16-8) = map,get(8) = 0
+                - <(0, 1), (10, 1), (15, 1), (18,1), (16, 1), (21, 0)>
+                res = res + LHS(null) + RHS(null) = 0
+                - <(0, 1), (10, 1), (15, 1), (18,1), (21, 0), (16, 0)>
+                return res(0)
+            
+            res = 1 + 0 + 0 = 1
+            - <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0)>
+            return res (1)
+        
+        3. TN(2), 15, 8, <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0)>)
+            - currentSym = 15 +2 = 17
+            - res = map.get(17-8) = map.get(9) = 0
+            <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0), (17, 1)>
+            res += LHS(null) + RHS(TN(1), 17, 8, <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0), (17, 1)>)
+            
+            4. TN(1), 17, 8, <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0), (17, 1)>
+                - currentSum = 17+1 = 18
+                - res = map.get(18-8) = map.get(10) = 1
+                <(0, 1), (10, 1), (15, 1), (18,1), (21, 0), (16, 0), (17, 1)>
+                - res = res + LHS(null) + RHS(null) = 1+ 0 + 0 = 1
+                <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0), (17, 1)>
+                return res(1)
+            
+            res = 0 + 0 + 1
+            <(0, 1), (10, 1), (15, 1), (18,0), (21, 0), (16, 0), (17, 0)>
+            return res;
+    
+    res = 0 + 1 + 1 = 2
+    2. TN(-3), 10, 8, <(0, 1), (10, 1)>
+    - currentSum = 10-3 = 7
+    - res = map.get(7-8) = 0;
+    <(0, 1), (10, 1), (7, 1)>
+    res = res + LHS(null) + RHS(TN(11), 7, 8, <(0, 1), (10, 1), (7,1)>)
+    
+        3. TN(11), 7, 8, <(0, 1), (10, 1), (7,1)>
+        - currentSum = 11+7 = 18
+        - res = map.get(18-8)= 1
+        <(0, 1), (10, 1), (7,1), (18, 1)>
+        res = res + LHS(null) + RHS(null)  = 1+0+0 = 1
+        <(0, 1), (10, 1), (7,1), (18, 0)>
+        return res(1)
+    
+    res = 0+0+1 = 1
+    <(0, 1), (10, 1), (7,0)>
+    return res(1)
+
+1. res = res + LHS(TN(5), 10, 8, <(0, 1), (10, 1)>) + RHS(TN(-3), 10, 8, <(0, 1), (10, 1)>)
+res = 0+2+1 = 3
+<(0, 1), (10, 0)>)
+return res(3)
+*/
