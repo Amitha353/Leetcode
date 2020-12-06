@@ -1,0 +1,13 @@
+class Solution {
+    public double myPow(double x, int n) {
+        // Any number raised to 0 is 1
+        if (n == 0) return 1;
+        //If a power is negative, then it's a positive power associated with the denominator
+        if (n < 0){
+            x = 1/x;
+            return (n %2 == 0) ? myPow(x*x, -(n/2)) : x*myPow(x*x, -(n/2));
+        }
+        //If the power is positive, the number can be doubled while the power can be halved
+        return (n %2 == 0) ? myPow(x*x, n/2) : x*myPow(x*x, n/2);
+    }
+}
