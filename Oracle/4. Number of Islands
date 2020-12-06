@@ -1,0 +1,40 @@
+class Solution {
+    public int numIslands(char[][] grid) {
+        if(grid==null || grid.length == 0) return 0;
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int result = 0;
+        
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(grid[i][j] == '1') {
+                    result++;
+                    dfs(i, j, grid);
+                }
+            }
+        }
+        return result;
+    }
+    
+    public void dfs(int row, int col, char[][] grid) {
+        if(row < 0 || col < 0 || row >= grid.length || col >= grid[0].length || grid[row][col] == '0') return;
+        
+        grid[row][col] = '0';
+        dfs(row-1, col, grid);
+        dfs(row, col-1, grid);
+        dfs(row, col+1, grid);
+        dfs(row+1, col, grid);
+    }
+}
+
+/*
+Algorithm : DFS - Depth first search 
+- Since the problem requires exploration of a confined grid space. The grid space can be treated as a strongly connected graph. It can be resolved by applying DFS on each component.
+In each DFS() call an unvisited component is explored. The number of calls to the DFS will give the number of connected components in the graph.
+
+- Alternate Approach - BFS - Breadth first search.
+
+Time Complexity : O(row x col) # row ->  number of rows in grid, # col ->  number of columns in the grid.
+Space complexity : O(row x col) # row ->  number of rows in grid, # col ->  number of columns in the grid.
+- Optimum solution
+*/
