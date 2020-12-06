@@ -1,0 +1,24 @@
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int n: nums) {
+            map.put(n, map.getOrDefault(n, 0)+1);
+        }
+        
+        PriorityQueue<Map.Entry<Integer, Integer>> pq = new PriorityQueue<>((a, b) -> b.getValue() - a.getValue());
+        for(Map.Entry<Integer, Integer> entry: map.entrySet()) {
+            pq.offer(entry);
+        }
+        int[] result = new int[k];
+        for(int i = 0; i < k; i++) {
+            Map.Entry<Integer, Integer> freqItem = pq.poll();
+            result[i] = freqItem.getKey();
+        }
+        return result;
+    }
+}
+
+/*
+Time Complexity - O(N log K)
+Space Complexity - O(N+K) - store the hashmap with n elements and heap with k elements.
+*/
