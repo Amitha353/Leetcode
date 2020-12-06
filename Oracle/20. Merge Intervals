@@ -1,0 +1,33 @@
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if(intervals.length <= 1) return intervals;
+        Arrays.sort(intervals, (a1, a2) -> Integer.compare(a1[0], a2[0]));
+        int[] current = intervals[0];
+        List<int[]> result = new ArrayList<>();
+        result.add(current);
+        for(int[] interval: intervals) {
+            if(current[1] >= interval[0]) {
+                current[1] = Math.max(current[1], interval[1]);
+            } else {
+                current = interval;
+                result.add(current);
+            }
+            
+        }
+        return result.toArray(new int[result.size()][]);
+    }
+}
+
+/* Algorithm | Pseudocode
+-> Sorting : if the last element of an array is greater than the first element on an array, then can merge intervals.
+1. if intevals.length is less than or equal to 1, return interval.
+2. Sort the arrays, such that its ordered according to the first element in each array.
+3. Take the first interval as current add it for the result list.
+4. loop through the intervals, if the first element of succedding array is smaller that the last element of the precedding array than there exists 
+an overlap
+5. Otherwise, add the interval as current and add it to the result.
+6. Convert the result list into an 2-D array and return.
+
+Time Complexity -> O(nlogn) -> sort and a linear scan
+Space Complexity -> O(1) or O(n) // if we can sort intervals in place , we don't need more than constant additional space. Otherwise, we must allocate linear space to store a copy of intevals and sort.
+*/
