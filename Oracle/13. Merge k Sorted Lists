@@ -1,0 +1,88 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists.length == 0 || lists == null) return null;
+        int interval = 1;
+        while(interval <= lists.length) {
+            for(int i = 0; i+interval < lists.length; i+= interval * 2) {
+                lists[i] = mergeTwoLists(lists[i], lists[i+interval]);
+            }
+            interval *= 2;
+        }
+        return lists[0];
+    }
+    
+    private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode check = new ListNode(0);
+        ListNode result = check;
+        while(l1 != null && l2 != null) {
+            if(l1.val < l2.val) {
+                check.next = l1;
+                check = check.next;
+                l1 = l1.next;
+            } else {
+                check.next = l2;
+                check = check.next;
+                l2 = l2.next;
+            }
+        }
+        if(l1 == null) check.next = l2;
+        if(l2 == null) check.next = l1;
+        return result.next;
+    }
+}
+
+/*
+Merge with Divide and Conquer
+- Pair up k lists and merge each pair.
+- After the first pairing, k lists are merged into k/2 lists average 2N/k length, then k/4, k/8, etc.
+- Repeat this procedure until we get the final sorted linked list.
+- Thus traverse almost N nodes per pairing and mergining, and repeat the procedure log K times.
+
+Time Complexity - O(Nlogk) - where k is the number of linked lists.
+    - merge two sorted linked lists in O(n) time where n is the total number of nodes in two lists.
+    - sum up the merge process and we ger O(Nlogk)
+Space Complexity - O(1) - we can merge two sorted linked lists in O(1) space.
+
+=======================================
+Trace the code
+lists = [[1,4,5],[1,3,4],[2,6]]
+interval = 1
+1 < 3
+i= 0, 0+1 = 1 < 3; i += 2
+    - lists[0] = merge([1,4,5],[1,3,4])
+        - 1 < 1
+            - else block 1
+        - 1 < 3
+            - if block 1 - 1
+        - 4 < 3
+            - else block 1 - 1 - 3
+        - 4 < 4
+            - else block 1 - 1 - 3 - 4
+        - 4 < 5
+            - if block 1 - 1 - 3 - 4 - 4
+        null condition:  1 - 1 - 3 - 4 - 4 - 5
+    - result = [1, 1, 3, 4, 4, 5]
+interval = 2;
+-------------------------------------------------
+i = 2 (2+2 = 4 < 3) out of for loop
+---------------------------------------------------
+interval = 2
+2 < 3
+i = 0; 0+2 < 3; i += 4
+    - lists[0] = merge(lists[0], lists[2]) // [1, 1, 3, 4, 4, 5], [2,6]
+        - [1, 1, 2, 3, 4, 4, 5, 6] //result
+interval = 4
+--------------------------------------------
+    
+
+*/
