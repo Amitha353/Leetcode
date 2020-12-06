@@ -1,0 +1,33 @@
+class Solution {
+    public String decodeString(String s) {
+        Stack<Integer> digits = new Stack<>();
+        Stack<StringBuilder> characters = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for(char c: s.toCharArray()) {
+            if(Character.isDigit(c)) {
+                i = i*10+c-'0';
+            } else if(c == '[') {
+                digits.add(i);
+                characters.add(sb);
+                sb = new StringBuilder();
+                i = 0;
+            } else if(c == ']') {
+                StringBuilder temp = sb;
+                sb = characters.pop();
+                for(int j = digits.pop(); j > 0; j--) {
+                    sb.append(temp);
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}
+
+/* Time - O(n)
+Space - O(n)
+- Whenever - numbers, digits, and paranthesis sequence -> use Stack.
+
+*/
