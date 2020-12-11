@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        helper(root, result);
+        return result;
+    }
+    
+    public void helper(TreeNode root, List<Integer> result) {
+        if(root != null) {
+            if(root.left != null) {
+                helper(root.left, result);
+            }
+            result.add(root.val);
+            if(root.right != null) {
+                helper(root.right, result);
+            }
+        }
+    }
+    
+}
+
+/* Inorder Traversal - LPR
+Time - O(n) - recursive function T(n) = 2.T(n/2)+1
+Space - O(n) [worst case], average case - O(log n) - n -> number of node.
+
+*/
