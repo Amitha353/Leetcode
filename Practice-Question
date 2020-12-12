@@ -1,0 +1,80 @@
+import java.util.*;
+
+
+/*
+input:  slotsA = [[10, 50], [55, 120], [140, 210]]
+        slotsB = [[0, 15], [60, 70]]
+        dur = 8
+output: [60, 68]
+*/
+/*
+input:  slotsA = [[10, 50], [60, 120], [140, 210]]
+        slotsB = [[0, 15], [60, 70]]
+        dur = 12
+output: [] # since there is no common slot whose duration is 12
+*/
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        List<List<Integer>> slotsA = new ArrayList<>();
+        slotsA.add(Arrays.asList(10,50));
+        slotsA.add(Arrays.asList(60,120));
+        slotsA.add(Arrays.asList(140,210));
+        List<List<Integer>> slotsB = new ArrayList<>();
+        slotsB.add(Arrays.asList(0,15));
+        slotsB.add(Arrays.asList(60,70));
+        int dur = 8;
+        List<Integer> res = commonDuration(slotsA,slotsB,dur);
+    
+        System.out.println(Arrays.toString(res.toArray()));
+     }
+     
+     public static List<Integer> commonDuration(List<List<Integer>> slotA, List<List<Integer>> slotB, int dur) {
+         List<Integer> output = new ArrayList<>();
+         int i = 0, j = 0;
+         int n = slotA.size(), m = slotB.size();
+         boolean found = false;
+         while(i < n && j < m && !found) {
+            if(slotA.get(i).get(0) > slotB.get(j).get(1)) {
+                j++;
+            }
+            if(slotA.get(i).get(1) < slotB.get(j).get(0)) {
+                 i++;
+            }
+            int startState = Math.max(slotA.get(i).get(0), slotB.get(j).get(0));
+            int endState = Math.min(slotA.get(i).get(1), slotB.get(j).get(1));
+            if(startState > 0 && startState+dur <= endState) {
+                output.add(startState);
+                output.add(startState+dur);
+                found = true;
+            }
+            i++; j++;
+         }
+         return output;
+     }
+     
+//      public static List<Integer> commonDuration(List<List<Integer>> slotA, List<List<Integer>>
+//                                      slotB, int dur) {
+//     List<Integer> output = new ArrayList<>();
+//     int startState = 0;
+//     int endTime = 0;
+//     for(int i = 0; i < slotA.size(); i++) {
+//       for(int j = 0; j < slotB.size(); j++) {
+        
+//         if(slotA.get(i).get(0) <= slotB.get(j).get(0)) {
+//           startState = Math.max(slotA.get(i).get(0), slotB.get(j).get(0));
+//           int maxDur = startState+dur;
+//           endTime = Math.min(slotA.get(i).get(1), slotB.get(j).get(1));
+//           if(maxDur <=  endTime) {
+//             output.add(startState);//60
+//             output.add(maxDur);//68
+//           }
+//         }  
+//       }
+//     }
+//     System.out.println(Arrays.toString(output.toArray()));
+    
+//     return output;
+//   }
+}
