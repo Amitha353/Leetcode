@@ -1,0 +1,63 @@
+import java.util.*;
+
+class Node {
+    int key;
+    Node left = null;
+    Node right = null;
+    
+    Node(int key) {
+        this.key = key;
+    }
+}
+    
+class Pair {
+    int val;
+    int level;
+    
+    Pair(int val, int level) {
+        this.val = val;
+        this.level = level;
+    }
+}
+
+public class HelloWorld{
+     public static void main(String []args){
+        Node root = new Node(1);
+        
+        root.left = new Node(2);
+        root.right = new Node(3);
+        
+        root.left.right = new Node(4);
+        
+        root.right.left = new Node(5);
+        root.right.right = new Node(6);
+        
+        root.right.left.left = new Node(7);
+        root.right.left.right = new Node(8);
+        
+        printBottomView(root);
+     }
+     
+     public static void printBottomView(Node root) {
+         if(root == null) return;
+         Map<Integer, Pair> map = new TreeMap<>();
+         
+         helper(root, 0, 0, map);
+         
+         for(Pair elt: map.values()) {
+             System.out.println(elt.val);
+         }
+     }
+     
+     public static void helper(Node root, int dist, int level, Map<Integer, Pair> map) {
+         if(root == null) return;
+         
+         if(!map.containsKey(dist) || level >= map.get(dist).level) {
+             Pair temp = new Pair(root.key, level);
+             map.put(dist, temp);
+         }
+         
+         helper(root.left, dist-1, level+1, map);
+         helper(root.right, dist+1, level+1, map);
+     }
+}
