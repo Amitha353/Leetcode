@@ -1,0 +1,73 @@
+import java.util.*;
+
+class Node
+{
+    int data;
+    Node left = null, right = null;
+ 
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class HelloWorld{
+    static Node newNode;
+     public static void main(String []args){
+        Node root = null;
+        root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.right = new Node(4);
+        root.right.left = new Node(5);
+        root.right.right = new Node(6);
+        root.right.left.left = new Node(7);
+        root.right.left.right = new Node(8);
+        System.out.println("Hello World");
+        
+        convertToSumTree(root);
+        System.out.println("displayPreOrder");
+        displayPreOrder(newNode);
+        System.out.println();
+        System.out.println("displayInOrder");
+        displayInOrder(newNode);
+        System.out.println();
+        System.out.println("displayPostOrder");
+        displayPostOrder(newNode);
+     }
+     
+    public static int convertToSumTree(Node root) {
+        if(root != null) {
+            int left = convertToSumTree(root.left);
+            int right = convertToSumTree(root.right);
+            int temp = root.data+left+right;
+            root.data = left+right;
+            newNode = root;
+            return temp;
+        }
+        return 0;
+    }
+    
+    public static void displayPreOrder(Node newNode) {
+        if(newNode != null) {
+            System.out.print(newNode.data+ " ");
+            displayPreOrder(newNode.left);
+            displayPreOrder(newNode.right);
+        }
+    }
+    
+    public static void displayInOrder(Node newNode) {
+        if(newNode != null) {
+            displayInOrder(newNode.left);
+            System.out.print(newNode.data+ " ");
+            displayInOrder(newNode.right);
+        }
+    }
+    
+    public static void displayPostOrder(Node newNode) {
+        if(newNode != null) {
+            displayPostOrder(newNode.left);
+            displayPostOrder(newNode.right);
+            System.out.print(newNode.data+ " ");
+        }
+    }
+}
