@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        Boolean boolX = false, boolY = false;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            boolX = false;
+            boolY = false;
+            for(int i = 0; i < size; i++) {
+                TreeNode curr = queue.poll();
+                if(curr.val == x) boolX = true;
+                if(curr.val == y) boolY = true;
+                
+                if(curr.left != null && curr.right != null) {
+                    if((curr.left.val == x && curr.right.val == y) || (curr.left.val == y && curr.right.val == x))
+                        return false; // no cousins, sibling
+                }
+                if(curr.left != null) queue.offer(curr.left);
+                if(curr.right != null) queue.offer(curr.right);
+            }
+            if(boolX&&boolY) return true;
+        }
+        return false;
+    }
+}
+
+/* BFS
+- Time Complexity - O(n)
+- Space Complexity - O(n)
+*/
