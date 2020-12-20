@@ -1,0 +1,70 @@
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+
+class Node {
+    int data;
+    Node left = null, right = null;
+    Node(int data) {
+        this.data = data;
+    }
+}
+public class Main
+{
+	public static void main(String[] args) {
+		Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.right = new Node(4);
+        root.right.left = new Node(5);
+        root.right.right = new Node(6);
+        root.right.left.left = new Node(7);
+        root.right.right.right = new Node(8);
+ 
+        System.out.print(findDistance(root, root.right.left.left, root.right.right));
+	}
+	
+	public static int findDistance(Node root, Node x, Node y) {
+	    Node lca = null;
+	    
+	    if(isNodePresent(root, x) && isNodePresent(root, y)) {
+	        lca = findLCA(root, x, y);
+	    } else {
+	        return Integer.MIN_VALUE;
+	    }
+	    
+	    return findLevel(lca, x, 0) + findLevel(lca, y, 0);
+	}
+	
+	public static boolean isNodePresent(Node root, Node node) {
+	    if(root == null) return false;
+	    if(root == node) return true;
+	    return isNodePresent(root.left, node) || isNodePresent(root.right, node);
+	}
+	
+	public static Node findLCA(Node root, Node x, Node y) {
+	    if(root == null) return null;
+	    
+	    if(root == x || root == y) return root;
+	    Node left = findLCA(root.left, x, y);
+	    Node right = findLCA(root.right, x, y);
+	    
+	    if(left != null && right != null) return root;
+	    if(left != null) return left;
+	    if(right != null) return right;
+	    return null;
+	}
+	
+	public static int findLevel(Node root, Node node, int level) {
+	    if(root == null) return  Integer.MIN_VALUE;
+	    if(root == node) return level;
+	    int left = findLevel(root.left, node, level+1);
+	    if(left != Integer.MIN_VALUE) return left;
+	    return findLevel(root.right, node, level+1);
+	}
+}
