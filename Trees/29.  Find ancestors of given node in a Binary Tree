@@ -1,0 +1,58 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Node {
+    int data;
+    Node left = null, right = null;
+    
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+	    Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.right = new Node(4);
+        root.right.left = new Node(5);
+        root.right.right = new Node(6);
+        root.right.left.left = new Node(7);
+        root.right.right.right = new Node(8);
+        int node = 7;
+        
+        printAncestors(root, node);
+	}
+	
+	public static void printAncestors(Node root, int node) {
+	    if(root == null) return;
+	    Stack<Node> stack = new Stack<>();
+	    stack.push(root);
+	    Map<Integer, Integer> parent = new HashMap<>();
+	    parent.put(root.data, 0);
+	    
+	    while(!stack.isEmpty()) {
+	        Node curr = stack.pop();
+	        if(curr.left != null) {
+	            stack.push(curr.left);
+	            parent.put(curr.left.data, curr.data);
+	        }
+	        if(curr.right != null) {
+	            stack.push(curr.right);
+	            parent.put(curr.right.data, curr.data);
+	        }
+	    }
+	    
+	    while(parent.get(node) != 0) {
+	        node = parent.get(node);
+	        System.out.print(node + " ");
+	    }
+	}
+}
