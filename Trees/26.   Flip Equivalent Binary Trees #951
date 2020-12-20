@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root1);
+        queue.offer(root2);
+        while(!queue.isEmpty()) {
+            TreeNode p = queue.poll();
+            TreeNode q = queue.poll();
+            if(p == null && q == null) continue;
+            if(!isEquals(p, q)) return false;
+            if(isEquals(p.left, q.left) && isEquals(p.right, q.right)) {
+                queue.offer(p.left);
+                queue.offer(q.left);
+                queue.offer(p.right);
+                queue.offer(q.right);
+            } else if(isEquals(p.left, q.right) && isEquals(p.right, q.left)) {
+                queue.offer(p.left);
+                queue.offer(q.right);
+                queue.offer(p.right);
+                queue.offer(q.left);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean isEquals(TreeNode p, TreeNode q) {
+        if(p == null && q == null) return true;
+        else if(p != null && q != null && p.val == q.val) return true;
+        else return false;
+    }
+}
+
+/*
+Iterative - BFS
+Time - O(n)
+Space - O(n)
+*/
