@@ -60,7 +60,7 @@ public class Main {
                 Map.Entry<String,Integer> e = pq[idx].peek();
                 res[i] = e.getKey();
             }
-            else res[i]= null;
+            else res[i]= null; "NONE";
         }
         return res;                            
     }
