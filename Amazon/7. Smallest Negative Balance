@@ -1,0 +1,164 @@
+https://www.youtube.com/watch?v=DQTtQWVumXU
+
+Amazon is working on a new application for recording internal debts across teams.
+This program can be used to create groups that show all records of debts between the group members.
+Given the group debt records observed for this team (including the borrower name, lender name, and debt amount),
+who in the group has the smallest negative balance?
+
+Notes:
+-10 is smaller that -1
+If multiple people have the smallest negative balance, return the list in alphabetical order.
+If nobody has a nagative balance, return the list consisting of string "Nobody has a nagative balance".
+
+Write an algorithm to find who in the group has the smallest nagatie balance.
+
+Input
+The input to the function/method consists of three arguments:
+- numRows, an integer representing the number of debt records.
+- numCols, an integer representing the number of elements in debt records. It is always 3.
+- debt, a list of triplets representing debtRecord consistsing of a string borrower, a string lender, 
+and an integer amount, representing the debt record.
+
+Output
+Return a list of strings representing an alphabetically ordered list of members with the smallest negative balance.
+If no team member has a nagative balance then return a list containing the string "Nobody has a nagative balance".
+
+Constraints:
+1 <= numRows <= 2*10^5
+1 <= amount in debts <= 1000
+1 <= length of borrower and lender in debts <= 20
+
+Example:
+Input:
+---------------------------
+borrower| lender | amount |
+---------------------------
+Alex    | Blake  |  2     |
+---------------------------
+Blake   |  Alex |   2    |
+---------------------------
+Casey   |  Alex  |    5   |
+---------------------------
+Blake   |  Casey |    7   |
+---------------------------
+Alex    |  Blake |    4   |
+---------------------------
+Alex    | Casey  |    4   |
+---------------------------
+
+Output:
+["Alex", "Blake"]
+
+Explanation:
+The first, fifth, and sixth entries decrease Alex's balance because Alex is a borrower
+The second and third entries increase because Alex is a lender. So, Alex's balance is (2+5) - (2+4+4) = 7 - 10 = -3.
+Blake is lender is the first and fifth entries and borrower in second and fourth entries. Thus, Blakes balance is (2+4)-(2+7) = 6 - 9 = -3.
+Casey is a borrower in the third entry and lender in the fourth and sixth entries. Thus casey's balance
+(7+4)-5 = 11 - 6 = 6.
+Here Alex and Blake both have the balance of -3, which is the minimum amoung all members.
+
+Helper Description:
+public class debtRecord {
+  String borrower = "";
+  String lender = "";
+  int amount = 0;
+  debtRecord() {}
+  debtRecord(String borrower, String lender, int amount) {
+    this.borrower = borrower;
+    this.lender = lender;
+    this.amount = amount;
+  }
+}
+
+
+import java.util.*;
+
+public class Smallest_Negative_Balance {
+
+        static class debtRecord {
+
+            String borrower = "";
+            String lender = "";
+            int amount = 0;
+            debtRecord(){}
+            debtRecord(String borrower, String lender, int amount) {
+                this.borrower = borrower;
+                this.lender = lender;
+                this.amount = amount;
+            }
+
+        }
+
+        static List<String> negativeAccounts(int numRows, int numCols, List<debtRecord> records) {
+
+            if(numRows == 0 || records == null) return new ArrayList<>();
+            HashMap<String, Integer> hm = new HashMap<>();
+
+            for(debtRecord r: records) {
+                String b = r.borrower, l = r.lender;
+                int amount = r.amount;
+                hm.put(b, hm.getOrDefault(b, 0) - amount);
+                hm.put(l, hm.getOrDefault(l, 0) + amount);
+            }
+
+            PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(
+                    (a,b) -> a.getValue() == b. getValue() ?
+                            a.getKey().compareTo(b.getKey()) :
+                            a.getValue() - b.getValue());
+
+            for(Map.Entry<String, Integer> entry: hm.entrySet()) {
+                if(entry.getValue() < 0) {
+                    pq.add(entry);
+                }
+            }
+
+            List<String> res = new ArrayList<>();
+            //get the minimum of queue
+            if(!pq.isEmpty()){
+                int smallest_negative_balance = pq.peek().getValue();
+                while(!pq.isEmpty() && pq.peek().getValue() == smallest_negative_balance) {
+                    res.add(pq.poll().getKey());
+                }
+            }
+
+            if(res.size() == 0) {
+                res.add("Nobody");
+            }
+            return res;
+        }
+
+        public static void main(String[] args) {
+            //Both Alex and Blake are smllest negative
+            List<debtRecord> records = new ArrayList<>();
+            records.add(new debtRecord("Alex", "Blake", 2));
+            records.add(new debtRecord("Blake", "Alex", 2));
+            records.add(new debtRecord("Casey", "Alex", 5));
+            records.add(new debtRecord("Blake", "Casey", 7));
+            records.add(new debtRecord("Alex", "Blake", 4));
+            records.add(new debtRecord("Alex", "Casey", 4));
+            List<String> res = negativeAccounts(6, 3, records);
+            System.out.println(res);
+
+            // Blake will be the only person with Smallest Negative
+            records = new ArrayList<>();
+            records.add(new debtRecord("Alex", "Blake", 2));
+            records.add(new debtRecord("Blake", "Alex", 2));
+            records.add(new debtRecord("Casey", "Alex", 5));
+            records.add(new debtRecord("Blake", "Casey", 7));
+            records.add(new debtRecord("Alex", "Blake", 4));
+            records.add(new debtRecord("Alex", "Casey", 4));
+            records.add(new debtRecord("Casey", "Alex", 1));
+            res = negativeAccounts(7, 3, records);
+            System.out.println(res);
+
+            // Nobody is with negative balance
+            records = new ArrayList<>();
+            records.add(new debtRecord("Alex", "Blake", 2));
+            records.add(new debtRecord("Blake", "Alex", 2));
+            records.add(new debtRecord("Casey", "Alex", 5));
+            records.add(new debtRecord("Alex", "Casey", 5));
+            res = negativeAccounts(4, 3, records);
+            System.out.println(res);
+        }
+
+}
