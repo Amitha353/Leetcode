@@ -1,0 +1,51 @@
+https://aonecode.com/amazon-subtree-with-maximum-average#:~:text=Subtree%20with%20Maximum%20Average&text=The%20average%20value%20of%20a,by%20the%20number%20of%20nodes.&text=Explanation%3A%20For%20the%20node%20with,5%20which%20is%20the%20maximum.&text=Output%3A%2021-,Explanation%3A,1)%20%2F%205%20%3D%204.
+https://leetcode.com/discuss/interview-question/349617
+https://leetcode.com/problems/maximum-average-subtree/ 
+
+
+Given a M-ary tree, find the subtree with maximum average. Return the root of the subtree.
+A subtree of a tree is any node of that tree plus all its descendants. The average value of a subtree is the sum of its values, divided by the number of nodes.
+
+Example 1:
+Input:
+[1]
+
+[-5, 13, 4]
+
+[[1, 2], [4, -2]]
+
+Output: 13
+Explanation:
+For the node with value = 13 we have an average of (13 + 4 + -2) / 3 = 5 which is the maximum.
+
+Example 2:
+
+Input:
+[1]
+
+[-5, 21, 5, -1]
+
+Output: 21
+Explanation:
+For the node with value = 1 we have an average of (- 5 + 21 + 5 - 1) / 5 = 4.
+For the node with value = -5 we have an average of (-5 / 1) = -5.
+For the node with value = 21 we have an average of (21 / 1) = 21.
+For the node with value = 5 we have an average of (5 / 1) = 5.
+For the node with value = -1 we have an average of (-1 / 1) = -1.
+So the subtree of 21 is the maximum.
+
+(tips: do you know in Java, the value of Double.MIN_VALUE is actually positive? )
+
+import java.util.*;
+/**
+ * Definition for a N-ary node.
+ * public class MAryTreeNode {
+ *     int val;
+ *     List<TreeNode> children;
+ * }
+ */
+
+public class Solution {
+    public MAryTreeNode subtreeMaxAvg(MAryTreeNode root) {
+    }
+}
