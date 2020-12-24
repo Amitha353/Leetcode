@@ -1,3 +1,5 @@
+https://www.youtube.com/watch?v=B2J89zrWA0g
+
 Your team at amazon is overseeing the design of a new high-efficiency data center at HQ2. A power grid needs to be generated for supplying power to its servers. All servers in the grid have to be connected such that they have access to power. The cost of connections between different servers varies.
 
 Assume that there are no ties, names of servers are unique, connections are directionless, there is at most one connection between a pair of servers, all costs are greater than zero, and a server does not connect to itself.
