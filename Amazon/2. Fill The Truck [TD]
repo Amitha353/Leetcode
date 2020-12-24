@@ -56,7 +56,27 @@ I'm failing some hidden test cases, I guess because of truckSize being long
 
 long getMaxUnit(int num, ArrayList<Integer> boxes, int unitSize, ArrayList<Integer> unitsPerBox, long truckSize)
 {
-    long cnt = (long) 0;
+         int cnt = 0;
+         PriorityQueue<Integer> unitsMaxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
+         for (int i = 0; i < num; i++) {
+             for (int j = 0; j < boxes[i]; j++) {
+                 unitsMaxHeap.add(unitsPerBox[i]);
+            }
+        }
+    
+        while (truckSize > 0 && !unitsMaxHeap.isEmpty()) {
+            int units = unitsMaxHeap.poll(); // get max units count
+            cnt += units;
+            truckSize--; 
+        }
+
+        return cnt;
+}
+
+
+
+/*
+long cnt = (long) 0;
     
     PriorityQueue<Integer> unitsMaxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
 
@@ -75,4 +95,4 @@ long getMaxUnit(int num, ArrayList<Integer> boxes, int unitSize, ArrayList<Integ
     }
 
     return cnt;
-}
+*/
