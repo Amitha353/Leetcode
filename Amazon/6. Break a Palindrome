@@ -1,0 +1,28 @@
+class Solution {
+    public String breakPalindrome(String palindrome) {
+            char[] s = palindrome.toCharArray();
+        int n = s.length;
+
+        for (int i = 0; i < n / 2; i++) {
+            if (s[i] != 'a') {
+                s[i] = 'a';
+                return String.valueOf(s);
+            }
+        }
+        s[n - 1] = 'b'; //if all 'a'
+        return n < 2 ? "" : String.valueOf(s);
+    }
+}
+
+/*
+Check half of the string,
+replace a non 'a' character to 'a'.
+
+If only one character, return empty string.
+Otherwise repalce the last character to 'b'
+
+
+Complexity
+Time O(N)
+Space O(N)
+*/
