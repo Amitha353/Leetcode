@@ -1,0 +1,86 @@
+https://aonecode.com/amazon-online-assessment-amazon-find-the-highest-profit
+https://leetcode.com/discuss/interview-question/804735/amazon-oa-2020-highest-profit
+https://www.youtube.com/watch?v=T48RwKNX6DU
+
+A company has several suppliers for its products. For each of the products, the stock is represented
+by a list of a number of items for each supplier. As items are purchased, the supplier raises the 
+price by 1 per item purchased. Let's assume the company profit on any single item is the same as the
+number of items the supplier has left. For example, if a supplier has 4 items, the profit on the
+first item sold is 4, then 3, then 2 and the profit of the last one is 1.
+
+Given a list where each value in the list is the number of the item at a given supplier and also 
+given the number of items to be ordered, write an algorithm to find the highest profit that can be 
+generated for the given product.
+
+Input
+The input to the function/method consists on three arguments:
+- numSuppliers, an integer representing the number of suppliers;
+- inventory, a list of long integers representing the value of the item at a given supplier;
+- order, a long integer representing the number of items to be ordered.
+
+Output
+-Return a long integer representing the highest profit that can be generated for the given product.
+
+Constraints
+
+1 <= numSuppliers <= 10^5
+1 <= inventory[i] <= 10 ^ 5
+0 <= i < numSuppliers
+1 <= orders <= sum of inventory
+
+Example1
+
+Input:
+numSuppliers = 2
+inventory = [3,5]
+order = 6
+
+Output:
+19
+
+Explanation: There are two suppliers, one with inventory 3 and the other with inventory 5,
+and 6 items were ordered The maximum profit is made by selling 1 for 5, 1 for 4, and 2 at 3 and 
+2 at 2 units profit. The two suppliers are left with a unit of product each. 
+The maximum profit generated is 5 + 4 + 2*3 + 2*2 = 19.
+
+5  4  3  2  1 (Price)  	   	   	   
+ 	 	 	  	  
+1  2  4  6     (Count)
+
+Maximizing profit: Green represents units purchased by the marketer, Red squares are products 
+retained by the suppliers. Blue squares are empty.
+
+ 
+
+Example2
+
+Input:
+numSuppliers = 2
+inventory = [2,5]
+order = 4
+
+Output:
+
+14
+  	   	   	   	   	 	 	  	  
+Inventory available from two suppliers is = [2,5] and the quantity ordered is 4. All items can be 
+purchased from the second supplier to generate 5 + 4 + 3 + 2 = 14. The same result is possible 
+purchasing one unit from the first supplier instead. 
+
+Example3
+
+Input:
+numSuppliers = 5
+inventory = [2, 8, 4, 10, 6]
+
+order = 20
+
+Output:
+
+110   	   	   	   	   	   	   	   	   
+   	   	   	   	   	   	   	   	   	   
+There are 5 sellers with inventory = [2, 8, 4, 10, 6] and Items ordered is 20.
+The marketer will purchase items from any supplier until they have only 2 units left. 
+The maximum profit generated is
+10 + 9 + 2*8 + 2*7 + 3*6 + 3*5+ 4*4 + 4*3 = 10 + 9 + 16 + 14 + 18 + 15 + 16 + 12 = 110
+----------------------------------------------------------------------------------------------
