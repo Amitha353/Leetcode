@@ -49,3 +49,119 @@ public class Solution {
     public MAryTreeNode subtreeMaxAvg(MAryTreeNode root) {
     }
 }
+----------------------------------------------------------------
+import java.util.*;
+
+class TreeNode {
+    public int val;
+    public List<TreeNode> children;
+
+    
+    public TreeNode() {
+        children = new ArrayList<TreeNode>();
+    }
+    
+    public TreeNode(int _val) {
+        val = _val;
+        children = new ArrayList<TreeNode>();
+    }
+    
+    public TreeNode(int _val, ArrayList<TreeNode> _children) {
+        val = _val;
+        children = _children;
+    }
+}
+
+public class HelloWorld{
+     public static void main(String []args){
+        /*TreeNode treeNode11 = new TreeNode(11);
+        TreeNode treeNode2 = new TreeNode(2);
+        TreeNode treeNode3 = new TreeNode(3);
+        ArrayList<TreeNode> treeNode12List = new ArrayList<>();
+        treeNode12List.add(treeNode11);
+        treeNode12List.add(treeNode2);
+        treeNode12List.add(treeNode3);
+        TreeNode treeNode12 = new TreeNode(12, treeNode12List);
+        
+        TreeNode treeNode15 = new TreeNode(15);
+        TreeNode treeNode8 = new TreeNode(8);
+        ArrayList<TreeNode> treeNode18List = new ArrayList<>();
+        treeNode18List.add(treeNode15);
+        treeNode18List.add(treeNode8);
+        TreeNode treeNode18 = new TreeNode(18, treeNode18List);
+        
+        ArrayList<TreeNode> treeNode20List = new ArrayList<>();
+        treeNode20List.add(treeNode12);
+        treeNode20List.add(treeNode18);
+        TreeNode treeNode20 = new TreeNode(20, treeNode20List);*/
+        
+        TreeNode treeNoden5 = new TreeNode(-5);
+        TreeNode treeNode21 = new TreeNode(21);
+        TreeNode treeNode5 = new TreeNode(5);
+        TreeNode treeNoden1 = new TreeNode(-1);
+        ArrayList<TreeNode> treeNode1List = new ArrayList<>();
+        treeNode1List.add(treeNoden5);
+        treeNode1List.add(treeNode21);
+        treeNode1List.add(treeNode5);
+        treeNode1List.add(treeNoden1);
+        TreeNode treeNode1 = new TreeNode(1, treeNode1List);
+        
+        // TreeNode treeNode1 = new TreeNode(1);
+        // TreeNode treeNode2 = new TreeNode(2);
+        // TreeNode treeNode4 = new TreeNode(4);
+        // TreeNode treeNoden2 = new TreeNode(-2);
+        
+        // ArrayList<TreeNode> treeNoden5List = new ArrayList<>();
+        // treeNoden5List.add(treeNode1);
+        // treeNoden5List.add(treeNode2);
+        // TreeNode treeNoden5 = new TreeNode(-5, treeNoden5List);
+        
+        // ArrayList<TreeNode> treeNode13List = new ArrayList<>();
+        // treeNode13List.add(treeNode4);
+        // treeNode13List.add(treeNoden2);
+        // TreeNode treeNode13 = new TreeNode(13, treeNode13List);
+        
+        // TreeNode treeNodel4 = new TreeNode(4);
+        
+        // ArrayList<TreeNode> treeNoden1List = new ArrayList<>();
+        // treeNoden1List.add(treeNoden5);
+        // treeNoden1List.add(treeNode13);
+        // treeNoden1List.add(treeNodel4);
+        
+        // TreeNode treeNodel1 = new TreeNode(1, treeNoden1List);
+        
+        System.out.println("Maximum Average Subtree details - " + maximumAverageSubtree(treeNode1));
+     }
+     
+     public static int maximumAverageSubtree(TreeNode root) {
+        if(root == null) return -1;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int max = 0;
+        TreeNode chosenNode = null;
+        while(!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            if(curr.children != null && curr.children.size() > 0) {
+                int n = curr.children.size();
+                int sum = 0;
+                for(int i = 0; i < n; i++) {
+                    sum += curr.children.get(i).val;
+                    queue.offer(curr.children.get(i));
+                }
+                sum+= curr.val;
+                int temp = sum/n;
+                if(temp > max) {
+                    max = temp;
+                    chosenNode = curr;
+                }
+            } else {
+                int temp = curr.val/1;
+                if(temp > max) {
+                    max = temp;
+                    chosenNode = curr;
+                }
+            }
+        }
+        return chosenNode.val;
+    }
+}
