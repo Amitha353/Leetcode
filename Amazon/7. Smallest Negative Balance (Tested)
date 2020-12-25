@@ -221,3 +221,95 @@ class Solution {
     }
 }
 
+--------------------------------------------------------------------------------------------
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        int numCols = 3;
+        int numRows = 6;
+        String [][] dataArray = {{"A", "B", "2"}, {"B", "A", "2"}, {"C", "A", "5"}, 
+        {"B", "C", "7"}, {"A", "B", "4"}, {"A", "C", "4"}};
+        
+        List<String> result = debtRecords(numCols, numRows, dataArray);
+        for(String item: result) {
+            System.out.print(item);
+        }
+        System.out.println();
+        
+        numCols = 3;
+        numRows = 7;
+        String[][] dataArray1 = {{"A", "B", "2"}, {"B", "A", "2"}, {"C", "A", "5"}, 
+        {"B", "C", "7"}, {"A", "B", "4"}, {"A", "C", "4"}, {"C", "A", "1"}};
+        
+        List<String> result1 = debtRecords(numCols, numRows, dataArray1);
+        for(String item: result1) {
+            System.out.print(item);
+        }
+        System.out.println();
+        
+        numCols = 3;
+        numRows = 4;
+        String[][] dataArray2 = {{"A", "B", "2"}, {"B", "A", "2"}, {"C", "A", "5"}, 
+        {"A", "C", "5"}};
+        
+        List<String> result2 = debtRecords(numCols, numRows, dataArray2);
+        for(String item: result2) {
+            System.out.print(item);
+        }
+        System.out.println();
+        
+        numCols = 3;
+        numRows = 6;
+        String [][] dataArray3 = {{"A", "B", "7"}, {"B", "A", "7"}, {"C", "A", "5"}, 
+        {"B", "C", "7"}, {"A", "B", "4"}, {"A", "C", "4"}};
+        
+        List<String> result3 = debtRecords(numCols, numRows, dataArray3);
+        for(String item: result3) {
+            System.out.print(item);
+        }
+        System.out.println();
+     }
+     
+     public static List<String> debtRecords(int numCols, int numRows, String[][] debts) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        Map<String, Integer> map = new HashMap<>();
+        for(String[] d: debts) {
+            String b = d[0];
+            String l = d[1];
+            int amount = Integer.parseInt(d[2]);
+            map.put(b, map.getOrDefault(b, 0) - amount);
+            map.put(l, map.getOrDefault(l, 0) + amount);
+        }
+        
+        PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(
+        (a, b) -> a.getValue() == b.getValue() ? a.getKey().compareTo(b.getKey()) :
+            a.getValue() - b.getValue());
+        
+        for(Map.Entry<String, Integer> entry: map.entrySet()) {
+            System.out.println(entry.getKey() + " -- " + entry.getValue());
+            if(entry.getValue() < 0) {
+                pq.add(entry);
+            }
+        }
+        
+        List<String> result = new ArrayList<>();
+
+        if(!pq.isEmpty()) {
+            int minVal = pq.peek().getValue();
+        
+            while(!pq.isEmpty() && pq.peek().getValue() == minVal) {
+                result.add(pq.poll().getKey());
+            }
+        }
+        
+        if(result.size() == 0) {
+            result.add("Nobody");
+        }
+        return result;//.toArray(new String[result.size()]);
+    }
+
+}
