@@ -1,2 +1,90 @@
-https://aonecode.com/amazon-online-assessment-split-string-into-unique-primes
+~~ https://aonecode.com/amazon-online-assessment-split-string-into-unique-primes
 https://www.geeksforgeeks.org/find-all-possible-ways-to-split-the-given-string-into-primes/
+
+
+
+// Java implementation of the above approach 
+  
+import java.util.*; 
+  
+class GFG{ 
+   // using Sieve of Eratosthenes 
+static void getPrimesFromSeive(HashSet<String> primes) 
+{ 
+    boolean []prime = new boolean[1000001]; 
+    Arrays.fill(prime, true); 
+    prime[0] = prime[1] = false; 
+    for (int i = 2; i * i <= 1000000; i++) { 
+        if (prime[i] == true) { 
+            for (int j = i * i; j <= 1000000; j += i) 
+                prime[j] = false; 
+        } 
+    } 
+   
+    // Here to_String() is used 
+    // for converting int to String 
+    for (int i = 2; i <= 1000000; i++) { 
+        if (prime[i] == true) 
+            primes.add(String.valueOf(i)); 
+    } 
+} 
+   
+// A function to find the minimum 
+// number of segments the given String 
+// can be divided such that every 
+// segment is a prime 
+static int splitIntoPrimes(String number) 
+{ 
+    int numLen = number.length(); 
+   
+    // Declare a splitdp[] array 
+    // and initialize to -1 
+    int []splitDP = new int[numLen + 1]; 
+    Arrays.fill(splitDP, -1); 
+   
+    // Call sieve function to store primes in 
+    // primes array 
+    HashSet<String> primes = new HashSet<String>(); 
+    getPrimesFromSeive(primes); 
+   
+    // Build the DP table in a bottom-up manner 
+    for (int i = 1; i <= numLen; i++) { 
+   
+        // If the prefix is prime then the prefix 
+        // will be found in the prime set 
+        if (i <= 6 && (primes.contains(number.substring(0, i)))) 
+            splitDP[i] = 1; 
+   
+        // If the Given Prefix can be split into Primes 
+        // then for the remaining String from i to j 
+        // Check if Prime. If yes calculate 
+        // the minimum split till j 
+        if (splitDP[i] != -1) { 
+            for (int j = 1; j <= 6 && i + j <= numLen; j++) { 
+   
+                // To check if the subString from i to j 
+                // is a prime number or not 
+                if (primes.contains(number.substring(i, i+j))) { 
+   
+                    // If it is a prime, then update the dp array 
+                    if (splitDP[i + j] == -1) 
+                        splitDP[i + j] = 1 + splitDP[i]; 
+                    else
+                        splitDP[i + j] = Math.min(splitDP[i + j], 
+                                             1 + splitDP[i]); 
+                } 
+            } 
+        } 
+    } 
+   
+    // Return the minimum number of splits 
+    // for the entire String 
+    return splitDP[numLen]; 
+} 
+   
+public static void main(String[] args) 
+{ 
+    System.out.print(splitIntoPrimes("13499315")+ "\n"); 
+    System.out.print(splitIntoPrimes("43")+ "\n"); 
+} 
+} 
