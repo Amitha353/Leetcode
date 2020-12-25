@@ -38,3 +38,56 @@ Constraints:
 Four of the associates with the following skill levels {4, 6, 5, 10} meet the criteria.
 There are 5 ways to form a team of 3 associates:
 {4, 5, 6} , {4, 6, 10}, {4, 5, 10}, {5, 6, 10} and {4, 5, 6, 10}
+---------------------------------------------------------------------------------
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+         int num = 6;
+         int[] skills = {12, 4, 6, 13, 5, 10};
+         int minAssociates = 3;
+         int minLevel = 4;
+         int maxLevel = 10;
+         int result = countTeams(num, skills, minAssociates, minLevel, maxLevel);
+         System.out.println(result);
+     }
+     
+     static int countTeams(int num, int[] skills, int minAssociates, int minLevel, int maxLevel) {
+         int skillMet = 0;
+         for(int i = 0; i < skills.length; i++) {
+             if(skills[i] >= minLevel && skills[i] <= maxLevel) {
+                 skillMet++;
+             }
+         }
+         
+         return binomialCoeff(skillMet, minAssociates);
+     }
+     
+    static int binomialCoeff(int n, int k)
+    {
+        int C[] = new int[n + 1];
+ 
+        C[0] = 1;
+ 
+        for (int i = 1; i <= n; i++) {
+            for (int j = Math.min(i, n); j > 0; j--)
+                C[j] = C[j] + C[j - 1];
+        }
+        
+        int result = 0;
+        for(int i = k; i <=n; i++) {
+            result += C[i];
+        }
+        
+        return result;
+    }
+}
+
+/*
+DP
+https://www.geeksforgeeks.org/binomial-coefficient-dp-9/
+
+Time Complexity: O(n*n) 
+Auxiliary Space: O(n)
+*/
