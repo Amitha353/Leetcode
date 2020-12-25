@@ -1,0 +1,90 @@
+https://aonecode.com/amazon-online-assessment-amazon-fetch-items-to-display
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        int sortParameter = 1;
+        int sortOrder = 0;
+        int itemsPerPage = 2;
+        int pageNumber = 1;
+        int numOfItems = 3;
+        int [][] dataArray = {{10, 15}, {3, 4}, {17, 8}};//new String[numOfItems][3];
+        HashMap<String, int[]> mapOfItems = new HashMap<>();
+        mapOfItems.put("item1", dataArray[0]);
+        mapOfItems.put("item2", dataArray[1]);
+        mapOfItems.put("item3", dataArray[2]);
+        List<String> result = fetchItemsToDisplay(sortParameter, sortOrder, itemsPerPage, pageNumber, numOfItems,  mapOfItems);
+        
+        for(String res: result) {
+            System.out.print(res + " ");
+        }
+        System.out.println();
+        
+        int sortParameter1 = 1;
+        int sortOrder1 = 1;
+        int itemsPerPage1 = 3;
+        int pageNumber1 = 1;
+        int numOfItems1 = 5;
+        int [][] dataArray1 = {{10, 5}, {3, 3}, {17, 4}, {9, 4}, {1, 5}};//new String[numOfItems][3];
+        HashMap<String, int[]> mapOfItems1 = new HashMap<>();
+        mapOfItems1.put("product1", dataArray1[0]);
+        mapOfItems1.put("product2", dataArray1[1]);
+        mapOfItems1.put("product3", dataArray1[2]);
+        mapOfItems1.put("product4", dataArray1[3]);
+        mapOfItems1.put("product5", dataArray1[4]);
+        List<String> result1 = fetchItemsToDisplay(sortParameter1, sortOrder1, itemsPerPage1, pageNumber1, numOfItems1,  mapOfItems1);
+        
+        for(String res: result1) {
+            System.out.print(res + " ");
+        }
+        System.out.println();
+     }
+     
+     public static List<String> fetchItemsToDisplay(int sortParameter, int sortOrder,int itemsPerPage, int pageNumber, int numOfItems, HashMap<String, int[]> dataArray) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        if (sortParameter == 0 && sortOrder == 0) {
+            return dataArray.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .map(Map.Entry::getKey)
+            .skip(itemsPerPage * pageNumber)
+            .limit(itemsPerPage)
+            .collect(Collectors.toList());
+        }
+
+        if (sortParameter == 0 && sortOrder == 1) {
+            return dataArray.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
+            .map(Map.Entry::getKey)
+            .skip(itemsPerPage * pageNumber)
+            .limit(itemsPerPage)
+            .collect(Collectors.toList());
+        }
+
+        if (sortOrder == 0) {
+            return dataArray.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(a -> a[sortParameter     - 1])))
+            .map(Map.Entry::getKey)
+            .skip(itemsPerPage * pageNumber)
+            .limit(itemsPerPage)
+            .collect(Collectors.toList());
+        }
+
+        if (sortOrder == 1) {
+            return dataArray.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue(Collections.reverseOrder(Comparator.comparingInt(a -> a[sortParameter - 1]))))
+            .map(Map.Entry::getKey)
+            .skip(itemsPerPage * pageNumber)
+            .limit(itemsPerPage)
+            .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
+    }
+}
