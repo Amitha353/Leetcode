@@ -8,7 +8,33 @@ https://github.com/zebointexas/Share_Resource/blob/main/Amazon_OA_2020_Min_Dista
     
     Input:
     The function/method consists of three arguments:
-    - numRobots, an integer representing the number
+    - numRobots, an integer representing the number of robots(n);
+    - positionX, a list of integers representing the x coordinates of the robot's position, in meters.
+    - positionY, a list of integers representing the y coordinates of the robot's position, in meters.
+    
+    Output:
+    - Return an integer representing the squared shortest distance between the pairs of robots.
+    
+    Constraints:
+    2 <= numRobots <= 10^5
+    0 <= positionX[i], positionY < 10^9
+    0 <= i < numRobots
+    
+    Note:
+    The squared distance between a pair of robots with xy coordinates of positions (X1, Y1) and (X2,Y2) is calculated using the formula (X1-X2)^2 + (Y1-Y2)^2
+    If the squared distance is 0 between a pair of robots then the robots are presented at the same position and the distance will not be considered.
+    
+    Input:
+    numRobots = 3
+    positionX = [0, 1, 2]
+    positionY = [0, 1, 4]
+    
+    Output:
+    2
+    
+    Explanation:
+    There are 3 robots with positions of x coordinates = {0, 1, 2} and y coordinates = {0, 1, 4}.
+    The robots have the xy coordinates of positions of (0, 0), (1, 1) and (2, 4). The closest robots are (0, 0) and (1, 1), and the closed squared Euclidean distance is (1-0)^2+(1-0)^2 = 2
 */
 
 import java.util.*;
