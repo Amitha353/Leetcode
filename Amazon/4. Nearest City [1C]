@@ -2,18 +2,23 @@ Nearest City
 https://leetcode.com/discuss/interview-question/872961/amazon-oa-2020-nearest-city
 https://leetcode.com/playground/mNjSTsDZ
 
-Amazon has Fulfillment Centers in multiple cities within a large geographic region. The cities are arranged on a graph that has beem divided up like an ordinary cartesian plane.
-Each city is located at an integer(x, y) coordinate intersection. City names and locations are given in the form of three arrays: c, x, and y, which are aligned by the index to rpovide the city name (c[i]),
+Amazon has Fulfillment Centers in multiple cities within a large geographic region. The cities are 
+arranged on a graph that has beem divided up like an ordinary cartesian plane.
+Each city is located at an integer(x, y) coordinate intersection. City names and locations are given 
+in the form of three arrays: c, x, and y, which are aligned by the index to rpovide the city name
+(c[i]),
 and its coordinates , (x[i], y[i]).
 
-Write an algorithm to determine the name of the nearest city that shares either an x or y coordinate with the queried city. If no other cities share an x or y coordinate, return NONE.
-If two cities have the same distance to the queried city, q[i], consider the one with an alphabetically smaller name (i.e. 'ab' < 'aba' < 'abb') as the closest choice.
+Write an algorithm to determine the name of the nearest city that shares either an x or y coordinate 
+with the queried city. If no other cities share an x or y coordinate, return NONE.
+If two cities have the same distance to the queried city, q[i], consider the one with an 
+alphabetically smaller name (i.e. 'ab' < 'aba' < 'abb') as the closest choice.
 
 The distance is denoted on an eucliean place: the difference in x plus the difference in y.
 
 public class Main {
-    public static String[] findNearestCities(int numOfCities,String[] cities, int[] xCoordinates,int[] yCoordinates,int numOfQueries,
-                                 String[] queries) {
+    public static String[] findNearestCities(int numOfCities,String[] cities, int[] xCoordinates,
+    int[] yCoordinates,int numOfQueries, String[] queries) {
                                      
         HashMap<String,Map.Entry<String,Integer>> map = new HashMap<>();
         PriorityQueue<Map.Entry<String,Integer>> pq[] = new PriorityQueue[numOfCities];
@@ -22,7 +27,9 @@ public class Main {
             map1.put(cities[i],i);
         }
         for(int i = 0;i<pq.length;i++)
-            pq[i] = new PriorityQueue<>((a,b) -> a.getValue()-b.getValue()!=0?a.getValue()-b.getValue():a.getKey().compareTo(b.getKey()));
+            pq[i] = new PriorityQueue<>(
+            (a,b) -> a.getValue()-b.getValue()!=0?a.getValue()-b.getValue():
+            a.getKey().compareTo(b.getKey()));
         for(int i = 0;i<xCoordinates.length;i++){
             for(int j = 0;j<xCoordinates.length;j++){
                 if(i == j)
@@ -71,7 +78,8 @@ public class Main {
         int[] yCoordinates = {30,25,30,40,25,25};
         int numOfQueries = 4;
         String[] queries = {"grey","blue","red","pink"};
-        String res[] = findNearestCities(numOfCities,cities,xCoordinates,yCoordinates,numOfQueries,queries);
+        String res[] = findNearestCities(numOfCities,cities,xCoordinates,yCoordinates,
+        numOfQueries,queries);
         for(String s : res)
             System.out.print(s + " ");
     }
