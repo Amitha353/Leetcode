@@ -1,6 +1,10 @@
 Count Teams
 
-An Amazon Area /manager is trying to assemble a specialized team from a roster of available associated. There is a minimum number of associates to be involved, and each associate needs to have a skill rating within a certain range. Given a list of associated' skill levels with desired upper and lower bounds, determine how many teams can be created from the list.
+An Amazon Area /manager is trying to assemble a specialized team from a roster of available 
+
+associated. There is a minimum number of associates to be involved, and each associate needs to 
+have a skill rating within a certain range. Given a list of associated' skill levels with desired
+upper and lower bounds, determine how many teams can be created from the list.
 
 Write an algorithm to find the number of teams that can be created fullfillinf the criteria.
 
