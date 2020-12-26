@@ -43,6 +43,51 @@ Four of the associates with the following skill levels {4, 6, 5, 10} meet the cr
 There are 5 ways to form a team of 3 associates:
 {4, 5, 6} , {4, 6, 10}, {4, 5, 10}, {5, 6, 10} and {4, 5, 6, 10}
 ---------------------------------------------------------------------------------
+public class HelloWorld{
+
+     public static void main(String []args){
+        int num = 6;
+         int[] skills = {12, 4, 6, 13, 5, 10};
+         int minAssociates = 3;
+         int minLevel = 4;
+         int maxLevel = 10;
+         int result = countTeams(num, skills, minAssociates, minLevel, maxLevel);
+         System.out.println(result);
+     }
+     
+     static int countTeams(int num, int[] skills, int minAssociates, int minLevel, int maxLevel) {
+         int skillMet = 0;
+         for(int i = 0; i < skills.length; i++) {
+             if(skills[i] >= minLevel && skills[i] <= maxLevel) {
+                 skillMet++;
+             }
+         }
+         
+         return binomialCoeff(skillMet, minAssociates);
+     }
+     
+    static int binomialCoeff(int n, int k)
+    {
+        int C[] = new int[n + 1];
+ 
+        C[0] = 1;
+ 
+        for(int i=1;i<=n;i++){
+		    C[i]=C[i-1]*(n-i+1)/i;
+        }   
+        
+        int result = 0;
+        for(int i = k; i <=n; i++) {
+            result += C[i];
+        }
+        
+        return result;
+    }
+}
+
+Time Complexity : O(n)
+Space Complexity : O(n)
+---------------------------------------------------------------------------------
 import java.util.*;
 
 public class HelloWorld{
