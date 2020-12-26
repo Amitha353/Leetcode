@@ -52,8 +52,7 @@ Finall we have the packed products like a list : [3, 2, 2, 1, 1, 1]
 The truckSize is 3, so we pick the top 3 from the above list, which is [3, 2, 2], and return the sum 7.
 The maximum number of units that can be shipped = 3 + 2 + 2 = 7 units
 
-I'm failing some hidden test cases, I guess because of truckSize being long
-
+------------------------------------------------------------------------------------------
 long getMaxUnit(int num, ArrayList<Integer> boxes, int unitSize, ArrayList<Integer> unitsPerBox, long truckSize)
 {
          int cnt = 0;
