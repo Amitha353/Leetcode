@@ -1,2 +1,64 @@
 https://www.1point3acres.com/bbs/interview/amazon-software-engineer-532369.html
 https://docs.google.com/document/d/1Wvsz24KQ92mTYCW34FRFasKWCHi0XXla2JTh8EDtVNo/edit#
+
+package algorithmpractice;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class TruckPackage {
+
+	public static void main(String[] args) {
+		Soln sol = new Soln();
+		sol.truckSpacePackage();
+	}
+}
+
+class Soln {
+	public void truckSpacePackage() {
+		PairInt result = solve(90, 5, new int[] { 1, 10, 25, 35, 60 });
+		System.out.println(result.first + ", " + result.second);
+		System.out.println();
+		result = solve(110, 5, new int[] { 5, 60, 20, 10, 70, 40});
+		System.out.println(result.first + ", " + result.second);
+		System.out.println();
+		result = solve(30, 5, new int[] { 1, 10, 25, 35, 60 });
+		System.out.println(result.first + ", " + result.second);
+		System.out.println();
+		result = solve(200, 5, new int[] { 100, 100, 90, 80, 60 });
+		System.out.println(result.first + ", " + result.second);
+		System.out.println();
+	}
+
+	PairInt solve(int truckSpace, int numOfPackages, int[] packagesSpace) {
+		Map<Integer, Integer> map = new HashMap<>();
+		int max = Integer.MIN_VALUE;
+		truckSpace -= 30;
+		PairInt result = new PairInt(0, 0);
+		for (int i = 0; i < numOfPackages; i++) {
+			int val = packagesSpace[i];
+			if (map.containsKey(truckSpace - val)) {
+				int cMax = val > truckSpace - val ? val : truckSpace - val;
+				if (cMax > max) {
+					max = cMax;
+					result.first = map.get(truckSpace - val);
+					result.second = i;
+				}
+			}
+			map.putIfAbsent(val, i);
+		}
+		return result;
+	}
+}
+
+class PairInt {
+	int first, second;
+
+	PairInt() {
+	}
+
+	PairInt(int first, int second) {
+		this.first = first;
+		this.second = second;
+	}
+}
