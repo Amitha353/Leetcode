@@ -1,0 +1,45 @@
+https://aonecode.com/amazon-online-assessment-earliest-time-to-complete-deliveries
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        System.out.println("Hello World");
+        
+        int numOfPiers = 2;
+        int[] pierOpenTime = {7, 9};
+        int[] deliveryTime = {7, 6, 3, 4, 1, 1, 2, 0};
+        
+        System.out.println(completeDeliveries(numOfPiers, pierOpenTime, deliveryTime));
+        
+        System.out.println(completeDeliveries(2, new int[]{1, 2}, new int[]{9, 6, 7, 8, 10, 5, 20, 36}));
+     }
+     
+     public static int completeDeliveries(int numOfPiers, int[] pierOpenTime, int[] deliveryTime) {
+         // an array of reverse sorted ints
+        int[] arrDesc = Arrays.stream(deliveryTime).boxed()
+            .sorted(Collections.reverseOrder())
+            .mapToInt(Integer::intValue).toArray();
+            
+        System.out.println(Arrays.toString(pierOpenTime));
+        System.out.println(Arrays.toString(arrDesc));
+        
+        int max = 0;
+        for(int i = 0; i < numOfPiers; i++) {
+            int j = i*4, count = 0;
+            while(count < 4) {
+                int curMax = pierOpenTime[i] + arrDesc[j++];
+                if(curMax > max) {
+                    max = curMax;
+                }
+                count++;   
+            }
+        }
+        return max;
+     }
+}
+
+/*
+Sorting: O(N logN);
+*/
