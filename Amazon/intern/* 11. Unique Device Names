@@ -1,1 +1,42 @@
 https://aonecode.com/amazon-online-assessment-unique-device-names
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        String[] result = uniqueDeviceNames(6, new String[]{"switch", "tv", "switch", "tv", "switch", "tv"});
+        System.out.println(Arrays.toString(result));
+        result = uniqueDeviceNames(8, new String[]{"bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger"});
+        System.out.println(Arrays.toString(result));
+        result = uniqueDeviceNames(64, new String[]{"bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger",
+            "bulb", "phone", "tab", "light", "block", "pen", "calculator", "charger"
+        });
+        System.out.println(Arrays.toString(result));
+     }
+     
+     public static String[] uniqueDeviceNames(int num, String[] devicenames) {
+         Map<String, Integer> map = new HashMap<>();
+         List<String> deviceList = new ArrayList<>();
+         for(String device: devicenames) {
+             if(!map.containsKey(device)) {
+                 map.put(device, 1);
+                 deviceList.add(device);
+             } else {
+                 String dname = device+map.get(device);
+                 map.put(device, map.get(device)+1);
+                 deviceList.add(dname);
+             }
+         }
+         
+         String[] itemsArray = new String[deviceList.size()];
+         itemsArray = deviceList.toArray(itemsArray);
+         return itemsArray;
+     }
+}
