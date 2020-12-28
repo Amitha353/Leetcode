@@ -24,7 +24,10 @@ Your method should select the third(ID-2) and fourth(ID-3) package since you hav
 -------------------------------------------------------------------------------------------
 package algorithmpractice;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TruckPackage {
@@ -32,6 +35,9 @@ public class TruckPackage {
 	public static void main(String[] args) {
 		Soln sol = new Soln();
 		sol.truckSpacePackage();
+		System.out.println("--------------------------------------------");
+		Soln2 sol2 = new Soln2();
+		sol2.truckSpacePackage2();
 	}
 }
 
@@ -40,7 +46,10 @@ class Soln {
 		PairInt result = solve(90, 5, new int[] { 1, 10, 25, 35, 60 });
 		System.out.println(result.first + ", " + result.second);
 		System.out.println();
-		result = solve(110, 5, new int[] { 5, 60, 20, 10, 70, 40});
+		result = solve(90, 6, new int[] { 1, 10, 25, 35, 60, 50 });
+		System.out.println(result.first + ", " + result.second);
+		System.out.println();
+		result = solve(110, 6, new int[] { 5, 60, 20, 10, 70, 40 });
 		System.out.println(result.first + ", " + result.second);
 		System.out.println();
 		result = solve(30, 5, new int[] { 1, 10, 25, 35, 60 });
@@ -55,7 +64,7 @@ class Soln {
 		Map<Integer, Integer> map = new HashMap<>();
 		int max = Integer.MIN_VALUE;
 		truckSpace -= 30;
-		PairInt result = new PairInt(0, 0);
+		PairInt result = new PairInt(-1, -1);
 		for (int i = 0; i < numOfPackages; i++) {
 			int val = packagesSpace[i];
 			if (map.containsKey(truckSpace - val)) {
@@ -83,3 +92,46 @@ class PairInt {
 		this.second = second;
 	}
 }
+
+/////////////////////////////////////////////////////////
+class Soln2 {
+	public void truckSpacePackage2() {
+		List<Integer> result = solve(90, 5, new int[] { 1, 10, 25, 35, 60 });
+		System.out.println(result.get(0) + ", " + result.get(1));
+		System.out.println();
+		result = solve(90, 6, new int[] { 1, 10, 25, 35, 60, 50 });
+		System.out.println(result.get(0) + ", " + result.get(1));
+		System.out.println();
+		result = solve(110, 6, new int[] { 5, 60, 20, 10, 70, 40 });
+		System.out.println(result.get(0) + ", " + result.get(1));
+		System.out.println();
+		result = solve(30, 5, new int[] { 1, 10, 25, 35, 60 });
+		System.out.println(result.get(0) + ", " + result.get(1));
+		System.out.println();
+		result = solve(200, 5, new int[] { 100, 100, 90, 80, 60 });
+		System.out.println(result.get(0) + ", " + result.get(1));
+		System.out.println();
+	}
+
+	List<Integer> solve(int truckSpace, int numOfPackages, int[] packagesSpace) {
+		Map<Integer, Integer> map = new HashMap<>();
+		int max = Integer.MIN_VALUE;
+		truckSpace -= 30;
+		Integer[] result = new Integer[] { -1, -1 };
+		for (int i = 0; i < numOfPackages; i++) {
+			int val = packagesSpace[i];
+			if (map.containsKey(truckSpace - val)) {
+				int cMax = val > truckSpace - val ? val : truckSpace - val;
+				if (cMax > max) {
+					max = cMax;
+					result[0] = map.get(truckSpace - val);
+					result[1] = i;
+				}
+			}
+			map.putIfAbsent(val, i);
+		}
+		return Arrays.asList(result);
+	}
+}
+// Time Complexity - O(N) // Going through all the packageSpace elements
+// Space Complexity - O(N) // HashMap
