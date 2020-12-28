@@ -52,3 +52,53 @@ https://ideone.com/HDju9l
 
 Similar to 8. Find Total Profit
 https://github.com/Amitha353/Leetcode/blob/master/Amazon/8.%20Find%20the%20Highest%20Profit%20%5BC1%5D
+--------------------------------------------------------------------------------
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        System.out.println("Hello World");
+        System.out.println(findProfit(2, new int[]{3, 5}, 6)); //expected: 19 // output: 19
+        System.out.println(findProfit(2, new int[]{2, 5}, 4)); //expected: 14 // output: 14
+        System.out.println(findProfit(5, new int[]{2, 8, 4, 10, 6}, 20)); //expected: 110 //output: 110
+     }
+     
+     public static int findProfit(int numSuppliers, int[] inventory, int order) {
+       // WRITE YOUR BRILLIANT CODE HERE
+        int highest = 0;
+        int profit = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i: inventory) {
+            map.put(i, map.getOrDefault(i, 0)+1);
+            if(highest < i) {
+                highest = i;
+            }
+        }
+        
+        while(order > 0 && !map.isEmpty()) {
+            int hFreq = map.get(highest);
+            if(order > hFreq) {
+                profit += hFreq * highest;
+                order -= hFreq;
+                map.remove(highest);
+                if(map.containsKey(highest-1)) {
+                    map.put(highest-1, map.get(highest-1)+hFreq);
+                } else {
+                    map.put(highest-1, hFreq);
+                }
+            } else {
+                profit += order * highest;
+                order = 0;
+            }
+            highest--;
+        }
+        return profit;
+    }
+}
+
+/*
+Time Complexity : O(N) - map has maximum N items and while loop runs until map is empty
+Space Complexity : (N) - making use of HashMap
+*/
