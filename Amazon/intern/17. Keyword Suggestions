@@ -1,1 +1,55 @@
+https://leetcode.com/submissions/detail/301648461/
 
+class Solution {
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        List<Integer> order = new ArrayList<>();
+    }
+    
+    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        List<List<String>> result = new ArrayList<>();
+        if(products == null || products.length == 0) return result;
+        Arrays.sort(products);
+        TrieNode root = new TrieNode();
+        TrieNode curr = root;
+        
+        for(int i = 0; i < products.length; i++) addWord(products[i], root, 0, i);
+        for(int j = 0; j < searchWord.length(); j++) {
+            char ch = searchWord.charAt(j);
+            if(curr == null || curr.children[ch-'a'] == null) {
+                result.add(new ArrayList<>());
+                curr = null;
+            }
+            else {
+                List<String> list = new ArrayList<>();
+                for(int l: curr.children[ch-'a'].order) {
+                    list.add(products[l]);
+                }
+                result.add(list);
+                curr = curr.children[ch-'a'];
+            }
+        }
+        return result;
+    }
+    
+    public void addWord(String word, TrieNode root, int idx, int wordIdx) {
+        if(idx == word.length()) return;
+        if(root.children[word.charAt(idx) - 'a'] == null) root.children[word.charAt(idx) - 'a'] = new TrieNode();
+        root = root.children[word.charAt(idx) - 'a'];
+        if(root.order.size() < 3) root.order.add(wordIdx);
+        addWord(word, root, idx+1, wordIdx);
+    }
+}
+
+
+/*
+Approach: Trie + DFS
+Complexity Analysis
+
+Time complexity : O(M)O(M) to build the trie where M is total number of characters in products For each prefix we find its representative node in 
+O(\text{len(prefix)})O(len(prefix)) and dfs to find at most 3 words which is an O(1) operation. Thus the overall complexity is dominated by the time 
+required to build the trie.
+
+In Java there is an additional complexity of O(m^2) due to Strings being immutable, here m is the length of searchWord.
+Space complexity : O(26n)=O(n). Here n is the number of nodes in the trie. 26 is the alphabet size. Space required for output is O(m) where m is the length of the search word.
+*/
