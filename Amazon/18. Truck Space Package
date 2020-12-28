@@ -1,6 +1,27 @@
 https://www.1point3acres.com/bbs/interview/amazon-software-engineer-532369.html
 https://docs.google.com/document/d/1Wvsz24KQ92mTYCW34FRFasKWCHi0XXla2JTh8EDtVNo/edit#
+-------------------------------------------------------------------------------------------
+In Amazon's sort center a computer system decides what packages are to be loaded on what trucks.
+All rooms and spaces are abstracted into space units which is represented as an integer 
+For each type of truck they have different space units
+For each package they will be occupying different space units
+As a software development engineer in sort centers you will need to write a method:
+Given truck space units and a list of product space units find out exactly TWO products that fit
+into the truck
+You will also implement an internal rule that whose combined space will leave exactly 30 space units on the truck
 
+ExampleInput:
+truckSpace=90
+packagesSpace=[1, 10, 25, 35, 60]
+
+Output:
+[2, 3]
+
+Explanation:
+Given a truck of 90 space units a list of packages space units [1, 10, 25, 35, 60]
+Your method should select the third(ID-2) and fourth(ID-3) package since you have to reserve exactly 30 space units.
+
+-------------------------------------------------------------------------------------------
 package algorithmpractice;
 
 import java.util.HashMap;
