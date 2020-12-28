@@ -3,3 +3,73 @@ https://leetcode.com/playground/4zfipBtD
 
 
 https://github.com/Amitha353/Leetcode/blob/master/Amazon/2.%20Fill%20The%20Truck%20%5BDone%5D
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        System.out.println("Hello World");
+        List<Integer> l1 = new ArrayList<>();
+        l1.add(1);
+        l1.add(2);
+        l1.add(3);
+        List<Integer> l2 = new ArrayList<>();
+        l2.add(3);
+        l2.add(2);
+        l2.add(1);
+        System.out.println(getMaxUnit(3, l1, 3, l2, 3)); //Solution 1
+        System.out.println(getMaxUnit1(3, l1, 3, l2, 3)); //solution 2
+        
+        List<Integer> l3 = new ArrayList<>();
+        l3.add(3);
+        l3.add(1);
+        l3.add(2);
+        List<Integer> l4 = new ArrayList<>();
+        l4.add(1);
+        l4.add(2);
+        l4.add(3);
+        System.out.println(getMaxUnit(3, l3, 3, l4, 4)); //Solution 1
+        System.out.println(getMaxUnit1(3, l3, 3, l4, 4)); //solution 2
+     }
+     
+     public static long getMaxUnit(int num, List<Integer> boxes, int unitSize, List<Integer> unitsPerBox, long truckSize)
+     {
+         long cnt = 0;
+         PriorityQueue<Integer> unitsMaxHeap = new PriorityQueue<>(Collections.reverseOrder());
+         for (int i = 0; i < num; i++) {
+             for (int j = 0; j < boxes.get(i); j++) {
+                 unitsMaxHeap.add(unitsPerBox.get(i));
+            }
+        }
+    
+        while (truckSize > 0 && !unitsMaxHeap.isEmpty()) {
+            int units = unitsMaxHeap.poll(); // get max units count
+            cnt += units;
+            truckSize--; 
+        }
+
+        return cnt;
+    }
+    
+    public static long getMaxUnit1(int num, List<Integer> boxes, int unitSize, List<Integer> unitsPerBox, long truckSize){
+        PriorityQueue<Integer> PQ = new PriorityQueue<>();
+        for(int i=0;i<num;i++){
+            for(int j=0;j<boxes.get(i);j++){
+                PQ.add(unitsPerBox.get(i));
+                if(PQ.size()>truckSize) PQ.remove();
+            }
+        }
+        long max=0;
+        while(!PQ.isEmpty()){
+            max += PQ.remove();
+        }
+        return max;
+    }
+}
+
+/*
+Time Complexity: O(NlogN) //priority queue - O(N) when inputs are ordered
+Space Complexity : O(N) //priorityqueue
+
+*/
