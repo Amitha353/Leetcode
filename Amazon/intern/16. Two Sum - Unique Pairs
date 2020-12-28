@@ -1,1 +1,53 @@
 https://leetcode.com/discuss/interview-question/372434
+
+// https://leetcode.com/discuss/interview-question/372434
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+         System.out.println(UniquePairs(new int[]{1, 1, 2, 45, 46, 46}, 47));
+         System.out.println(UniquePairs(new int[]{1, 1}, 2));
+         System.out.println(UniquePairs(new int[]{1, 5, 1, 5}, 6));
+         System.out.println(UniquePairs(new int[]{1, 5, 3, 3, 3}, 6));
+     }
+     
+     public static int UniquePairs(int[] nums, int target) {
+         Set<Integer> seen =  new HashSet<>();
+         Map<Integer, Integer> map = new HashMap<>();
+         int ans = 0;
+         for (int num : nums){
+             if (map.containsKey(num)){
+                 int key = map.get(num)*10 + num;
+                 if (! seen.contains(key)){
+                     ans++;
+                     seen.add(key);
+                 }
+             } else {
+                 map.put(target-num, num);
+             }
+         }
+         return ans;
+     }
+     
+/*     public static int UniquePairs(int[] nums, int target) {
+         Set<Integer> set = new HashSet<>();
+         Set<Integer> seen = new HashSet<>();
+         int count = 0;
+         for(int num: nums) {
+             if(set.contains(target-num) && !seen.contains(num)) {
+                 count++;
+                 seen.add(target-num);
+                 seen.add(num);
+             } else if(!set.contains(num)) {
+                 set.add(num);
+             }
+         }
+         return count;
+     }*/
+}
+
+/*
+Time: O(n)
+Space: O(n)
+*/
