@@ -1,0 +1,31 @@
+https://algo.monster/problems/min_job_difficulty
+https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/discuss/490316/JavaC%2B%2BPython3-DP-O(nd)-Solution
+
+class Solution {
+    public int minDifficulty(int[] jobDifficulty, int D) {
+        int n = jobDifficulty.length, inf = Integer.MAX_VALUE, maxd;
+        if (n < D) return -1;
+        int[] dp = new int[n + 1];
+        for (int i = n - 1; i >= 0; --i)
+            dp[i] = Math.max(dp[i + 1], jobDifficulty[i]);
+        for (int d = 2; d <= D; ++d) {
+            for (int i = 0; i <= n - d; ++i) {
+                maxd = 0;
+                dp[i] = inf;
+                for (int j = i; j <= n - d; ++j) {
+                    maxd = Math.max(maxd, jobDifficulty[j]);
+                    dp[i] = Math.min(dp[i], maxd + dp[j + 1]);
+                }
+            }
+        }
+        return dp[0];
+    }
+}
+
+
+/*
+Bottom-up 1D DP
+Time complexity O(nnd)
+
+*/
+Space complexity O(n)
