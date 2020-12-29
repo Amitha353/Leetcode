@@ -1,4 +1,46 @@
+/*
 https://docs.google.com/document/d/1Wvsz24KQ92mTYCW34FRFasKWCHi0XXla2JTh8EDtVNo/edit#bookmark=id.ghqcj11v4k3i
+------------------------------------------------------------------------------------------------------
+Your team at Amazon has been tasked with developing a health app to assist climbers with high altitude 
+training. To prepare for high-altitude climbs, climbers want to hike directly from one location to
+another while maximizing the elevation they will have to hike through. Given a matrix of elevations 
+with N rows and M columns, plan route from top left corned to the bottom right corner of the matrix, 
+only moving down or right at each step. Climbers have to start from the top-left corner at (0, 0) and 
+reach the bottom-right corner at (N-1, M-1).
+
+There exist multiple routes to reach the bottom right corner from the top-left corner.
+Your team at Amazon wishes to identify the maximum possible value in the minimum elevlations obtained
+from each of the possible routes from the top-left corner to the bottom-right corner. Write an 
+algorithm to find this elevation.
+
+Input:
+- The input to the function/method consists of three arguments:
+* columnCount, an integer representing the number of columns in the matrix (M),
+* rowCount, an integer representing the number of rows in the matrix (N),
+* mat, representing a two-dimensional integer matrix.
+
+Output:
+Return an integer representing the maximum value in the minimum elevations obtained from each of the
+possible routes from top-left corner to the bottom-right corner in the matrix.
+
+Constraints:
+0 < columnCount, rowCount
+
+Examples:
+Example 1:
+Input:
+columnCount = 2, rowCount = 2
+mat = [[5, 1], [4, 5]]
+
+Output:
+4
+
+Explanation:
+5 -> 1 -> 5
+5 -> 4 -> 5
+min Elevation [1, 4] , max of the min elevation : 4
+*/
+
 public class HelloWorld{
 
      public static void main(String []args){
