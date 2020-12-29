@@ -1,5 +1,156 @@
 https://aonecode.com/amazon-online-assessment-amazon-fetch-items-to-display
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Solution:
+package algorithmpractice;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
+
+public class fetchItems {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int sortParameter = 2;
+		int sortOrder = 1;
+		int itemsPerPage = 4;
+		int pageNumber = 0;
+		int numOfItems = 8;
+		int[][] dataArray = { { 5, 4 }, { 4, 2 }, { 3, 7 }, { 2, 5 }, { 1, 8 }, { 6, 6 }, { 7, 1 }, { 8, 3 } };
+		
+		HashMap<String, int[]> mapOfItems = new HashMap<>();
+		mapOfItems.put("product1", dataArray[0]);
+		mapOfItems.put("product2", dataArray[1]);
+		mapOfItems.put("product3", dataArray[2]);
+		mapOfItems.put("product4", dataArray[3]);
+		mapOfItems.put("product5", dataArray[4]);
+		mapOfItems.put("product6", dataArray[5]);
+		mapOfItems.put("product7", dataArray[6]);
+		mapOfItems.put("product8", dataArray[7]);
+		List<String> result = fetchItemsToDisplay2(sortParameter, sortOrder, itemsPerPage, pageNumber, numOfItems,
+				mapOfItems);
+
+		for (String res : result) {
+
+			System.out.print(res + " ");
+		}
+		List<String> result0 = fetchItemsToDisplay(sortParameter, sortOrder, itemsPerPage, pageNumber, numOfItems,
+				mapOfItems);
+		System.out.println();
+		for (String res : result0) {
+
+			System.out.print(res + " ");
+		}
+		System.out.println();
+
+		int sortParameter1 = 0;
+		int sortOrder1 = 0;
+		int itemsPerPage1 = 3;
+		int pageNumber1 = 0;
+		int numOfItems1 = 5;
+		int[][] dataArray1 = { { 10, 5 }, { 3, 3 }, { 17, 4 }, { 9, 4 }, { 1, 5 } };// new String[numOfItems][3];
+		HashMap<String, int[]> mapOfItems1 = new HashMap<>();
+		mapOfItems1.put("product1", dataArray1[0]);
+		mapOfItems1.put("product2", dataArray1[1]);
+		mapOfItems1.put("product3", dataArray1[2]);
+		mapOfItems1.put("product4", dataArray1[3]);
+		mapOfItems1.put("product5", dataArray1[4]);
+		List<String> result1 = fetchItemsToDisplay2(sortParameter1, sortOrder1, itemsPerPage1, pageNumber1, numOfItems1,
+				mapOfItems1);
+
+		for (String res : result1) {
+			System.out.print(res + " ");
+		}
+		System.out.println();
+
+		List<String> result2 = fetchItemsToDisplay(sortParameter1, sortOrder1, itemsPerPage1, pageNumber1, numOfItems1,
+				mapOfItems1);
+
+		for (String res : result2) {
+			System.out.print(res + " ");
+		}
+		System.out.println();
+	}
+
+	public static List<String> fetchItemsToDisplay2(int sortParameter, int sortOrder, int itemsPerPage, int pageNumber,
+			int numOfItems, HashMap<String, int[]> dataArray) {
+		PriorityQueue<Map.Entry<String, int[]>> pq = new PriorityQueue<>();
+
+		if (sortParameter == 0 && sortOrder == 0) {
+			pq = new PriorityQueue<>((a, b) -> a.getKey().compareTo(b.getKey()));
+		} else if (sortParameter == 0 && sortOrder == 1) {
+			pq = new PriorityQueue<>((a, b) -> b.getKey().compareTo(a.getKey()));
+		} else if (sortParameter == 1 && sortOrder == 0) {
+			pq = new PriorityQueue<>((a, b) -> a.getValue()[0] - b.getValue()[0]);
+		} else if (sortParameter == 1 && sortOrder == 1) {
+			pq = new PriorityQueue<>((a, b) -> b.getValue()[0] - a.getValue()[0]);
+		} else if (sortParameter == 2 && sortOrder == 0) {
+			pq = new PriorityQueue<>((a, b) -> a.getValue()[1] - b.getValue()[1]);
+		} else if (sortParameter == 2 && sortOrder == 1) {
+			pq = new PriorityQueue<>((a, b) -> b.getValue()[1] - a.getValue()[1]);
+		}
+
+		for (Map.Entry<String, int[]> entry : dataArray.entrySet()) {
+			pq.add(entry);
+		}
+
+		int startIdx = pageNumber * itemsPerPage;
+		int i = 0;
+		while (i < startIdx) {
+			pq.poll();
+			i++;
+		}
+		int count = Math.min(pq.size(), itemsPerPage);
+		List<String> result = new ArrayList<>();
+		while (!pq.isEmpty() && count > 0) {
+			result.add(pq.poll().getKey());
+			count--;
+		}
+		return result;
+	}
+
+	public static List<String> fetchItemsToDisplay(int sortParameter, int sortOrder, int itemsPerPage, int pageNumber,
+			int numOfItems, HashMap<String, int[]> dataArray) {
+		// WRITE YOUR BRILLIANT CODE HERE
+		if (sortParameter == 0 && sortOrder == 0) {
+			return dataArray.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getKey)
+					.skip(itemsPerPage * pageNumber).limit(itemsPerPage).collect(Collectors.toList());
+		}
+
+		if (sortParameter == 0 && sortOrder == 1) {
+			return dataArray.entrySet().stream().sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
+					.map(Map.Entry::getKey).skip(itemsPerPage * pageNumber).limit(itemsPerPage)
+					.collect(Collectors.toList());
+		}
+
+		if (sortOrder == 0) {
+			return dataArray.entrySet().stream()
+					.sorted(Map.Entry.comparingByValue(Comparator.comparingInt(a -> a[sortParameter - 1])))
+					.map(Map.Entry::getKey).skip(itemsPerPage * pageNumber).limit(itemsPerPage)
+					.collect(Collectors.toList());
+		}
+
+		if (sortOrder == 1) {
+			return dataArray.entrySet().stream()
+					.sorted(Map.Entry.comparingByValue(
+							Collections.reverseOrder(Comparator.comparingInt(a -> a[sortParameter - 1]))))
+					.map(Map.Entry::getKey).skip(itemsPerPage * pageNumber).limit(itemsPerPage)
+					.collect(Collectors.toList());
+		}
+
+		return Collections.emptyList();
+	}
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Time Complexity : O(N)
+* Space Complexity : O(N)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
