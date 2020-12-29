@@ -1,6 +1,8 @@
 Nearest City
 https://leetcode.com/discuss/interview-question/872961/amazon-oa-2020-nearest-city
 https://leetcode.com/playground/mNjSTsDZ
+https://algo.monster/problems/nearest_cities
+https://aonecode.com/amazon-online-assessment-nearest-cities
 
 Amazon has Fulfillment Centers in multiple cities within a large geographic region. The cities are 
 arranged on a graph that has beem divided up like an ordinary cartesian plane.
@@ -190,3 +192,75 @@ public class NearestCities {
             new int[] { 10, 20, 10, 10, 50 }, 5, new String[] { "p1", "p2", "p3", "p4", "p5" });
    }
 }
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+https://aonecode.com/amazon-online-assessment-nearest-cities
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+//If no other cities share an x or y coordinate, return null
+public class Solution {
+    public String[] findNearestCities(int numOfPoints,
+                                 String[] points,
+                                 int[] xCoordinates,
+                                 int[] yCoordinates,
+                                 int numOfQueries,
+                                 String[] queries) {
+                                     
+        HashMap<String,Map.Entry<String,Integer>> map = new HashMap<>();
+        PriorityQueue<Map.Entry<String,Integer>> pq[] = new PriorityQueue[numOfPoints];
+        HashMap<String,Integer> map1 = new HashMap<>();
+        for(int i = 0;i<points.length;i++){
+            map1.put(points[i],i);
+        }
+        for(int i = 0;i<pq.length;i++)
+            pq[i] = new PriorityQueue<>(
+            (a,b) -> a.getValue()-b.getValue()!=0?a.getValue()-b.getValue():
+            a.getKey().compareTo(b.getKey()));
+        for(int i = 0;i<xCoordinates.length;i++){
+            for(int j = 0;j<xCoordinates.length;j++){
+                if(i == j)
+                    continue;
+                if(xCoordinates[i] == xCoordinates[j]){
+                    int x = Math.abs(xCoordinates[i] - xCoordinates[j]);
+                    int y = Math.abs(yCoordinates[i] - yCoordinates[j]);
+                    int d = x+y;
+                    HashMap<String,Integer> m = new HashMap<>();
+                    m.put(points[j],d);
+                    for(Map.Entry<String,Integer> e : m.entrySet())
+                        pq[i].offer(e);
+                }
+            }
+        }
+        for(int i = 0;i<yCoordinates.length;i++){
+            for(int j = 0;j<yCoordinates.length;j++){
+                if(i == j)
+                    continue;
+                if(yCoordinates[i] == yCoordinates[j]){
+                    int x = Math.abs(xCoordinates[i] - xCoordinates[j]);
+                    int y = Math.abs(yCoordinates[i] - yCoordinates[j]);
+                    int d = x+y;
+                    HashMap<String,Integer> m = new HashMap<>();
+                    m.put(points[j],d);
+                    for(Map.Entry<String,Integer> e : m.entrySet())
+                        pq[i].offer(e);
+                }
+            }
+        }
+        String res[] = new String[numOfQueries];
+        for(int i = 0;i<queries.length;i++){
+            int idx = map1.get(queries[i]);
+            if(!pq[idx].isEmpty()){
+                Map.Entry<String,Integer> e = pq[idx].peek();
+                res[i] = e.getKey();
+            }
+            else res[i]= null;
+        }
+        return res; 
+    }
+}
+
+Time Complexity : O(N)
+Space Complexity : O(N)
