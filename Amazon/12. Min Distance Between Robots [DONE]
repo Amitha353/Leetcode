@@ -1,0 +1,341 @@
+https://www.youtube.com/watch?v=X9LgqjSsoBU
+https://github.com/jennifernghi/ClosetPairOfPoints/blob/master/closetPointDemo.java
+https://raw.githubusercontent.com/sijunhe/Project-Programs/master/java/closest%20Pair/Points.java
+
+https://github.com/zebointexas/Share_Resource/blob/main/Amazon_OA_2020_Min_Distance_Between_Robots
+
+/* The year is 2125 and Amazon has built a galactic-scale warehouse on the edge of the Orion Spur of the Milky Way Galaxy. The warehouse is a single story space station measuring 1E9 meters in length and width(1 billion meters, or approximately 3.3 light seconds). The warehouse runs a fleet of up to 10,000 autonomuous robots which magnetically attach to the floor of the station, eliminating the need for artificial gravity. Amazon has asked you to find the squared distance between the two closest robots.
+
+    Given the position of n robots in the warehouse, write an algorithm to find the squared shortest distance between them.
+    
+    
+    Input:
+    The function/method consists of three arguments:
+    - numRobots, an integer representing the number of robots(n);
+    - positionX, a list of integers representing the x coordinates of the robot's position, in meters.
+    - positionY, a list of integers representing the y coordinates of the robot's position, in meters.
+    
+    Output:
+    - Return an integer representing the squared shortest distance between the pairs of robots.
+    
+    Constraints:
+    2 <= numRobots <= 10^5
+    0 <= positionX[i], positionY < 10^9
+    0 <= i < numRobots
+    
+    Note:
+    The squared distance between a pair of robots with xy coordinates of positions (X1, Y1) and (X2,Y2) is calculated using the formula (X1-X2)^2 + (Y1-Y2)^2
+    If the squared distance is 0 between a pair of robots then the robots are presented at the same position and the distance will not be considered.
+    
+    Input:
+    numRobots = 3
+    positionX = [0, 1, 2]
+    positionY = [0, 1, 4]
+    
+    Output:
+    2
+    
+    Explanation:
+    There are 3 robots with positions of x coordinates = {0, 1, 2} and y coordinates = {0, 1, 4}.
+    The robots have the xy coordinates of positions of (0, 0), (1, 1) and (2, 4). The closest robots are (0, 0) and (1, 1), and the closed squared 
+    Euclidean distance is (1-0)^2+(1-0)^2 = 2
+*/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package algorithmpractice;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+
+public class ClosestPairDistance {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Point[] a = new Point[3];
+		a[0] = new Point(0, 0);
+		a[1] = new Point(1, 1);
+		a[2] = new Point(2, 4);
+		Point[] closestPair = closestPair(a);
+		System.out.println("The distances between them is " + distance(closestPair[0], closestPair[1]));
+		
+		System.out.println();
+		
+		Point[] b = new Point[7];
+		b[0] = new Point(1, 1);
+		b[1] = new Point(1, 9);
+		b[2] = new Point(2, 5);
+		b[3] = new Point(3, 1);
+		b[4] = new Point(4, 4);
+		b[5] = new Point(5, 8);
+		b[6] = new Point(6, 2);
+		closestPair = closestPair(b);
+		
+		System.out.println("The distances between them is " + distance(closestPair[0], closestPair[1]));
+		
+		Point[] c = new Point[30];
+		Random ran = new Random();
+		for (int i=0;i<30;i++){
+			c[i] = new Point(ran.nextInt(10),ran.nextInt(10));
+		}
+		closestPair = closestPair(c);
+		System.out.println("By the divide and conquer method of O(nlog(n)), the closest points are:");
+		System.out.println("Point:    x = " + closestPair[0].x + " y= " + closestPair[0].y);
+		System.out.println("Point:    x = " + closestPair[1].x + " y= " + closestPair[1].y);
+		System.out.println("The distances between them is " + distance(closestPair[0],closestPair[1]));
+		
+		Point[] d = new Point[3];
+		d[0] = new Point(0, 0);
+		d[1] = new Point(5, 5);
+		d[2] = new Point(2, 8);
+		closestPair = closestPair(d);
+		System.out.println("The distances between them is " + distance(closestPair[0], closestPair[1]));
+		
+	}
+
+	public static Point[] closestPair(Point[] a) {
+		Point[] sortByX = new Point[a.length];
+		Point[] sortByY = new Point[a.length];
+		for (int i = 0; i < a.length; i++) {
+			sortByX[i] = a[i];
+			sortByY[i] = a[i];
+		}
+		Arrays.sort(sortByX, Point.sortX);
+		Arrays.sort(sortByY, Point.sortY);
+		return closest(sortByX, sortByY);
+	}
+
+	public static Point[] closest(Point[] sortByX, Point[] sortByY) {
+		if (sortByX.length <= 3)
+			return bruteForce(sortByX, sortByY);
+
+		Point[] pair = new Point[2];
+		double min;
+		int center = sortByX.length / 2;
+
+		Point[] leftHalfX = new Point[center];
+		Point[] rightHalfX = new Point[sortByX.length - center];
+
+		Point[] leftHalfY = new Point[center];
+		Point[] rightHalfY = new Point[sortByX.length - center];
+
+		for(int i= 0; i < center; i++) {
+			leftHalfX[i] = sortByX[i];
+			leftHalfY[i] = sortByY[i];
+		}
+		
+		for (int i = center; i < sortByX.length; i++) {
+			rightHalfX[i - center] = sortByX[i];
+			rightHalfY[i - center] = sortByY[i];
+		}
+
+		Point[] pair1 = closest(leftHalfX, leftHalfY);
+		double min1 = distance(pair1[0], pair1[1]);
+		Point[] pair2 = closest(rightHalfX, rightHalfY);
+		double min2 = distance(pair2[0], pair2[1]);
+
+		if (min1 < min2) {
+			pair = pair1;
+			min = min1;
+		} else {
+			pair = pair2;
+			min = min2;
+		}
+
+		List<Point> filtered = new ArrayList<>();
+		double leftBoundary = sortByX[center].x - min;
+		double rightBoundary = sortByX[center].x - min;
+		for(int i = 0; i < sortByY.length; i++) {
+			if(leftBoundary < sortByY[i].x && sortByY[i].x < rightBoundary) {
+				filtered.add(sortByY[i]);
+			}
+		}
+		
+		for(int i = 0; i < (filtered.size()-1); i++) {
+			for(int j = i+1; j < Math.min(filtered.size(), i+7); j++) {
+				double dist = distance(filtered.get(i), filtered.get(j));
+				if(dist < min) {
+					min = dist;
+					pair[0] = filtered.get(i);
+					pair[1] = filtered.get(j);
+				}
+			}
+		}
+		return pair;
+	}
+	
+	public static double distance(Point a, Point b) {
+		double xDiff = a.x + b.x;
+		double yDiff = a.y + b.y;
+		return (xDiff * xDiff + yDiff * yDiff);
+	}
+	
+	public static Point[] bruteForce(Point[] sortByX, Point[] sortByY) {
+		double min = distance(sortByX[0], sortByX[1]);
+		Point[] pair = new Point[2];
+		pair[0] = sortByX[0];
+		pair[1] = sortByX[1];
+		
+		for(int i = 0; i < sortByX.length; i++) {
+			for(int j = i+1; j < sortByX.length; j++) {
+				double dist1 = distance(sortByX[i], sortByX[j]);
+				double dist2 = distance(sortByY[i], sortByY[j]);
+				
+				if (dist1 < min) {
+					min = dist1;
+					pair[0] = sortByX[i];
+					pair[1] = sortByX[j];
+				} 
+				
+				if(dist2 < min) {
+					min = dist2;
+					pair[0] = sortByY[i];
+					pair[1] = sortByY[j];
+				}
+			}
+		}
+		return pair;
+	}
+}
+
+class Point {
+	int x;
+	int y;
+	static final Comparator<Point> sortX = new compareX();
+	static final Comparator<Point> sortY = new compareY();
+
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	static class compareX implements Comparator<Point> {
+
+		@Override
+		public int compare(Point o1, Point o2) {
+			// TODO Auto-generated method stub
+			if (o1.x < o2.x)
+				return -1;
+			if (o1.x > o2.x)
+				return +1;
+			return 0;
+		}
+	}
+
+	static class compareY implements Comparator<Point> {
+
+		@Override
+		public int compare(Point o1, Point o2) {
+			// TODO Auto-generated method stub
+			if (o1.y < o2.y)
+				return -1;
+			if (o1.y > o2.y)
+				return +1;
+			return 0;
+		}
+
+	}
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+// Point[] points = new Point[7];
+
+//             points[0] = new Point(1, 1);
+//             points[1] = new Point(1, 9);
+//             points[2] = new Point(2, 5);
+//             points[3] = new Point(3, 1);
+//             points[4] = new Point(4, 4);
+//             points[5] = new Point(5, 8);
+//             points[6] = new Point(6, 2);
+
+            int numRobots = 3;
+            int[] positionX = {0, 1, 2};
+            int[] positionY = {0, 1, 4};
+           Point[] points = new Point[numRobots];
+           
+           for(int i = 0; i < numRobots; i++) {
+               points[i] = new Point(positionX[i], positionY[i]);
+           }
+
+            Arrays.sort(points, new Comparator<Point>()
+            {
+                @Override
+                public int compare(Point p1, Point p2)
+                {
+                    return (p1.x > p2.x) ? 1 : (p1.x == p2.x) ? 0 : -1;
+                }
+
+            });
+            System.out.println(divide(0, points.length-1, points));     
+     }
+     
+     public static double divide(int left, int right, Point[] points)
+        {
+            double curMinDis = 1e20;
+            if (left == right)
+            {
+                return curMinDis;
+            }
+            if (left + 1 == right)
+            {
+                return distance(points[left], points[right]);
+            }
+
+            int middle = (left + right) >> 1;
+            double leftMinDis = divide(left, middle, points);
+            double rightMinDis = divide(middle, right, points);
+
+            curMinDis = (leftMinDis <= rightMinDis) ? leftMinDis : rightMinDis;
+
+            List<Integer> validPointIndex = new ArrayList<>();
+            for (int i = left; i <= right; i++)
+            {
+                if (Math.abs(points[middle].x - points[i].x) <= curMinDis)
+                {
+                    validPointIndex.add(i);
+                }
+            }
+            for (int i = 0; i < validPointIndex.size() - 1; i++)
+            {
+                for (int j = i + 1; j < validPointIndex.size(); j++)
+                {
+                    
+                    if (Math.abs(points[validPointIndex.get(i)].y
+                            - points[validPointIndex.get(j)].y) > curMinDis)
+                    {
+                        continue;
+                    }
+                    double tempDis = distance(points[validPointIndex.get(i)],
+                            points[validPointIndex.get(j)]);
+
+                    curMinDis = (tempDis < curMinDis) ? tempDis : curMinDis;
+                }
+            }
+
+            return curMinDis;
+        }
+
+        
+        public static double distance(Point p1, Point p2)
+        {
+            // return Math.sqrt((p2.y - p1.y) * (p2.y - p1.y) + (p2.x - p1.x) * (p2.x - p1.x));
+            return (p2.y - p1.y) * (p2.y - p1.y) + (p2.x - p1.x) * (p2.x - p1.x);
+        }
+
+
+        
+        static class Point {
+            public int x;
+            public int y;
+
+            Point(int x, int y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+}
