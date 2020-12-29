@@ -71,9 +71,49 @@ long getMaxUnit(int num, ArrayList<Integer> boxes, int unitSize, ArrayList<Integ
 
         return cnt;
 }
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Solution 2:
+import java.util.*;
+import java.io.*;
+import java.lang.*;
 
+class Box implements Comparable<Box> {
+    int numBoxes;
+    int size;
+    
+    public Box(int num,int s){
+        numBoxes=num;
+        size=s;
+    }
+    
+    @Override
+    public int compareTo(Box o) {
+        return o.size-this.size;
+    }
+}
 
+public class Solution {
+    public int fillTheTruck(int num, int[] boxes, int unitSize, int[] unitsPerBox, long truckSize) {
+        PriorityQueue<Box> maxBoxSize = new PriorityQueue<Box>();
+        for(int i=0;i<boxes.length;i++){
+            maxBoxSize.add(new Box((int)boxes[i],(int)unitsPerBox[i]));
+        }
+        long count = 0;
+        while(truckSize > 0 && !maxBoxSize.isEmpty()){
+            Box curr = maxBoxSize.remove();
+            long numBoxes = Math.min(curr.numBoxes,truckSize);
+            count = count+numBoxes*curr.size;
+            truckSize = truckSize - numBoxes;
+        }
+        return (int)count;
+    }
+}
 
+Time Complexity: O(N)
+Space Complexity: O(N)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /*
 long cnt = (long) 0;
     
