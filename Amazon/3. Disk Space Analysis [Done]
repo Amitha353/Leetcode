@@ -1,6 +1,8 @@
 https://aonecode.com/amazon-online-assessment-amazon-analyze-disk-space
 https://www.youtube.com/watch?v=pno0Y4rpM2M
 https://leetcode.com/playground/MShqbPZu
+https://leetcode.com/problems/sliding-window-maximum/discuss/65884/Java-O(n)-solution-using-deque-with-explanation
+https://leetcode.com/submissions/detail/417979740/
 
 //monotonic deque, sliding window
 
@@ -70,3 +72,6 @@ public class Diskspace {
         System.out.println(space.analyse(13, new int[] {2,4,3,7,8,6,5,16,19,33,32,34,35}, 5));
     }
 }
+
+Time Complexity : O(N)
+Space Complexity : O(N)
