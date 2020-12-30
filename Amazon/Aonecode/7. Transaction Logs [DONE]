@@ -1,0 +1,35 @@
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+public class Solution {
+    public String[] processLogFile(String[] logs, int threshold) {
+        Map<String, Integer> map = new HashMap<>();
+         
+         for(String log: logs) {
+             String[] data = log.split(" ");
+             if(data[0].equals(data[1])) {
+                 map.put(data[0], map.getOrDefault(data[0], 0)+1);
+             } else {
+                 map.put(data[0], map.getOrDefault(data[0], 0)+1);
+                 map.put(data[1], map.getOrDefault(data[1], 0)+1);
+             }
+         }
+         
+         List<String> result = new ArrayList<>();
+         
+         for(Map.Entry<String, Integer> entry: map.entrySet()) {
+            //  System.out.println(entry.getKey() + " ---- " + entry.getValue());
+             if(entry.getValue() >= threshold) {
+                 result.add(entry.getKey());
+             }
+         }
+         String[] datalogs = new String[result.size()];
+         int i = 0;
+         for(String res: result) {
+             datalogs[i++] = res;
+         }
+         return datalogs;
+    }
+}
