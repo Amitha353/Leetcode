@@ -1,2 +1,37 @@
-
 https://leetcode.com/discuss/interview-question/935558/Amazon-SDE1-or-OA-2020-or-Amazon-Fulfillment-Builder
+https://www.cnblogs.com/Dylan-Java-NYC/p/12174241.html
+https://medium.com/@carlosbf/top-amazon-questions-minimum-cost-to-connect-sticks-lc-1167-6e547e1715ac
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args) {
+         List<Integer> parts = Arrays.asList(8, 4, 6, 12);
+         System.out.println(fulfillmentBuilder(parts));
+         
+         parts = Arrays.asList(2, 4, 3);
+         System.out.println(fulfillmentBuilder(parts));
+         
+         parts = Arrays.asList(1, 8, 3, 5);
+         System.out.println(fulfillmentBuilder(parts));
+     }
+     
+    private static int fulfillmentBuilder(List<Integer> parts) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int p: parts) {
+            pq.offer(p);
+        }
+        
+        int sum = 0;
+        
+        while(!pq.isEmpty() && pq.size() >= 2) {
+            int first = pq.poll();
+            int second = pq.poll();
+            int temp = first + second;
+            sum += temp;
+            pq.offer(temp);
+        }
+        return sum;
+    } 
+}
