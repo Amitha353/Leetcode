@@ -1,2 +1,39 @@
 https://leetcode.com/discuss/interview-question/989768/Amazon-or-OA-2020-or-Transaction-logs
 https://algo.monster/problems/transaction_logs
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        String[] logData = {"345366 89921 45", "029323 38239 23", "38239 345366 15", "029323 38239 77", "345366 38239 23", "029323 345366 13", "38239 38239 23"};
+        List<String> result = getFraudIds(logData, 3);
+        for(String res: result) {
+            System.out.print(res + " ");
+        }
+     }
+     
+     public static List<String> getFraudIds(String[] logData, int threshold) {
+         Map<String, Integer> map = new HashMap<>();
+         
+         for(String log: logData) {
+             String[] data = log.split(" ");
+             if(data[0].equals(data[1])) {
+                 map.put(data[0], map.getOrDefault(data[0], 0)+1);
+             } else {
+                 map.put(data[0], map.getOrDefault(data[0], 0)+1);
+                 map.put(data[1], map.getOrDefault(data[1], 0)+1);
+             }
+         }
+         
+         List<String> result = new ArrayList<>();
+         
+         for(Map.Entry<String, Integer> entry: map.entrySet()) {
+            //  System.out.println(entry.getKey() + " ---- " + entry.getValue());
+             if(entry.getValue() >= threshold) {
+                 result.add(entry.getKey());
+             }
+         }
+         return result;
+     }
+}
