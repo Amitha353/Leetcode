@@ -69,7 +69,53 @@ public class debtRecord {
     this.amount = amount;
   }
 }
+==========================================================================================================================
 
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+public class Solution {
+    List<String> minimumDebtMembers(List<debtRecord> records){
+        if(records.size() == 0 || records == null) return new ArrayList<>();
+            HashMap<String, Integer> hm = new HashMap<>();
+
+            for(debtRecord r: records) {
+                String b = r.borrower, l = r.lender;
+                int amount = r.amount;
+                hm.put(b, hm.getOrDefault(b, 0) - amount);
+                hm.put(l, hm.getOrDefault(l, 0) + amount);
+            }
+
+            PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(
+                    (a,b) -> a.getValue() == b. getValue() ?
+                            a.getKey().compareTo(b.getKey()) :
+                            a.getValue() - b.getValue());
+
+            for(Map.Entry<String, Integer> entry: hm.entrySet()) {
+                if(entry.getValue() < 0) {
+                    pq.add(entry);
+                }
+            }
+
+            List<String> res = new ArrayList<>();
+            //get the minimum of queue
+            if(!pq.isEmpty()){
+                int smallest_negative_balance = pq.peek().getValue();
+                while(!pq.isEmpty() && pq.peek().getValue() == smallest_negative_balance) {
+                    res.add(pq.poll().getKey());
+                }
+            }
+
+            if(res.size() == 0) {
+                res.add("Nobody has a negative balance");
+            }
+            return res;
+    }
+}
+
+
+==========================================================================================================================
 
 import java.util.*;
 
