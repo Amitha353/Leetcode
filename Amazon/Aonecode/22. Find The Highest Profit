@@ -1,0 +1,78 @@
+https://aonecode.com/amazon-online-assessment-amazon-find-the-highest-profit
+
+public static long supplierInventory(int numSupplier, long [] inventory, long order){
+        Map<Long,Long> map = new HashMap<>();
+        long highest=0;
+        long profit = 0;
+        for(int i=0;i<inventory.length;i++){
+            map.put(inventory[i],map.getOrDefault(inventory[i],0L)+1);
+            if(highest<inventory[i])
+                highest = inventory[i];
+        }
+        
+        while(order>0 && !map.isEmpty()){
+            long highestFreq = map.get(highest);
+            if(order>highestFreq){
+                profit += highestFreq*highest;
+                order -= highestFreq;
+                map.remove(highest);
+                if(map.containsKey(highest-1)){
+                    long curr = map.get(highest-1);
+                    map.put(highest-1,map.get(highest-1)+highestFreq);
+                }else
+                    map.put(highest-1,highestFreq);
+            
+                highest--;
+            }else{
+                profit += highest*order;
+                order=0;
+            }
+        }
+        
+        return profit;
+    }
+--------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    public static int findProfit(int numSuppliers, int[] inventory, int order) {
+       // WRITE YOUR BRILLIANT CODE HERE
+        int highest = 0;
+        int profit = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i: inventory) {
+            map.put(i, map.getOrDefault(i, 0)+1);
+            if(highest < i) {
+                highest = i;
+            }
+        }
+        
+        while(order > 0 && !map.isEmpty()) {
+            int hFreq = map.get(highest);
+            if(order > hFreq) {
+                profit += hFreq * highest;
+                order -= hFreq;
+                map.remove(highest);
+                if(map.containsKey(highest-1)) {
+                    map.put(highest-1, map.get(highest-1)+hFreq);
+                } else {
+                    map.put(highest-1, hFreq);
+                }
+            } else {
+                profit += order * highest;
+                order = 0;
+            }
+            highest--;
+        }
+        return profit;
+    }
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        int numSuppliers = Integer.parseInt(scanner.nextLine());
+        int[] inventory = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int order = Integer.parseInt(scanner.nextLine());
+
+        scanner.close();
+        System.out.println(findProfit(numSuppliers, inventory, order));
+    }
+}
+--------------------------------------------------------------------------------------------------------
