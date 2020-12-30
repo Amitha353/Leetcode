@@ -1,0 +1,181 @@
+/* 
+https://www.geeksforgeeks.org/how-is-the-time-complexity-of-sieve-of-eratosthenes-is-nloglogn/
+https://www.geeksforgeeks.org/count-of-ways-to-split-a-given-number-into-prime-segments/
+
+https://www.colabug.com/2020/0410/7240214/
+https://aonecode.com/amazon-online-assessment-split-string-into-unique-primes
+------------------------------------------------------------------------------
+Given a String of digits [0-9], count the number of ways to break the string into prime numbers 
+in the range 2 to 1000 inclusive.
+
+https://aonecode.com/amazon-online-assessment-split-string-into-unique-primes
+
+Input
+The input to the function/method has an argument:
+inputString, a string representing the inputString.
+
+Output:
+Return an integer representing the number of ways the given string can be split into prime number 
+using all the characters.
+
+Note:
+The inputString does not contain leading zeros.
+
+Example:
+Input:
+inputString = "31173"
+
+Output:
+6
+
+Explanation:
+This string can be split into prime numbers in 6 different ways:
+[3, 11, 7, 3], [3, 11, 73], [31, 17, 3], [31, 173], [311, 7, 3], [311, 73]
+*/
+---------------------------------------------------------------------------------------------------
+Solution 1
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        System.out.println("Hello World");
+        Solution sol = new Solution();
+	System.out.println("3175 : " + sol.countPrimeStrings("3175"));
+	System.out.println("11373 : " + sol.countPrimeStrings("11373"));
+	System.out.println("31173 : " + sol.countPrimeStrings("31173"));
+     }
+}
+
+class Solution {
+
+	public int countPrimeStrings(String s) {
+		Set<Integer> sieve = buildSieve();
+		int result = solve(s, sieve);
+		return result;
+	}
+
+	int solve(String s, Set<Integer> primes) {
+// 		int mod = 1000000007;
+		int n = s.length();
+		int[] dp = new int[n + 1];
+		dp[0] = 1;
+
+		for (int i = 1; i <= n; i++) {
+			if (s.charAt(i - 1) != '0') {
+				int idx1 = Integer.parseInt(s.substring(i - 1, i));
+				if (primes.contains(idx1)) {
+					dp[i] = dp[i - 1];
+				}
+			}
+
+			if (i - 2 >= 0 && s.charAt(i - 2) != '0') {
+				int idx2 = Integer.parseInt(s.substring(i - 2, i));
+				if (primes.contains(idx2)) {
+					dp[i] = (dp[i] + dp[i - 2]);// % mod;
+				}
+			}
+
+			if (i - 3 >= 0 && s.charAt(i - 3) != '0') {
+				int idx3 = Integer.parseInt(s.substring(i - 3, i));
+				if (primes.contains(idx3)) {
+					dp[i] = (dp[i] + dp[i - 3]);// % mod;
+				}
+			}
+		}
+		return dp[n];
+	}
+
+	public Set<Integer> buildSieve() {
+		boolean[] isPrimeNumber = new boolean[1001];
+        Set<Integer> primes = new HashSet<Integer>();
+        Arrays.fill(isPrimeNumber, true);
+        isPrimeNumber[0] = isPrimeNumber[1] = false;
+        
+        for (int i = 2; i < 1001; i++) {
+            if (isPrimeNumber[i]) {
+                primes.add(i);
+                for (int j = i; j * i < 1001; j++) {
+                    isPrimeNumber[i * j] = false;
+                }
+            }
+        }
+        return primes;
+	}
+}
+
+/*
+Time Complexity: O(N + N*log(log(N))) 
+Space Complexity: O(N) // dp array
+*/
+
+---------------------------------------------------------------------------------------------------
+Solution 2
+package algorithmpractice;
+
+import java.util.Arrays;
+
+public class teststringsplit {
+
+	public static void main(String[] args) {
+		Solution sol = new Solution();
+		System.out.println("3175 : " + sol.countPrimeStrings("3175"));
+		System.out.println("11373 : " + sol.countPrimeStrings("11373"));
+		System.out.println("31173 : " + sol.countPrimeStrings("31173"));
+	}
+}
+
+class Solution {
+
+	public int countPrimeStrings(String s) {
+		boolean[] sieve = buildSieve();
+		int result = solve(s, sieve);
+		return result;
+	}
+
+	int solve(String s, boolean[] primes) {
+		int mod = 1000000007;
+		int n = s.length();
+		int[] dp = new int[n + 1];
+		dp[0] = 1;
+
+		for (int i = 1; i <= n; i++) {
+			if (s.charAt(i - 1) != '0') {
+				int idx1 = Integer.parseInt(s.substring(i - 1, i));
+				if (primes[idx1]) {
+					dp[i] = dp[i - 1];
+				}
+			}
+
+			if (i - 2 >= 0 && s.charAt(i - 2) != '0') {
+				int idx2 = Integer.parseInt(s.substring(i - 2, i));
+				if (primes[idx2]) {
+					dp[i] = (dp[i] + dp[i - 2]) % mod;
+				}
+			}
+
+			if (i - 3 >= 0 && s.charAt(i - 3) != '0') {
+				int idx3 = Integer.parseInt(s.substring(i - 3, i));
+				if (primes[idx3]) {
+					dp[i] = (dp[i] + dp[i - 3]) % mod;
+				}
+			}
+		}
+		return dp[n];
+	}
+
+	public boolean[] buildSieve() {
+		boolean[] sieve = new boolean[1001];
+		Arrays.fill(sieve, true);
+		sieve[0] = sieve[1] = false;
+
+		for (int i = 2; i * i <= 1001; i++) {
+			if (sieve[i] == true) {
+				for (int j = i * i; j < 1001; j += i) {
+					sieve[j] = false;
+				}
+			}
+		}
+		return sieve;
+	}
+}
