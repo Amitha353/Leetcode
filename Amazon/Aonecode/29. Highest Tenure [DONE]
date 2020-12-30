@@ -1,0 +1,41 @@
+https://aonecode.com/amazon-online-assessment-highest-tenure
+https://github.com/Amitha353/Leetcode/blob/master/Amazon/5.%20Subtree:%20Maximum%20Average%20Node%20%5BDone%5D
+https://aonecode.com/amazon-subtree-with-maximum-average#:~:text=Subtree%20with%20Maximum%20Average&text=The%20average%20value%20of%20a,by%20the%20number%20of%20nodes.&text=Explanation%3A%20For%20the%20node%20with,5%20which%20is%20the%20maximum.&text=Output%3A%2021-,Explanation%3A,1)%20%2F%205%20%3D%204.
+
+import java.util.*;
+/**
+ * Definition for a N-ary node.
+ * public class MAryTreeNode {
+ *     int val;
+ *     List<TreeNode> children;
+ * }
+ */
+
+public class Solution {
+    double max = Integer.MIN_VALUE;
+    MAryTreeNode maxNode = null;
+
+    public MAryTreeNode subtreeMaxAvg(MAryTreeNode root) {
+        if (root == null) return null;
+        helper(root);
+        return maxNode;
+    }
+    
+    private double[] helper(MAryTreeNode root) {
+    if (root == null) return new double[] {0, 0};
+
+    double curTotal = root.val;
+    double count = 1;
+    for (MAryTreeNode child : root.children) {
+        double[] cur = helper(child);
+        curTotal += cur[0];
+        count += cur[1];
+    }        
+    double avg = curTotal / count;
+    if (count >= 1 && avg > max) { //taking "at least 1 child" into account
+        max = avg;
+        maxNode = root;
+    }
+    return new double[] {curTotal, count};
+    }
+}
