@@ -1,0 +1,46 @@
+https://leetcode.com/discuss/interview-question/985703/Amazon-OA-2020-Rover-Control
+https://aonecode.com/aplusplus/interviewctrl/getInterview/89237198
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        String[] commands = {"RIGHT", "DOWN", "LEFT", "LEFT", "DOWN"};
+        System.out.println(roverMove(4, commands));
+         System.out.println(roverMove(4, new String[]{"RIGHT", "UP", "DOWN", "LEFT", "DOWN", "DOWN"}));
+          System.out.println(roverMove(8, new String[]{"UP", "RIGHT", "DOWN", "LEFT", "DOWN", "RIGHT", "UP", "LEFT", "DOWN", "LEFT", "UP", "RIGHT", "DOWN", "RIGHT", "UP", "LEFT"}));
+     }
+     
+     public static int roverMove(int n, String[] commands) {
+         if(commands.length == 0) return 0;
+         
+         int position = 0;
+         
+         for(String command: commands) {
+             int row = position/n;
+             int column = position%n;
+            //  System.out.println(command + " - " + position + " - " + row + " - " + column);
+             
+            if(command.equals("RIGHT")) {
+                 if(column < n-1) {
+                     position++;
+                 }
+             }
+             else if(command.equals("LEFT")) {
+                 if(column > 0) {
+                     position--;
+                 }
+             }
+             else if(command.equals("UP")) {
+                 if(row > 0) {
+                     position = position - n;
+                 }
+             }
+             else if(command.equals("DOWN")) {
+                 if(row < n-1) {
+                     position = position+n;
+                 }
+             }
+         }
+         return position;
+     }
+}
