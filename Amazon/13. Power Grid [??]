@@ -50,6 +50,24 @@ public class Power_Grid {
         edges.add(new Edge('C', 'E', 1));
 
         System.out.println(solve(edges, 5));
+        
+        edges = new ArrayList<>();
+        edges.add(new Edge('A', 'B', 1));
+        edges.add(new Edge('B', 'C', 2));
+        edges.add(new Edge('B', 'H', 8));
+        edges.add(new Edge('C', 'D', 3));
+        edges.add(new Edge('D', 'E', 1));
+        edges.add(new Edge('H', 'I', 2));
+        edges.add(new Edge('I', 'J', 3));
+        edges.add(new Edge('J', 'K', 1));
+        edges.add(new Edge('H', 'G', 1));
+        edges.add(new Edge('D', 'G', 7));
+        edges.add(new Edge('E', 'F', 2));
+        edges.add(new Edge('G', 'F', 3));
+        edges.add(new Edge('G', 'J', 9));
+        edges.add(new Edge('F', 'K', 10));
+
+        System.out.println(solve(edges, 11));
     }
 
     private static List<Edge> solve(List<Edge> edges, int vertices) {
