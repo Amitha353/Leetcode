@@ -1,0 +1,92 @@
+https://algo.monster/problems/items_in_containers
+https://aonecode.com/amazon-online-assessment-items-in-containers
+https://juejin.cn/post/6893932757819326477
+https://www.chegg.com/homework-help/questions-and-answers/solve-using-java-please-company-would-like-know-much-inventory-exists-closed-inventory-com-q58045345
+https://leetcode.com/discuss/interview-question/942970/amazon-oa-2020-amazon-music-pair
+===============================================================================================
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        String s = "|**|*|*";
+        int[] startIndices = {1, 1};
+        int[] endIndices = {5, 6};
+        int[] results = numberOfItems(s, startIndices, endIndices);
+        for(int result: results) {
+            System.out.println(result);
+        }
+        System.out.println("====================");
+        s = "*|*|";
+        startIndices = new int[]{1};
+        endIndices = new int[]{3};
+        results = numberOfItems(s, startIndices, endIndices);
+        for(int result: results) {
+            System.out.println(result);
+        }
+        System.out.println("====================");
+        s = "*|*|*|";
+        startIndices = new int[]{1};
+        endIndices = new int[]{6};
+        results = numberOfItems(s, startIndices, endIndices);
+        for(int result: results) {
+            System.out.println(result);
+        }
+        System.out.println("====================");
+     }
+     
+     public static int[] numberOfItems(String s, int[] startIndices, int[] endIndices) {
+        int n = s.length();
+        int[][] dp = new int[n+1][3];
+        dp[0][0] = 0;
+        dp[0][1] = -1;
+        dp[n][2] = -1;
+        
+        //get left index
+        int left_index = -1;
+        int val = 0;
+        for(int i = 0; i < n; i++) {
+            dp[i][1] = left_index;
+            if(left_index != -1 && s.charAt(i) == '*') {
+                val++;
+            }
+            dp[i][0] = val;
+            if(s.charAt(i) == '|') {
+                left_index = i;
+                val = 0;
+            }
+        }
+        
+        //get right index
+        int right_index = -1;
+        for(int i = n-1; i >= 0; i--) {
+            dp[i][2] = right_index;
+            if(s.charAt(i) == '|') {
+                right_index = i;
+            }
+        }
+        
+        int idxcount = startIndices.length;
+        int[] result = new int[idxcount];
+        for(int i = 0; i < idxcount; i++) {
+            int start = startIndices[i]-1;
+            int end = endIndices[i]-1;
+            int count = components(start, end, dp);
+            result[i] = count;
+        }
+        return result;
+     }
+     
+     public static int components(int start, int end, int[][] dp) {
+        int count = 0;
+        if(dp[start][1] != -1) {
+            count += dp[start][0];
+        }
+        
+        while(dp[start][2] <= end && dp[start][2] != -1) {
+            start = dp[start][2];
+            count += dp[start][0];
+        }
+        return count;
+     }
+}
