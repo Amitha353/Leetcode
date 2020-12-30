@@ -1,0 +1,40 @@
+https://leetcode.com/discuss/interview-question/945673/Amazon-or-OA-or-Multiprocessor-System
+https://aonecode.com/amazon-online-assessment-multiprocessor-system
+
+// https://leetcode.com/discuss/interview-question/945673/Amazon-or-OA-or-Multiprocessor-System
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+         int[] ability={3,1,7,2,4};
+         int num=5;
+         int processes=15;
+         System.out.println(multiprocessorSystem(ability,num,processes));
+         System.out.println(multiprocessorSystem(new int[]{4, 2, 8, 3, 5},5,19));
+     }
+     
+     private static int multiprocessorSystem(int[] ability, int num, int processes) {
+        int count=0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>((o1, o2) -> o2-o1);
+        for(int num1 :ability){
+            pq.add(num1);
+        }
+        while(processes>0){
+            int process=pq.poll();
+            processes -=process;
+            count++;
+            pq.add(process/2);
+        }
+        return count;
+    }
+}
+
+/*
+Solve it using Priority Queue(PQ).
+1.Create PQ from the given numbers(Max Heap).
+2.Each time pull from the PQ .
+3.Divide it by 2.
+4.Push it back to PQ
+5.Do it until your all divided processor count equals to processes(15)
+*/
