@@ -1,0 +1,22 @@
+// https://aonecode.com/amazon-online-assessment-utilization-checks
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+public class Solution {
+    public int finalInstances(int instances, int[] averageUtil) {
+        int n = averageUtil.length;
+         
+         for(int i = 0; i < n; i++) {
+             if(averageUtil[i] < 25 && instances > 1) {
+                 instances = (int)Math.ceil((double)instances/2);
+                 i+=10;
+             } else if(averageUtil[i] > 60 && instances < 200000000) {
+                 instances *= 2;
+                 i+=10;
+             }
+         }
+         return instances;
+    }
+}
