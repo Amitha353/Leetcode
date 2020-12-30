@@ -1,0 +1,20 @@
+https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/
+
+
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        int[] counter = new int[60];
+        int result = 0;
+        
+        for(int i = 0; i < time.length; i++) {
+            result += counter[(600-time[i])%60];
+            counter[time[i]%60]++;
+        }
+        return result;
+    }
+}
+
+Complexity Analysis
+
+Time complexity: \mathcal{O}(n)O(n), when nn is the length of the input array, because we would visit each element in time once.
+Space complexity: \mathcal{O}(1)O(1), because the size of the array remainders is fixed with 6060.
