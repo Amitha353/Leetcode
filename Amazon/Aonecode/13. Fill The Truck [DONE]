@@ -1,0 +1,25 @@
+https://aonecode.com/amazon-online-assessment-fill-the-truck
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+public class Solution {
+    public int fillTheTruck(int num, int[] boxes, int unitSize, int[] unitsPerBox, long truckSize) {
+        int cnt = 0;
+         PriorityQueue<Integer> unitsMaxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
+         for (int i = 0; i < num; i++) {
+             for (int j = 0; j < boxes[i]; j++) {
+                 unitsMaxHeap.add(unitsPerBox[i]);
+            }
+        }
+    
+        while (truckSize > 0 && !unitsMaxHeap.isEmpty()) {
+            int units = unitsMaxHeap.poll(); // get max units count
+            cnt += units;
+            truckSize--; 
+        }
+
+        return cnt;
+    }
+}
