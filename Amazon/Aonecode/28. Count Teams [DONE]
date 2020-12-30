@@ -1,0 +1,45 @@
+https://aonecode.com/amazon-online-assessment-create-teams
+https://github.com/Amitha353/Leetcode/blob/master/Amazon/14.%20Count%20Teams%20%5BDONE%5D
+
+public class Main
+{
+	public static void main(String[] args) {
+		int num = 6;
+         int[] skills = {12, 4, 6, 13, 5, 10};
+         int minAssociates = 3;
+         int minLevel = 4;
+         int maxLevel = 10;
+         int result = countTeams(num, skills, minAssociates, minLevel, maxLevel);
+         System.out.println(result);
+         System.out.println(countTeams(num, new int[]{12, 4, 6, 13, 5, 9, 10}, minAssociates, minLevel, maxLevel));
+         System.out.println(countTeams(8, new int[]{6, 13, 5, 10, 12, 4, 2, 15}, 3, 4, 10));
+	}
+	
+	static int countTeams(int num, int[] skills, int minAssociates, int minLevel, int maxLevel) {
+         int skillMet = 0;
+         for(int i = 0; i < skills.length; i++) {
+             if(skills[i] >= minLevel && skills[i] <= maxLevel) {
+                 skillMet++;
+             }
+         }
+         
+         return binomialCoeff(skillMet, minAssociates);
+     }
+     
+    static int binomialCoeff(int n, int k)
+    {
+        int C[] = new int[n + 1];
+ 
+        C[0] = 1;
+ 
+        for(int i=1;i<=n;i++){
+		    C[i]=C[i-1]*(n-i+1)/i;
+        }   
+        
+        int result = 0;
+        for(int i = k; i <=n; i++) {
+            result += C[i];
+        }
+        
+        return result;
+    }
