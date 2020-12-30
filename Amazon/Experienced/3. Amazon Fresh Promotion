@@ -1,2 +1,43 @@
 https://www.youtube.com/watch?v=D3GDFfCOLss
 https://juejin.cn/post/6893932757819326477
+
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        System.out.println("Hello World");
+        System.out.println(isWinner(new String[][]{{"apple", "apple"}, {"banana", "anything", "banana"}}, new String[]{"orange", "apple", "apple",
+        "banana", "orange", "banana"}));
+        System.out.println(isWinner(new String[][]{{"apple", "apple"}, {"banana", "anything", "banana"}}, new String[]{"banana", "orange", "banana",
+        "apple", "apple"}));
+        System.out.println(isWinner(new String[][]{{"apple", "apple"}, {"banana", "anything", "banana"}}, new String[]{"apple", "banana", "apple",
+        "banana", "orange", "banana"}));
+        System.out.println(isWinner(new String[][]{{"apple", "apple"}, {"apple", "apple", "banana"}}, new String[]{"apple", "apple", "apple","banana"}));
+     }
+     
+     private static int isWinner(String[][] codeList,String[] shoppingCart){
+        //check zero length...
+        if(codeList == null || codeList.length == 0)
+            return 1;
+        if(shoppingCart == null || shoppingCart.length == 0)
+            return 0;
+        int i=0,j=0;
+        for(int k=0;k<shoppingCart.length;k++) {
+            //when match success
+            if(codeList[i][j].equals(shoppingCart[k]) || codeList[i][j].equals("anything")) {
+                j++;
+                if(j == codeList[i].length) {
+                    i++;
+                    j=0;
+                }
+                if(i == codeList.length)
+                    return 1;
+            }else {
+                //when match failed, k and j both go back.
+                k-=j;
+                j=0;
+            }
+        }
+        return 0;
+    }
+}
