@@ -8,7 +8,7 @@ class Solution {
        // WRITE YOUR BRILLIANT CODE HERE
         LinkedHashSet<String> set = new LinkedHashSet<>();
 		for(int i =0;i<s.length()-k+1;i++) {
-			StringBuilder sb = new StringBuilder();
+			//StringBuilder sb = new StringBuilder();
 			String st = "";
 			for(int j=i;j<i+k;j++) {
 				if(st.indexOf(s.charAt(j))!=-1) {
