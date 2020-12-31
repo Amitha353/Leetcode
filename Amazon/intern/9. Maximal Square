@@ -22,8 +22,8 @@ class Solution {
 }
 
 /*
-Appraoch: DP
-Time complexity : O(mn)O(mn). Single pass.
+Appraoch: Dynamic Programming
+Time complexity : O(mn). Single pass.
 
-Space complexity : O(n)O(n). Another array which stores elements in a row is used for dp.
+Space complexity : O(n). Another array which stores elements in a row is used for dp.
 */
