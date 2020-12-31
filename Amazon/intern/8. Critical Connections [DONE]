@@ -1,0 +1,50 @@
+https://algo.monster/problems/data_center_critical_connection
+https://leetcode.com/problems/critical-connections-in-a-network/
+=================================================================================================================
+class Solution {
+    private int time = 0; //current time of discovery
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        //create an graph that stores the adjacent nodes for each node - graph
+        // a critical node is identified based on its discover, if it is discovered after the root discovery, then it is critical - this must be added to the output.
+
+        List<Integer>[] graph = new ArrayList[n];
+        for(int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for(List<Integer> conn: connections) {
+            graph[conn.get(0)].add(conn.get(1));
+            graph[conn.get(1)].add(conn.get(0));
+        }
+        
+        int[] disc = new int[n];
+        int[] low = new int[n];
+        boolean[] visited = new boolean[n];
+        List<List<Integer>> result = new ArrayList<>();
+        
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
+                dfs(i, -1, disc, low, visited, graph, result);
+            }
+        }
+        return result;
+    }
+    
+    private void dfs(int root, int parent, int[] disc, int[] low, boolean[] visited, List<Integer>[] graph, List<List<Integer>> result) {
+        visited[root] = true;
+        disc[root] = time++;
+        low[root] = disc[root];
+        for(Integer neig: graph[root]) {
+            if(neig == parent) continue;
+            if(!visited[neig]) {
+                dfs(neig, root, disc, low, visited, graph, result);
+                low[root] = Math.min(low[root], low[neig]);
+                if(disc[root] < low[neig]) {
+                    result.add(Arrays.asList(root, neig));
+                }
+            } else {
+                low[root] = Math.min(low[root], disc[neig]);
+            }
+        }
+    }
+}
