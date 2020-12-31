@@ -1,0 +1,77 @@
+https://aonecode.com/amazon-online-assessment-choose-a-flask
+https://algo.monster/problems/choose_a_flask
+
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) {
+		int totalMarks = 9;
+		List<PairInt> edges = new ArrayList<>();
+		edges.add(new PairInt(0, 3));
+		edges.add(new PairInt(0, 5));
+		edges.add(new PairInt(0, 7));
+		
+		edges.add(new PairInt(1, 6));
+		edges.add(new PairInt(1, 8));
+		edges.add(new PairInt(1, 9));
+		
+		edges.add(new PairInt(2, 3));
+		edges.add(new PairInt(2, 5));
+		edges.add(new PairInt(2, 6));
+		System.out.println(chooseAFlask(4, new int[]{4, 6, 6, 7}, 3, 9, edges));
+	}
+	
+	public static int chooseAFlask(int numOrders, int[] requirements, int flaskTypes, int totalMarks, List<PairInt> edges){
+       // WRITE YOUR BRILLIANT CODE HERE
+       Arrays.sort(requirements);
+       Map<Integer, TreeSet<Integer>> map = new HashMap<>();
+       for(PairInt edge: edges) {
+           if(!map.containsKey(edge.first)) {
+               TreeSet<Integer> temp = new TreeSet<>();
+               temp.add(edge.second);
+               map.put(edge.first, temp);
+           } else {
+               TreeSet<Integer> tempexist = map.get(edge.first);
+               tempexist.add(edge.second);
+               map.put(edge.first, tempexist);
+           }
+       }
+       int minWastage = Integer.MAX_VALUE;
+       int result = -1;
+       for(Map.Entry<Integer, TreeSet<Integer>> entry: map.entrySet()) {
+            TreeSet<Integer> flaskSizes = entry.getValue();
+            if(flaskSizes.last() >= requirements[requirements.length-1]) {
+                int waste = calculateWaste(requirements, entry.getValue());
+                if(waste < minWastage) {
+                    minWastage = waste;
+                    result = entry.getKey();
+                }
+            }
+       }
+       return result;
+    }
+    
+    public static int calculateWaste(int[] requirements, TreeSet<Integer> flaskSizes) {
+        Iterator<Integer> iterator = flaskSizes.iterator();
+        int waste = 0;
+        int i = 0;
+        while(iterator.hasNext() && i < requirements.length) {
+            int fType = iterator.next();
+            while(i < requirements.length && requirements[i] <= fType) {
+                waste += fType - requirements[i];
+                i++;
+            }
+        }
+        return waste;
+    }
+	
+	static class PairInt {
+      int first, second;
+
+      PairInt(int first, int second) {
+          this.first = first;
+          this.second = second;
+      }
+  }
+}
