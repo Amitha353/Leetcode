@@ -1,0 +1,102 @@
+https://aonecode.com/amazon-online-assessment-throttling-gateway
+https://leetcode.com/discuss/interview-question/819577/Throttling-Gateway-Hackerrank
+https://leetcode.com/discuss/interview-question/358601/akuna-capital-oa-2019-quant
+https://leetcode.com/discuss/interview-question/985713/Amazon-or-OA-or-Throttling-Gateway/798684
+https://leetcode.com/discuss/interview-question/518083/Citrix-or-OA-2020-or-Evaluating-Circuit-Expressions-or-Throttling-Gateway-or-Computing-Cluster-Quality
+==========================================================================================================================
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) {
+        Integer[] arr = new Integer[]{1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7,7,7,7, 11, 11, 11, 11};
+        List<Integer> t = Arrays.asList(arr);
+        System.out.println(solve(t));
+        arr = new Integer[]{1,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,11,11,11};
+        t = Arrays.asList(arr);
+        System.out.println(solve(t));
+        arr = new Integer[]{1,1,1,1,2};
+        t = Arrays.asList(arr);
+        System.out.println(solve(t));
+        arr = new Integer[]{1,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7};
+        t = Arrays.asList(arr);
+        System.out.println(solve(t));
+	}
+	
+	public static int solve(List<Integer> requestTime){
+	    if(requestTime.size() <= 3) return 0;
+	    int n = requestTime.size();
+	    int max = requestTime.get(n-1)+1;
+	    Integer[] cnt = new Integer[max];
+	    Arrays.fill(cnt, 0);
+	    Integer[] val = new Integer[max];
+	    Arrays.fill(val, 0);
+	    int drops = 0;
+	    for(int i=0;i<n;i++){
+            cnt[requestTime.get(i)]++;
+        }
+        
+        List<Integer> lookup = new ArrayList<>();
+        lookup.add(0);
+        for(int i=1;i<max;i++){
+            val[i]=val[i-1]+cnt[i];
+            lookup.add(val[i]);
+        }
+        for(int i = 3; i < n; i++) {
+            int temp1 = 0, temp2 = 0;
+            int idx10 = requestTime.get(i)-10;
+            if(idx10 >= 0 && idx10 < n) {
+                temp1 = lookup.get(idx10);
+            }
+            int idx60 = requestTime.get(i)-60;
+            if(idx60 >= 0 && idx60 < n) {
+                temp2 = lookup.get(idx60);
+            }
+            if(requestTime.get(i-3) == requestTime.get(i)) {
+
+                drops++;
+            }
+            else if(((i+1)-temp1) > 20) {
+                drops++;
+            }
+            else if(((i+1)-temp2) > 60) {
+                drops++;
+            }
+        }
+        return drops;
+    }
+}
+============================================================================================================================
+# Hello World program in Python
+    
+import collections
+def droppedRequests(requestTime):
+    if len(requestTime) <= 3: return 0
+    count = collections.Counter(requestTime)
+    lookup = collections.defaultdict(int)
+    for i in range(requestTime[0], requestTime[-1]+1):
+        lookup[i] = lookup[i-1] + count[i]
+    for i in range(3, len(requestTime)):
+        temp1 , temp2 = 0, 0
+        if requestTime[i]-10 in lookup:
+            temp1 = lookup[requestTime[i]-10]
+        if requestTime[i]-60 in lookup:
+            # print(i , requestTime[i], requestTime[i]-60, lookup[requestTime[i]-60])
+            temp2 = lookup[requestTime[i]-60]
+        if requestTime[i-3] == requestTime[i]:
+            # print(i, requestTime[i])
+            requestTime[i-3] = '$'
+        elif i+1 - temp1 > 20:
+            # print(i, temp1)
+            requestTime[i] = '$'
+        elif i+1 - temp2 > 60:
+            print(i, temp2)
+            requestTime[i] = '$'
+    return requestTime.count('$')
+
+requests = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7,7,7,7, 11, 11, 11, 11]
+print(droppedRequests(requests))
+print(droppedRequests([1,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,11,11,11]))
+print(droppedRequests([1,1,1,1,2]))
+print(droppedRequests([1,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7]))
+===============================================================================================================================
