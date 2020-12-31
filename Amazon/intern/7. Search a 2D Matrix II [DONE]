@@ -20,6 +20,8 @@ class Solution {
 }
 
 /*
+Start from top right corner, if value if target is less than the cell, move to lower column,
+if the target is greater than the cell, move to higher row.
 Time: O(M+N)
 Space: O(1)
 */
