@@ -16,5 +16,5 @@ class Solution {
 
 Complexity Analysis
 
-Time complexity: \mathcal{O}(n)O(n), when nn is the length of the input array, because we would visit each element in time once.
-Space complexity: \mathcal{O}(1)O(1), because the size of the array remainders is fixed with 6060.
+Time complexity: O(n), when nn is the length of the input array, because we would visit each element in time once.
+Space complexity: O(1), because the size of the array remainders is fixed with 6060.
