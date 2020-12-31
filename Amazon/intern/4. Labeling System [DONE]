@@ -1,0 +1,75 @@
+https://aonecode.com/amazon-online-assessment-labeling-system
+
+https://discuss.codechef.com/t/amazon-coding-question-2020-help/81298
+https://leetcode.com/discuss/interview-question/724785/rearrange-original-string-and-delete-characters-java8
+https://algo.monster/problems/labeling_system
+
+==============================================================
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		System.out.println(labelSystem("azzzzz", 2));
+		System.out.println(labelSystem("azzzz", 2));
+		System.out.println(labelSystem("cbddd", 2));
+		System.out.println(labelSystem("baccc", 2));
+		System.out.println(labelSystem("cccba", 2));
+		System.out.println(labelSystem("cccba", 3));
+		System.out.println(labelSystem("zzzazzb", 2));
+		System.out.println(labelSystem("zzzxazz", 2));
+		System.out.println(labelSystem("zzzzzzxxxzzaabbazza", 5));
+		System.out.println(labelSystem("zzzzzzxxxzzaabbazza", 3));
+		System.out.println(labelSystem("aaara", 2));
+		System.out.println(labelSystem("aaaaa", 2));
+	}
+	
+	public static String labelSystem(String s, int limit) {
+	    List<Character> list = new ArrayList<>();
+		for(char c: s.toCharArray()) {
+		    list.add(c);
+		}
+		Collections.sort(list);
+		Collections.reverse(list);
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		int j = 0;
+		sb.append(list.get(0));
+		for(int i = 1; i < list.size(); i++) {
+		    if(list.get(i) == list.get(i-1)) {
+		        count++;
+		        if(count == limit) {
+		          if((j == list.size()-1) || (i == list.size()-1)) {
+		              break;
+		          }
+		            for(j = i+1; j < list.size(); j++) {
+		                if(list.get(j) != list.get(i)) {
+		                    break;
+		                }
+		                //If the characters after removing should not be repeated.
+		                if((j == list.size()-1) || (i == list.size()-1)) {
+		                    return sb.toString();
+		                }
+		                
+		                //If the characters after removing one should be repeated
+		              //  if((j == list.size()-1) || (i == list.size()-1)) {
+		              //      return sb.toString();
+		              //  }
+		            }
+		            char temp = list.get(i);
+		            list.set(i, list.get(j));
+		            list.set(j, temp);
+		            sb.append(list.get(i));
+		            count = 0;
+		        } else {
+		            sb.append(list.get(i));
+		        }
+		    } else {
+		        sb.append(list.get(i));
+		        count = 0;
+		    }
+		}
+		return sb.toString();
+    }
+}
