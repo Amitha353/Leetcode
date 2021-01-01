@@ -1,0 +1,40 @@
+https://aonecode.com/amazon-online-assessment-find-related-books
+
+import java.util.*;
+
+public class Solution {
+  public List<String> findLargestGroup(List<List<String>> items){
+      Map<String, TreeSet<String>> map = new HashMap<>();
+      
+      for(List<String> item: items) {
+          TreeSet<String> temp = new TreeSet<>(item);
+          for(String p: item) {
+              if(!map.containsKey(p)) {
+                  map.put(p, temp);
+              } else {
+                  TreeSet<String> exists = map.get(p);
+                  exists.addAll(temp);
+                  map.put(p, exists);
+              }
+          }
+      }
+      
+      String maxElement = "";
+      int maxSize = 0;
+      for(Map.Entry<String, TreeSet<String>> entry: map.entrySet()) {
+          if(entry.getValue().size() > maxSize) {
+              maxSize = entry.getValue().size();
+              maxElement = entry.getKey();
+          }
+      }
+      
+      TreeSet<String> result = new TreeSet<>();
+      for(String elt: map.get(maxElement)) {
+          result.addAll(map.get(elt));
+      }
+      
+      List<String> aList = new ArrayList<String>();
+      aList.addAll(result);
+      return aList;
+  }
+}
