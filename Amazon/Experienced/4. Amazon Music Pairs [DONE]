@@ -1,6 +1,19 @@
 https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/
 
-
+==========================================================================================
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        int[] counter = new int[60];
+        int result = 0;
+        
+        for(int i = 0; i < time.length; i++) {
+            result += counter[(60-(time[i]%60))%60];
+            counter[time[i]%60]++;
+        }
+        return result;
+    }
+}
+------------------------------------------------------------------------------------------
 class Solution {
     public int numPairsDivisibleBy60(int[] time) {
         int[] counter = new int[60];
