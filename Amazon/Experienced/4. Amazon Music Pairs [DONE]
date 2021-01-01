@@ -18,3 +18,9 @@ Complexity Analysis
 
 Time complexity: O(n), when nn is the length of the input array, because we would visit each element in time once.
 Space complexity: O(1), because the size of the array remainders is fixed with 6060.
+
+
+this is a DP where c keeps the count of times it is possible to have a summation up to multiple of 60, with any number X. 
+So by keeping the array up to 60, you maintain a counter count. Using the formula for getting the nearest number which can be
+added to a particular X to sum up to 60 (which is found using 60 - t % 60) . Now to get the index and add it to the result, you do 
+another modulo 60 which forms the basis of res += c[(60 - t % 60) % 60];
