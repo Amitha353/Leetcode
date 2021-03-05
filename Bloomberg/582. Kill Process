@@ -1,0 +1,47 @@
+https://www.lintcode.com/problem/kill-process/
+
+import java.util.*;
+
+public class Solution {
+    /**
+     * @param pid: the process id
+     * @param ppid: the parent process id
+     * @param kill: a PID you want to kill
+     * @return: a list of PIDs of processes that will be killed in the end
+     */
+    public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
+        List<Integer> result = new ArrayList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        for(int i = 0; i < ppid.size(); i++) {
+            if(map.containsKey(ppid.get(i))) {
+                List<Integer> temp = map.get(ppid.get(i));
+                temp.add(pid.get(i));
+                map.put(ppid.get(i), temp);
+            } else {
+                List<Integer> temp = new ArrayList<>();
+                temp.add(pid.get(i));
+                map.put(ppid.get(i), temp);
+            }
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(kill);
+
+        while(!queue.isEmpty()) {
+            int current = queue.poll();
+            result.add(current);
+            if(map.containsKey(current)) {
+                List<Integer> temp = map.get(current);
+                for(int i = 0; i < temp.size(); i++) {
+                    queue.offer(temp.get(i));
+                }
+            }
+        }
+        return result;
+    }
+}
+
+/*
+HashMap + BFS
+*/
