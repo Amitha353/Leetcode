@@ -1,0 +1,25 @@
+https://www.lintcode.com/problem/closest-binary-search-tree-value/
+
+public class Solution {
+    public int closestValue(TreeNode root, double target) {
+        // write your code here
+        int result = root.val;
+
+        if(root.val < target) {
+            if(root.right != null) {
+                int right = closestValue(root.right, target);
+                if(Math.abs(right - target) < Math.abs(result - target)) {
+                    result = right;
+                }
+            }
+        } else {
+            if(root.left != null) {
+                int left = closestValue(root.left, target);
+                if(Math.abs(left-target) < Math.abs(result - target)) {
+                    result = left;
+                }
+            }
+        }
+        return result;
+    }
+}
