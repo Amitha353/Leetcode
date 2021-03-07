@@ -1,19 +1,21 @@
 https://zhuhan0.blogspot.com/2017/03/leetcode-253-meeting-rooms-ii.html
 
 class Solution {
-    public int minMeetingRooms(Interval[] intervals) {
-        Arrays.sort(intervals, (a, b) -> a.start - b.start);
+    public int minMeetingRooms(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
         PriorityQueue<Integer> heap = new PriorityQueue<>();
         
-        for (Interval i : intervals) {
-            if (!heap.isEmpty() && i.start >= heap.peek()) {
+        for (int[] i : intervals) {
+            if (!heap.isEmpty() && i[0] >= heap.peek()) {
                 heap.poll();
             }
-            heap.offer(i.end);
+            heap.offer(i[1]);
         }
         return heap.size();
     }
+}
 
 
 Time complexity:
 Sorting takes O(nlogn). Offering to min heap takes O(logn) so the for loop takes O(nlogn). The overall time complexity is O(nlogn).
+Space - O(n)
