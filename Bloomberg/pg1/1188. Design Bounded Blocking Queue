@@ -1,0 +1,38 @@
+http://guanzhou.pub/2020/06/16/LeetCode2/
+
+/**
+semaphore: acquire -1, release +1.
+
+*/
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Semaphore;
+
+class BoundedBlockingQueue {
+
+    private Semaphore enq;
+    private Semaphore deq;
+    ConcurrentLinkedQueue<Integer> queue;
+
+    public BoundedBlockingQueue(int capacity) {
+        queue = new ConcurrentLinkedQueue<>();
+        enq = new Semaphore(capacity);
+        deq = new Semaphore(0);
+    }
+
+    public void enqueue(int element) throws InterruptedException {
+        enq.acquire();
+        queue.offer(element);
+        deq.release();
+    }
+
+    public int dequeue() throws InterruptedException {
+        deq.acquire();
+        int res = queue.poll();
+        enq.release();
+        return res;
+    }
+
+    public int size() {
+        return queue.size();
+    }
+}
