@@ -1,0 +1,62 @@
+https://wentao-shao.gitbook.io/leetcode/matrix/723.candy-crush
+
+public class Solution {
+    /**
+     * @param board: a 2D integer array
+     * @return: the current board
+     */
+    public int[][] candyCrush(int[][] board) {
+        // Write your code here
+       int r = board.length;
+       int c = board[0].length;
+       boolean crush = false;
+       
+       for(int i = 0; i < r; i++) {
+           for(int j = 0; j < c; j++) {
+               int v = Math.abs(board[i][j]);
+               
+               if(v == 0) continue;
+               
+               //horizontal check
+               if(j+2 < c && v == Math.abs(board[i][j+1]) && v == Math.abs(board[i][j+2])) {
+                   crush = true;
+                   board[i][j] = board[i][j+1] = board[i][j+2] = -v;
+               }
+               
+               //vertical check
+               if(i+2 < r && v == Math.abs(board[i+1][j]) && v == Math.abs(board[i+2][j])) {
+                   crush = true;
+                   board[i][j] = board[i+1][j] = board[i+2][j] = -v;
+               }
+           }
+       }
+       
+       for(int j = 0; j < c; j++) {
+           int id = r-1;
+           for(int i = r-1; i >= 0; i--) {
+               if(board[i][j] > 0) {
+                   board[id--][j] = board[i][j];
+               }
+           }
+           while(id >= 0) {
+               board[id--][j] = 0;
+           }
+       }
+       return crush ? candyCrush(board) : board;
+    }
+}
+
+Time: O((R*C)^2) && Space: O(1)
+
+/*
+Mark the crushed candidate directly on the board by negating the value
+We check in group of 3, if they are the same absolute value, we mark them for crushing step
+Time complexity O((rc)^2), because it costs 3rc to scan the whole board then we call at most rc/3 times
+Space complexity O(1)
+- https://just4once.gitbooks.io/leetcode-notes/content/leetcode/two-pointers/723-candy-crush.html
+
+Check if the curent grid value is 0 , continue;
+if three in row or column are same value , then negate.
+
+for each column, begin from bottom,if positive, retain, else fill with zeros.
+*/
