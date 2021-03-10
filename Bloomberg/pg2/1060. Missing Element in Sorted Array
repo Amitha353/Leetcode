@@ -1,0 +1,32 @@
+class Solution {
+    public int missingElement(int[] nums, int k) {
+        int n = nums.length;
+        
+        int missingcount  = nums[n-1] - nums[0] - (n - 1);
+        
+        if(missingcount < k) {
+            return nums[n-1] + k - (missingcount);
+        }
+        
+        int l = 0, r = n-1;
+        
+        while(l < r-1) {
+            int mid = l + (r-l)/2;
+            missingcount = (nums[mid] - nums[l]) - (mid-l);
+            if(missingcount < k) {
+                l = mid;
+                k -= missingcount;
+            } else {
+                r = mid;
+            }
+        }
+        
+        return nums[l]+k;
+    }
+}
+
+/*
+Binary Search
+- O(log n)
+- O(1)
+*/
