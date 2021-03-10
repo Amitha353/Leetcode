@@ -1,0 +1,45 @@
+class Solution {
+    public int minTotalDistance(int[][] grid) {
+        //Median
+        
+        int r = grid.length;
+        int c = grid[0].length;
+        
+        List<Integer> cols = new ArrayList<>();
+        List<Integer> rows = new ArrayList<>();
+        
+        for(int i = 0; i < r; i++) {
+            for(int j = 0; j < c; j++) {
+                if(grid[i][j] == 1) {
+                    cols.add(j);
+                    rows.add(i);
+                }
+            }
+        }
+        
+        int sum = 0;
+        Collections.sort(rows);
+        Collections.sort(cols);
+        
+        int median_row = rows.get(rows.size()/2);
+        int median_col = cols.get(cols.size()/2);
+        
+        for(Integer row: rows) {
+            sum += Math.abs(row - median_row);
+        }
+        
+        for(Integer col: cols) {
+            sum += Math.abs(col - median_col);
+        }
+        
+        return sum;
+    }
+}
+
+/*
+Time complexity :O(mnlogmn). Since there could be at most m \times nm×n points, therefore the time complexity is O(mnlogmn) due to sorting.
+
+Space complexity : O(mn).
+
+
+*/
