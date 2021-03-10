@@ -1,0 +1,49 @@
+/*
+// Definition for an Interval.
+class Interval {
+    public int start;
+    public int end;
+
+    public Interval() {}
+
+    public Interval(int _start, int _end) {
+        start = _start;
+        end = _end;
+    }
+};
+*/
+
+class Solution {
+    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+        PriorityQueue<Interval> pq = new PriorityQueue<>((a, b) -> a.start - b.start);
+        
+        for(List<Interval> intervals : schedule) {
+            for(Interval interval: intervals) {
+                pq.offer(interval);
+            }
+        }
+        
+        List<Interval> result = new ArrayList<>();
+        
+        Interval begin = pq.poll();
+        
+        while(!pq.isEmpty()) {
+            Interval curr = pq.poll();
+            
+            if(curr.start > begin.end) {
+                Interval temp = new Interval(begin.end, curr.start);
+                result.add(temp);
+                begin = curr;
+            } else {
+                begin.end = Math.max(begin.end, curr.end);
+            }
+        }
+        
+        return result;
+    }
+}
+
+/*
+Time Complexity - O(log N)
+Space Complexity - O(N)
+*/
