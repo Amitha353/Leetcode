@@ -46,3 +46,5 @@ class Solution {
         System.out.println(res);
     }
 }
+
+//https://algo.monster/problems/storage_optimization
