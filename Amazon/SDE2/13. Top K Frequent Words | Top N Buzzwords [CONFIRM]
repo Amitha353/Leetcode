@@ -1,0 +1,99 @@
+// https://aonecode.com/interview-question/top-frequent-words
+// https://algo.monster/problems/top_k_frequently_mentioned_keywords
+
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+
+import java.util.*;
+
+public class Main{
+
+     public static void main(String []args){
+         String[] keywords = {"anacell", "betacellular", "cetracular", "deltacellular", "eurocell"};
+         String[] reviews = {"I love anacell Best services; Best services provided by anacell",
+  "betacellular has great services",
+  "deltacellular provides much better services than betacellular",
+  "cetracular is worse than anacell",
+  "Betacellular is better than deltacellular."};
+  
+        List<String> result = topMentioned(2, keywords, reviews);
+        System.out.println(result);
+        
+        keywords = new String[]{"anacell", "cetracular", "betacellular"};
+        reviews = new String[]{"Anacell provides the best services in the city",
+  "betacellular has awesome services",
+  "Best services provided by anacell, everyone should use anacell"};
+  
+        result = topMentioned(2, keywords, reviews);
+        System.out.println(result);
+        
+        
+        keywords = new String[]{"apple", "banana", "orange"};
+        reviews = new String[]{"orange city",
+  "apple city banana city",
+  "orange city apple city"};
+  
+        result = topMentioned(2, keywords, reviews);
+        System.out.println(result);
+        
+         keywords = new String[]{"osmo", "uno", "playmonster", "lcr", "buzzed", "piefaced"};
+        reviews = new String[]{"The new osmo is super fun for my kids", 
+        "Osmo is the hottest of the season! Osmo will be on every kid's wishlist!",
+            "Expect the Playmonster drone to be very popular this year, PlayMonster",
+            "Uno is our family tradition",
+            "Playmonster and Osmo are the games to go with for my family's holiday grouping, Playmonster is good",
+            "For parents of older kids, look into buying them an LCR",
+            "PieFace is becoming popular among children"
+        };
+  
+        result = topMentioned(2, keywords, reviews);
+        System.out.println(result);
+        
+        keywords = new String[]{"trader","joe"};
+        reviews = new String[]{"trader joe's", "joe'asdf", "joe'xyz",
+        "joe`book", "joe-biden", "bitcoin trader"};
+  
+        result = topMentioned(1, keywords, reviews);
+        System.out.println(result);
+        
+     }
+     
+     public static List<String> topMentioned(int K, String[] keywords, String[] reviews) {
+         Map<String, Integer> map = new HashMap<>();
+        
+        PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(
+                   (a,b) -> a.getValue() == b.getValue() ?
+                            b.getKey().compareTo(a.getKey()) : a.getValue() - b.getValue());
+         
+         Set<String> keyWSet = new HashSet<>(Arrays.asList(keywords));
+
+         for(String review: reviews) {
+             review = review.replaceAll("[^a-zA-Z0-9\\s]", " ");
+             String[] words = review.toLowerCase().split(" ");
+             Set<String> tempSet = new HashSet<>(Arrays.asList(words));
+             tempSet.retainAll(keyWSet);
+             for(String temp: tempSet) {
+                 map.put(temp, map.getOrDefault(temp, 0) + 1);
+             }
+         }
+         
+         for(Map.Entry<String, Integer> entry: map.entrySet()) {
+             pq.offer(entry);
+             if(pq.size() > K) {
+                 pq.poll();
+             }
+         }
+         
+         List<String> result = new ArrayList<>();
+         while(!pq.isEmpty()) {
+             result.add(pq.poll().getKey());
+         }
+         Collections.reverse(result);
+         return result;
+     }
+}
