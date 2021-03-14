@@ -1,0 +1,74 @@
+// https://aonecode.com/amazon-interview-questions/find-critical-nodes
+
+import java.util.*;
+
+public class Solution {
+    int time = 0;
+	public int[] findCriticalNodes(int nodeNum, int[][] graph) {
+		List<Integer>[] adj = new ArrayList[nodeNum];
+		
+		for(int i = 0; i < nodeNum; i++) {
+		    adj[i] = new ArrayList<>();
+		}
+		
+		for(int[] edge: graph) {
+		    adj[edge[0]].add(edge[1]);
+		    adj[edge[1]].add(edge[0]);
+		}
+		
+		boolean[] visited = new boolean[nodeNum];
+		int[] disc = new int[nodeNum];
+		int[] low = new int[nodeNum];
+		int[] parent = new int[nodeNum];
+		boolean[] ap = new boolean[nodeNum];
+		
+		for(int i = 0; i < nodeNum; i++) {
+		    parent[i] = -1;
+		    visited[i] = false;
+		    ap[i] = false;
+		}
+		
+		for(int i = 0; i < nodeNum; i++) {
+		    if(visited[i] == false) {
+		        APUtil(i, visited, disc, low, parent, ap, adj);
+		    }
+		}
+		
+		List<Integer> result = new ArrayList<>();
+		
+		for (int i = 0; i < nodeNum; i++) 
+			if (ap[i] == true) 
+				result.add(i);
+		
+		return result.stream().mapToInt(i -> i).toArray();
+	}
+	
+	public void APUtil(int u, boolean[] visited, int[] disc, int[] low, int[] parent, boolean[] ap,
+			List<Integer>[] adj) {
+		int children = 0; 
+
+		visited[u] = true; 
+
+		disc[u] = low[u] = ++time; 
+
+		Iterator<Integer> i = adj[u].iterator(); 
+		while (i.hasNext()) 
+		{ 
+			int v = i.next();
+			if (!visited[v]) 
+			{ 
+				children++; 
+				parent[v] = u; 
+				APUtil(v, visited, disc, low, parent, ap, adj); 
+
+				low[u] = Math.min(low[u], low[v]); 
+				if (parent[u] == -1 && children > 1) 
+					ap[u] = true; 
+				if (parent[u] != -1 && low[v] >= disc[u]) 
+					ap[u] = true; 
+			} 
+			else if (v != parent[u]) 
+				low[u] = Math.min(low[u], disc[v]); 
+		}
+	}
+}
