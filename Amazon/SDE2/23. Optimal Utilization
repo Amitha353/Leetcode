@@ -1,1 +1,47 @@
-//https://algo.monster/problems/optimal_utilization// 
+// https://algo.monster/problems/optimal_utilization// 
+// https://leetcode.com/discuss/interview-question/373202
+
+import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    public static List<List<Integer>> getPairs(List<List<Integer>> a, List<List<Integer>> b, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        TreeMap<Integer, List<List<Integer>>> tree = new TreeMap<>();
+
+        for (int i=0; i<a.size(); i++) {
+            for (int j=0; j<b.size(); j++) {
+                int sum = a.get(i).get(1) + b.get(j).get(1); 
+                if (sum <= target) {
+                    List<List<Integer>> list = tree.computeIfAbsent(sum, (k) -> new ArrayList<>());
+                    list.add(Arrays.asList(a.get(i).get(0), b.get(j).get(0)));
+                }
+            }
+        }
+
+        return tree.floorEntry(target).getValue();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int aLength = Integer.parseInt(scanner.nextLine());
+        List<List<Integer>> a = new ArrayList<>();
+        for (int i = 0; i < aLength; i++) {
+            a.add(Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList()));
+        }
+        int bLength = Integer.parseInt(scanner.nextLine());
+        List<List<Integer>> b = new ArrayList<>();
+        for (int i = 0; i < bLength; i++) {
+            b.add(Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList()));
+        }
+        int target = Integer.parseInt(scanner.nextLine());
+        scanner.close();
+        List<List<Integer>> res = getPairs(a, b, target);
+        for (List<Integer> row : res) {
+            System.out.println(row.stream().map(String::valueOf).collect(Collectors.joining(" ")));
+        }
+    }
+}
