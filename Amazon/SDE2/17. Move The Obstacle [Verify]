@@ -17,28 +17,30 @@ public class HelloWorld{
 	}
 
 	private static int demolitionRobot(int[][] matrix) {
-		if(matrix.length == 0 || matrix[0].length == 0)
-            return -1;
-        int minSteps = Integer.MAX_VALUE;
-        Queue<int[]> queue = new LinkedList<>();
-        boolean visited[][] = new boolean[matrix.length][matrix[0].length];
-        for(int i = 0; i < matrix.length; i++)
-            Arrays.fill(visited[i], false);
-        queue.add(new int[]{0,0,-1});
-        int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        while(!queue.isEmpty()) {
-            int[] deq = queue.poll();
-            if(matrix[deq[0]][deq[1]] == 1) {
-                deq[2]++;
-                for(int[] dir: dirs) {
-                    int x = deq[0] + dir[0];
-                    int y = deq[1] + dir[1];
+	    if(matrix.length == 0 || matrix[0].length == 0)
+            	return -1;
+            int minSteps = Integer.MAX_VALUE;
+            Queue<int[]> queue = new LinkedList<>();
+            boolean visited[][] = new boolean[matrix.length][matrix[0].length];
+            for(int i = 0; i < matrix.length; i++)
+            	Arrays.fill(visited[i], false);
+            queue.add(new int[]{0,0,-1});
+	    visited[0][0] = true;
+            int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+            
+	    while(!queue.isEmpty()) {
+            	int[] deq = queue.poll();
+            	if(matrix[deq[0]][deq[1]] == 1) {
+                     	deq[2]++;
+                	for(int[] dir: dirs) {
+                    		int x = deq[0] + dir[0];
+                    		int y = deq[1] + dir[1];
                     
-                    if(x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && !visited[x][y]) {
-                        queue.offer(new int[]{x, y, deq[2]});
-                        visited[x][y] = true;
-                    }
-                }
+                    		if(x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && !visited[x][y]) {
+                        		queue.offer(new int[]{x, y, deq[2]});
+                        		visited[x][y] = true;
+                    		}
+                	}
             }
             else if(matrix[deq[0]][deq[1]] == 9){
                 minSteps = Math.min(deq[2] + 1, minSteps);
