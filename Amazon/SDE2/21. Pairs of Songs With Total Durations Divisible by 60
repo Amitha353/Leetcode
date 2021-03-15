@@ -1,1 +1,29 @@
 // https://algo.monster/problems/pairs_of_songs
+// https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    public static int numPairsDivisibleBy60(List<Integer> times) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        int[] counter = new int[60];
+        int result = 0;
+        
+        for(int i = 0; i < times.size(); i++) {
+            result += counter[(60-(times.get(i)%60))%60];
+            counter[times.get(i)%60]++;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> times = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        scanner.close();
+        int res = numPairsDivisibleBy60(times);
+        System.out.println(res);
+    }
+}
