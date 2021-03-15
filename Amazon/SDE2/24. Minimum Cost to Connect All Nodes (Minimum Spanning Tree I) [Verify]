@@ -1,4 +1,5 @@
 // https://algo.monster/problems/min_cost_to_connect_all_nodes
+// https://leetcode.com/discuss/interview-question/356981
 
 import java.util.*;
 import java.util.Arrays;
