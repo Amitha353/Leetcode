@@ -1,1 +1,54 @@
 // https://aonecode.com/aplusplus/interviewctrl/getInterview/87123881213
+// https://leetcode.com/discuss/interview-question/1033264/amazon-oa-1-year-experienced-for-sde1
+
+import java.util.*;
+
+public class MoveTheObstacle {
+	public static void main(String[] args) {
+		int[][] lot = new int[][] {
+			{1, 0, 0},
+			{1, 0, 9},
+			{1, 9, 1}
+		};
+		
+		int result = demolitionRobot(lot);
+		System.out.println(result);
+	}
+
+	private static int demolitionRobot(int[][] matrix) {
+		if(matrix.length == 0 || matrix[0].length == 0)
+            return -1;
+        int minSteps = Integer.MAX_VALUE;
+        Queue<int[]> queue = new LinkedList<>();
+        boolean visited[][] = new boolean[matrix.length][matrix[0].length];
+        for(int i = 0; i < matrix.length; i++)
+            Arrays.fill(visited[i], false);
+        queue.add(new int[]{0,0,-1});
+        while(!queue.isEmpty()) {
+            int[] deq = queue.poll();
+            if(matrix[deq[0]][deq[1]] == 1) {
+                deq[2]++;
+                if (deq[0] + 1 < matrix.length && !visited[deq[0] + 1][deq[1]]) {
+                    queue.add(new int[]{deq[0] + 1, deq[1], deq[2]});
+                    visited[deq[0] + 1][deq[1]] = true;
+                }
+                if (deq[1] + 1 < matrix[deq[0]].length &&!visited[deq[0]][deq[1] + 1]) {
+                    queue.add(new int[]{deq[0], deq[1] + 1, deq[2]});
+                    visited[deq[0]][deq[1] + 1] = true;
+                }
+                if (deq[0] - 1 >= 0 && !visited[deq[0] - 1][deq[1]]) {
+                    queue.add(new int[]{deq[0] - 1, deq[1], deq[2]});
+                    visited[deq[0] - 1][deq[1]] = true;
+                }
+                if (deq[1] - 1 >= 0 &&!visited[deq[0]][deq[1] - 1]) {
+                    queue.add(new int[]{deq[0], deq[1] - 1, deq[2]});
+                    visited[deq[0]][deq[1] - 1] = true;
+                }
+            }
+            else if(matrix[deq[0]][deq[1]] == 9){
+                minSteps = Math.min(deq[2] + 1, minSteps);
+            }
+        }
+        return minSteps == Integer.MAX_VALUE ? -1 : minSteps;
+	}
+}
