@@ -1,0 +1,67 @@
+// https://aonecode.com/amazon-online-assessment-algorithm-swap
+// https://algo.monster/problems/amazon_oa_number_of_swaps_to_sort
+
+import java.util.*;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    public static int numberOfSwapsToSort(List<Integer> nums) {
+        int[] smaller = new int[nums.size()];
+        List<swapNumber> tempSwap = new ArrayList<>();
+        
+        for(int i = 0; i < nums.size(); i++) {
+            tempSwap.add(new swapNumber(i, nums.get(i)));
+        }
+        
+        mergeSort(tempSwap, smaller);
+        return Arrays.stream(smaller).sum();
+     }
+     
+     private static List<swapNumber> mergeSort(List<swapNumber> nums, int[] smaller) {
+         if(nums.size() <= 1) {
+             return nums;
+         }
+         
+         int mid = nums.size()/2;
+         List<swapNumber> left = mergeSort(nums.subList(0, mid), smaller);
+         List<swapNumber> right = mergeSort(nums.subList(mid, nums.size()), smaller);
+         return merge(left, right, smaller);
+     }
+    
+     private static List<swapNumber> merge(List<swapNumber> left, List<swapNumber> right, int[] smaller) {
+         List<swapNumber> result = new ArrayList<>();
+         int  l =0, r = 0;
+         
+         while(l < left.size() || r < right.size()) {
+             if(r >= right.size() || (l < left.size() && left.get(l).val <= right.get(r).val)) {
+                 result.add(left.get(l));
+                 smaller[left.get(l).index] += r;
+                 l += 1;
+             } else {
+                 result.add(right.get(r));
+                 r += 1;
+             }
+         }
+         return result;
+     }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> nums = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        scanner.close();
+        int res = numberOfSwapsToSort(nums);
+        System.out.println(res);
+    }
+}
+
+class swapNumber {
+    int index;
+    int val;
+    
+    public swapNumber(int index, int val) {
+        this.index = index;
+        this.val = val;
+    }
+}
