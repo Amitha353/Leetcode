@@ -1,2 +1,71 @@
 // https://aonecode.com/amazon-online-assessment-optimizing-box-weight
 // https://algo.monster/problems/optimizing_box_weights
+// https://stackoverflow.com/questions/66091385/optimizing-box-weights-
+// DP
+
+import java.util.*;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    static int minElements = Integer.MAX_VALUE;
+    static int maxSum = 0;
+    static List<Integer> res = null;
+    public static List<Integer> optimizingBoxWeights(List<Integer> arr) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        Map<Integer, Integer> map = new HashMap<>();
+        int totalSum = 0;
+        for(int i: arr){
+            totalSum+=i;
+            map.put(i, map.getOrDefault(i, 0)+1);
+        }
+
+        //System.out.println(map);
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>();
+        for(Map.Entry<Integer, Integer> entry: map.entrySet()){
+            list.add(entry);
+        }
+
+        helper(list, 0, 0, totalSum, new ArrayList<>());
+        return res;
+    }
+    
+    private static void helper(List<Map.Entry<Integer, Integer>> list, int index, int currSum, int totalSum, List<Integer> curr){
+        //System.out.println(curr + " : " +  currSum + " : " +totalSum + " : " + (currSum > totalSum - currSum) + " : " + maxSum );
+
+        if(currSum > totalSum - currSum){
+            if(minElements > curr.size()){
+                minElements = curr.size();
+                res = new ArrayList<>(curr);
+                maxSum = currSum;
+            } else if (minElements == curr.size()){
+                if(currSum > maxSum){
+                    minElements = curr.size();
+                    res = new ArrayList<>(curr);
+                    maxSum = currSum;
+                }
+            }
+            return;
+        }
+
+        if(index > list.size()-1)
+            return;
+
+        Map.Entry<Integer, Integer> entry = list.get(index);
+        List<Integer> temp = new ArrayList<>(curr);
+        for(int i=0;i<entry.getValue();i++){
+            temp.add(entry.getKey());
+        }
+        helper(list, index+1, currSum + (entry.getValue() * entry.getKey()), totalSum, temp);
+        helper(list, index+1, currSum, totalSum, curr);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> arr = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        scanner.close();
+        List<Integer> res = optimizingBoxWeights(arr);
+        System.out.println(res.stream().map(String::valueOf).collect(Collectors.joining(" ")));
+    }
+}
