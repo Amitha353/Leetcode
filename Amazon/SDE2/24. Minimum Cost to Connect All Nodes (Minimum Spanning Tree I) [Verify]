@@ -1,0 +1,69 @@
+// https://algo.monster/problems/min_cost_to_connect_all_nodes
+
+import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    static int[] parent;
+    static int component;
+    
+    private static int find(int v){
+        if(parent[v] == v) return v;
+        return parent[v] = find(parent[v]);
+    }
+    
+    private static void connect(int v1, int v2){
+        if(find(v1) == find(v2)) return;
+        int root = find(v1);
+        while(v2 != parent[v2]){
+            int temp = parent[v2];
+            parent[v2] = root;
+            v2 = temp;
+        }
+        --component;
+        parent[v2] = root;
+    }
+    
+    private static boolean isConnected(int v1, int v2){
+        return find(v1) == find(v2);
+    }
+    
+    public static int minCostToConnectNodes(int n, List<List<Integer>> edges, List<List<Integer>> costs) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        parent = new int[n + 1]; component = n;
+        for(int i = 0; i <= n; ++i) parent[i] = i;
+        for(List<Integer> edge: edges) 
+            connect(edge.get(0), edge.get(1));
+        Collections.sort(costs, (a, b) -> (a.get(2) - b.get(2)));
+        int cost = 0;
+        for(int i = 0; i < costs.size(); ++i){
+            if(!isConnected(costs.get(i).get(0), costs.get(i).get(1))){
+                connect(costs.get(i).get(0), costs.get(i).get(1));
+                cost += costs.get(i).get(2);
+                if(component == 1) return cost;
+            }
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = Integer.parseInt(scanner.nextLine());
+        int edgesLength = Integer.parseInt(scanner.nextLine());
+        List<List<Integer>> edges = new ArrayList<>();
+        for (int i = 0; i < edgesLength; i++) {
+            edges.add(Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList()));
+        }
+        int costsLength = Integer.parseInt(scanner.nextLine());
+        List<List<Integer>> costs = new ArrayList<>();
+        for (int i = 0; i < costsLength; i++) {
+            costs.add(Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList()));
+        }
+        scanner.close();
+        int res = minCostToConnectNodes(n, edges, costs);
+        System.out.println(res);
+    }
+}
