@@ -1,0 +1,48 @@
+// https://aonecode.com/amazon-online-assessment-five-star-sellers
+// https://algo.monster/problems/five_star_sellers
+// https://leetcode.com/discuss/interview-question/983856/Amazon-or-OA-or-Five-Star-Sellers
+
+import java.util.*;
+
+public class Solution {
+    public static int fiveStarReviews(int[][] productRatings, int ratingsThreshold) {
+        int result = 0;
+    class customComparator implements Comparator<Float[]> {
+
+        @Override
+        public int compare(Float[] o1, Float[] o2) {
+            return o1[0].compareTo(o2[0]);
+        }
+    }
+
+    Queue<Float[]> priorityQueue = new PriorityQueue<>(new customComparator());
+    float grandTotal = 0;
+    for (int i = 0; i < productRatings.length; i++) {
+        int[] arr = productRatings[i];
+        Float percentage = percentage(arr);
+        Float incrementalPercentage = incrementedPercentage(arr);
+        grandTotal += percentage;
+        priorityQueue.add(new Float[]{(percentage - incrementalPercentage), (float) i});
+    }
+    float grandPercentage = (grandTotal / productRatings.length) * 100;
+    while (grandPercentage < ratingsThreshold) {
+        Float[] least = priorityQueue.poll();
+        int[] arr = productRatings[least[1].intValue()];
+        grandTotal += incrementedPercentage(arr) - percentage(arr);
+        grandPercentage = (grandTotal / productRatings.length) * 100;
+        arr[0]++;
+        arr[1]++;
+        priorityQueue.add(new Float[]{percentage(arr) - incrementedPercentage(arr), least[1]});
+        result++;
+    }
+    return result;
+}
+
+private static float percentage(int[] arr) {
+    return ((float) arr[0] / (float) arr[1]);
+}
+
+private static float incrementedPercentage(int[] arr) {
+    return ((float) arr[0] + 1) / ((float) arr[1] + 1);
+}
+}
