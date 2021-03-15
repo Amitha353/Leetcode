@@ -1,0 +1,38 @@
+// https://algo.monster/problems/substrings_of_size_K_with_K_distinct_chars
+
+import java.util.*;
+class Solution {
+    public static String[] subString(String s, int k){
+       // WRITE YOUR BRILLIANT CODE HERE
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+		for(int i =0;i<s.length()-k+1;i++) {
+			StringBuilder sb = new StringBuilder();
+			String st = "";
+			for(int j=i;j<i+k;j++) {
+				if(st.indexOf(s.charAt(j))!=-1) {
+					break;
+				}
+				else {
+					st = st+s.charAt(j);
+				}	
+			}
+			if(st.length()==k){
+				set.add(st);
+			}
+		}
+        int n = set.size(); 
+        String arr[] = new String[n]; 
+  
+        int i = 0; 
+        for (String x : set) 
+            arr[i++] = x; 
+        return arr;
+    }
+  public static void main(String[] args){
+      Scanner scanner = new Scanner(System.in);
+      String s = scanner.nextLine().trim();
+      int k = Integer.parseInt(scanner.nextLine());
+      scanner.close();
+      System.out.println(String.join(" ", subString(s,k)));
+  }
+}
