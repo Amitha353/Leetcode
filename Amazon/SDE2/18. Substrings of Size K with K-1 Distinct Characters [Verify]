@@ -4,37 +4,29 @@ import java.util.*;
 class Solution {
     public static String[] subString(String s, int k){
        // WRITE YOUR BRILLIANT CODE HERE
-        HashSet<String> found = new HashSet<>();
-        ArrayList<String> res = new ArrayList<>();
-        // char -> index of (only) occurence in substring
+        Set<String> found = new LinkedHashSet<>();
         HashMap<Character, Integer> occur = new HashMap<>();
-        // start index of substring
         int start = 0;
-        // end index of substring
         int end = 0;
         while (end < s.length()) {
             char ch = s.charAt(end);
-            // ensure s[start:end] has length <= k and distinct chars
             int newStart = occur.getOrDefault(ch, end - k);
             while (start <= newStart) {
-                occur.remove(s.charAt(start));
-                start++;
+                occur.remove(s.charAt(start++));
             }
-            occur.put(ch, end);
-            end++;
+            occur.put(ch, end++);
             if (end - start < k)
                 continue;
             String sub = s.substring(start, end);
             if (!found.contains(sub)) {
                 found.add(sub);
-                res.add(sub);
             }
         }
-        int n = res.size(); 
+        int n = found.size(); 
         String arr[] = new String[n]; 
   
         int i = 0; 
-        for (String x : res) 
+        for (String x : found) 
             arr[i++] = x; 
         return arr;
     }
@@ -46,7 +38,6 @@ class Solution {
       System.out.println(String.join(" ", subString(s,k)));
   }
 }
-
 
 =================================================================================================
 import java.util.*;
