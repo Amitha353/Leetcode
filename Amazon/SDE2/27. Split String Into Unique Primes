@@ -1,2 +1,71 @@
 // https://algo.monster/problems/amazon_oa_num_ways_to_split_into_primes
 // https://aonecode.com/aplusplus/interviewctrl/getInterview/191931233
+// https://github.com/Amitha353/Leetcode/blob/751ca940ea89df0d58cd1ca0fd8b4eeafaf3b9b0/Amazon/Aonecode/26.%20Split%20String%20Into%20Unique%20Primes
+
+import java.util.*;
+import java.util.Scanner;
+
+class Solution {
+    public static int splitPrimes(String inputStr) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        Set<Integer> sieve = buildSieve();
+		int result = solve(inputStr, sieve);
+		return result;
+    }
+    
+    public static int solve(String s, Set<Integer> primes) {
+// 		int mod = 1000000007;
+		int n = s.length();
+		int[] dp = new int[n + 1];
+		dp[0] = 1;
+
+		for (int i = 1; i <= n; i++) {
+			if (s.charAt(i - 1) != '0') {
+				int idx1 = Integer.parseInt(s.substring(i - 1, i));
+				if (primes.contains(idx1)) {
+					dp[i] = dp[i - 1];
+				}
+			}
+
+			if (i - 2 >= 0 && s.charAt(i - 2) != '0') {
+				int idx2 = Integer.parseInt(s.substring(i - 2, i));
+				if (primes.contains(idx2)) {
+					dp[i] = (dp[i] + dp[i - 2]);// % mod;
+				}
+			}
+
+			if (i - 3 >= 0 && s.charAt(i - 3) != '0') {
+				int idx3 = Integer.parseInt(s.substring(i - 3, i));
+				if (primes.contains(idx3)) {
+					dp[i] = (dp[i] + dp[i - 3]);// % mod;
+				}
+			}
+		}
+		return dp[n];
+	}
+    
+    public static Set<Integer> buildSieve() {
+		boolean[] isPrimeNumber = new boolean[1001];
+        Set<Integer> primes = new HashSet<Integer>();
+        Arrays.fill(isPrimeNumber, true);
+        isPrimeNumber[0] = isPrimeNumber[1] = false;
+        
+        for (int i = 2; i < 1001; i++) {
+            if (isPrimeNumber[i]) {
+                primes.add(i);
+                for (int j = i; j * i < 1001; j++) {
+                    isPrimeNumber[i * j] = false;
+                }
+            }
+        }
+        return primes;
+	}
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String inputStr = scanner.nextLine();
+        scanner.close();
+        int res = splitPrimes(inputStr);
+        System.out.println(res);
+    }
+}
