@@ -21,3 +21,146 @@ class Solution {
         return dp[0];
     }
 }
+
+
+//https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/discuss/944828/Short-DP-solution-with-highly-detailed-step-by-step-explanation
+
+First, let's assume that we have an array, call it dp, of size ( n + 1), where n is the length of the input array.
+
+Loop 1: iterates from day 1 to day D, which is the amount of days given. For every iteration of this outer loop, dp[0] will contain an updated answer depending on how many days have passed. For instance, after 2 iterations, we will have the correct minimum difficulty for inputs A and D = 2 stored in dp[0]. We will start at 1 day, and work our way up to the given D days.
+
+Now, let’s take a detailed look at what’s happening to our dp array as we go through the inner loops. Below is the what happens at every iteration of d. The “===“ line indicates the end of a day.
+
+A = [6,5,7,3]
+D = 3
+
+DAY ONE
+i is: 0, j is: 0, maxd is: 6, dp array: [ Infinity, Infinity, Infinity, Infinity, 0 ]
+i is: 0, j is: 1, maxd is: 6, dp array: [ Infinity, Infinity, Infinity, Infinity, 0 ]
+i is: 0, j is: 2, maxd is: 7, dp array: [ Infinity, Infinity, Infinity, Infinity, 0 ]
+i is: 0, j is: 3, maxd is: 7, dp array: [ 7, Infinity, Infinity, Infinity, 0 ]
+(i++)
+i is: 1, j is: 1, maxd is: 5, dp array: [ 7, Infinity, Infinity, Infinity, 0 ]
+i is: 1, j is: 2, maxd is: 7, dp array: [ 7, Infinity, Infinity, Infinity, 0 ]
+i is: 1, j is: 3, maxd is: 7, dp array: [ 7, 7, Infinity, Infinity, 0 ]
+(i++)
+i is: 2, j is: 2, maxd is: 7, dp array: [ 7, 7, Infinity, Infinity, 0 ]
+i is: 2, j is: 3, maxd is: 7, dp array: [ 7, 7, 7, Infinity, 0 ]
+(i++)
+i is: 3, j is: 3, maxd is: 3, dp array: [ 7, 7, 7, 3, 0 ]
+
+PAUSE
+
+What does [ 7, 7, 7, 3, 0 ] mean?
+Well, let’s start from the right. Forget about the 0 for a bit.
+
+3 means that A. we have one job at A[3] that is of difficulty 3, and B. we have only one day work.
+Given these two conditions, the minimum difficulty is clearly 3. We would have to complete A[3] = 3 in one day.
+
+Now, let’s move to the left. We have a 7. What does the 7 mean?
+7 means that A. We have two jobs starting at A[2], namely [7, 3], and B. still only one day to work with (we are still on the first iteration of the outermost loop)
+Given these two conditions, the minimum difficulty of our schedule is 7 because we would have to complete A[2] = 7 and A[3] = 3 on the same day.
+
+Lets move one more to the left, what does this 7 at dp[1] mean?
+It means that if A. we have three jobs starting at A[1], namely [5, 7, 3], and B. one day to work, then the minimum difficulty is 7.
+We would have to complete A[1] = 5, A[2] = 7, and A[3] = 3 on the same day.
+
+This all seems correct, but we don’t quite see how these answers are being generated.
+
+Let’s look at what happens during day 2.
+
+=============================================================================
+
+DAY TWO
+i is: 0, j is: 0, maxd is: 6, dp array: [ 13, 7, 7, 3, 0 ]
+
+PAUSE
+
+What just happened?
+
+maxd is the maximum difficulty that we have encountered thus far, currently located at A[0] = 6.
+Now, pay very close attention to the following.
+
+Question: If we complete job 6 on the FIRST day, and every other job on the SECOND day, what is the total minimum difficulty of our job schedule?
+
+Two part answer:
+A. if we complete job 6 in one day, the first day's total difficulty is 6.
+
+Ok, that’s the first day, but what is the total difficulty of all the other jobs starting from index j + 1, namely [5, 7, 3], completed on the second day?
+
+B. We already know the answer to this question! It’s in dp[j + 1], or dp[1].
+
+Look above! We already found that for [5, 7, 3], completing all the jobs in one day would yield a difficulty of 7.
+
+6 + 7 = 13
+
+At this point, the intuition behind Math.min(dp[i], maxd + dp[j + 1]) should start to become apparent, but don’t worry if not totally clear yet. Let’s do a few more iterations.
+
+i is: 0, j is: 1, maxd is: 6, dp array: [ 13, 7, 7, 3, 0 ]
+i is: 0, j is: 2 , maxd is: 7, dp array: [ 10, 7, 7, 3, 0 ]
+
+PAUSE.
+
+What just happened?
+
+maxd remained 6 for one iteration, and our dp array remained exactly the same, but then maxd became 7 since j reached 2 and A[2] = 7, which is max([6,5,7]).
+Now, again, pay very close attention to the following.
+
+Question: If we complete jobs [6, 5, 7] on the first day, and all of the rest of the jobs starting at index j + 1, namely [3] on the next day (the second day), what is the total minimum difficulty of our job schedule?
+
+Two part answer:
+
+A. if we complete job [6, 5, 7] in one, that day's total difficulty is 7 (or maxd!)
+
+Ok, that’s the first day, but what is the total difficulty of all the other jobs starting at index j + 1, namely [3] completed on the second day?
+
+B. We already know the answer to this question! It’s in dp[j + 1]. We already found, in the very beginning of our analysis, that for [3], completing all the jobs (or in this case, 1 job) in one day would yield a difficulty of 3.
+
+7 + 3 = 10, and we just found a new minimum! If we divide the jobs like this : first day: [6, 5, 7], second day: [3], we get 10 as our minimum difficulty.
+
+But we’re not done yet! The input has D = 3. Let’s fast forward to day 3!
+
+(i++)
+i is: 1, j is: 1, maxd is: 5 dp array: [ 10, 12, 7, 3, 0 ]
+i is: 1, j is: 2, maxd is: 7, dp array: [ 10, 10, 7, 3, 0 ]
+(i++)
+i is: 2, j is: 2, maxd is: 7, dp array: [ 10, 10, 10, 3, 0 ]
+
+=============================================================================
+
+DAY THREE
+i is: 0, j is: 0, maxd is: 6, dp array: [ 16, 10, 10, 3, 0 ]
+
+PAUSE
+
+What just happened?
+
+maxd = 6, which is the maximum difficulty so far (obviously, we are still at j = 0, and we haven’t passed any other difficulties)
+Now, once again, pay very close attention to the following.
+
+Question: If we complete job [6] on the first day, and all of the rest of the jobs, namely [5,7,3] this time during the next TWO days, day 2 and day 3, what will be the total minimum difficulty of our job schedule?
+
+Two part answer:
+
+A. if we complete job [6] in one day, the first day's total difficulty is 6, or maxd!
+
+Ok, that’s the first day, but what is the total difficulty of all the other jobs starting at index j + 1, namely [5, 7, 3] completed on the second AND third day.
+
+B. We already know the answer to this question! It’s in dp[j + 1], or dp[1]. We already found, during the previous day when d = 2, i = 1, and j = 2, that for [5, 7, 3], completing all the jobs in two days would yield a difficulty of 10.
+
+6 + 10 = 16.
+
+i is: 0, j is: 1, maxd is: 6, dp array: [ 16, 10, 10, 3, 0 ]
+(i++)
+i is: 1, j is: 1, maxd is: 5, dp array: [ 16, 15, 10, 3, 0 ]
+
+=============================================================================
+
+Now, lets summarize the algorithm.
+
+For each day, we want to update dp from i = 0 to i = n - d.
+Why n - d? Well, think of it this way. After d = 1 is completed, our dp looks like this : [ 7, 7, 7, 3, 0 ]
+When d = 2, would it make sense to update dp[3]? No, because we can't distribute one job, namely, [3] over 2 days.
+This upper limit ensures that we never update dp where there aren't enough jobs to fill the days specified by our outer loop.
+For each iteration of i over dp, we want to go over all of the elements in A from j = i to j = n - d.
+In this innermost loop, keep track of maxd, and for each iteration, the minimum is either dp[i] or maxd + dp[j + 1], whichever is smallest.
