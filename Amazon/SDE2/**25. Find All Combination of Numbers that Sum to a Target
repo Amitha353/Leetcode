@@ -1,1 +1,71 @@
 // https://algo.monster/problems/amazon_oa_find_all_combination_of_numbers_sum_to_target
+// https://leetcode.com/problems/4sum-ii/discuss/93920/Clean-java-solution-O(n2)
+// https://leetcode.com/discuss/interview-question/1023609/amazon-oa-shopping-options
+// https://leetcode.com/discuss/interview-question/974912/amazon-phone-find-all-combinations-of-numbers-that-sum-to-a-target
+import java.util.*;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    public static int numberOfOptions(List<Integer> pricesOfJeans, List<Integer> pricesOfShoes, List<Integer> pricesOfSkirts, List<Integer> pricesOfTops, int budget) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+        for (int jean : pricesOfJeans) {
+            for (int shoe : pricesOfShoes) {
+                int price = jean + shoe;
+                map.put(price, map.getOrDefault(price,0)+1);
+            }
+        }
+        
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+         }
+
+        // Get accumulated count
+        int acc = 0;
+        for (Map.Entry<Integer,Integer> entry : map.entrySet()) {
+            acc += entry.getValue();
+            map.put(entry.getKey(), acc);
+        }
+        System.out.println("==================================================");
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+         }
+        // Get the final ans
+        int ans = 0;
+        for (int skirt : pricesOfSkirts) {
+            for (int top : pricesOfTops) {
+                int upperLimit = budget - skirt - top;
+                Map.Entry<Integer,Integer> entry = map.floorEntry(upperLimit);
+                if (entry != null)
+                    ans += entry.getValue();
+            }
+        
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> pricesOfJeans = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> pricesOfShoes = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> pricesOfSkirts = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> pricesOfTops = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        int budget = Integer.parseInt(scanner.nextLine());
+        scanner.close();
+        int res = numberOfOptions(pricesOfJeans, pricesOfShoes, pricesOfSkirts, pricesOfTops, budget);
+        System.out.println(res);
+    }
+}
+
+
+/*
+Time complexity:  O(n^2)
+Space complexity: O(n^2)
+
+Time complexity: put and get methods for hashing can be considered constant complexity O(1). Each double loop complexity has quadratic complexity O(N^2), repeated two times. Hence, Total Time complexity will be: O(2 N^2) + O(1) = O(N^2)
+Space complexity: how mush space you add? map.put add a row in the map, here you are adding space in the memory. How much space? the number of times of the double for loop: O(N^2). Second double loop does not add space, has only get method. For loops themselves add only variable j and i in the memory, considered O(1), as well as the other variables in the code.
+Hence, Total Space Complexity will be: O(N^2) + O(1) = O(N^2)
+Hope I have been clear.
+*/
