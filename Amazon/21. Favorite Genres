@@ -1,4 +1,5 @@
-// "static void main" must be defined in a public class.
+// https://leetcode.com/discuss/interview-question/373006
+// https://leetcode.com/playground/DoUrVydn
 
 import java.util.ArrayList;
 import java.util.Arrays;
