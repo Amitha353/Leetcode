@@ -1,0 +1,26 @@
+// https://www.javaer101.com/en/article/58672.html
+
+import java.util.*;
+
+public class Solution {
+	public boolean loadBalance(int[] arr) {
+		int[] sumMap = new int[arr.length];
+        int sum = 0;
+        for(int i = 0; i < arr.length; i ++) {
+            sum += arr[i];
+            sumMap[i] = sum;
+        }
+
+        // 2.try each combination
+        for(int i = 1; i < arr.length - 1; i ++) {
+            for(int j = i + 1; j < arr.length - 1; j ++) {
+                int left = sumMap[i] - arr[i];
+                int mid = sumMap[j] - sumMap[i] - arr[j];
+                int right = sumMap[arr.length - 1] - sumMap[j];
+
+                if(left == mid && mid == right)return true;
+            }
+        }
+        return false;
+	}
+}
