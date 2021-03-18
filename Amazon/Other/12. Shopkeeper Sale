@@ -1,0 +1,35 @@
+import java.util.*;
+
+public class MyClass {
+
+     public static void main(String []args){
+        System.out.println("Hello World");
+        int[] prices = {2,3,1,2,4,2};
+        finalPrice(prices);
+        
+        int[] prices2 = {5, 1, 3, 4, 6, 2};
+        finalPrice(prices2);
+        
+        int[] prices3 = {1, 3, 3, 2, 5};
+        finalPrice(prices3);
+     }
+     
+     public static void finalPrice(int[] prices) {
+    int total = 0;
+    Stack<Integer> s = new Stack<>();
+    for (int i = 0; i < prices.length; i++) {
+        while (!s.isEmpty() && prices[s.peek()] >= prices[i]) {
+            total += prices[s.pop()] - prices[i];
+        }
+        s.push(i);
+    }
+    List<Integer> res = new ArrayList<>();
+    while (!s.isEmpty()) {
+        int idx = s.pop();
+        total += prices[idx];
+        res.add(0, idx);
+    }
+    System.out.println(total);
+    System.out.println(res);
+}
+}
