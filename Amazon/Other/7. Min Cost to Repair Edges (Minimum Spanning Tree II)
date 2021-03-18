@@ -1,0 +1,46 @@
+import java.util.*;
+
+public class Solution {
+    int[] parentTracker;
+    public int minCostToRepairEdges(int n, int[][] edges, int[][] edgesToRepair) {
+        if (n == 0) return -1;
+        if(edges.length == 0 && edgesToRepair.length == 0) return -1;
+        int[] roots = new int[n + 1];// id -> index + 1
+        Arrays.fill(roots, -1);
+
+        HashSet<String> broken = new HashSet<>();//record broken edges
+        for (int[] edge : edgesToRepair) {
+            broken.add(Arrays.toString(Arrays.copyOfRange(edge, 0, 2)));
+        }
+
+
+        for (int[] edge : edges) {
+            if (broken.contains(Arrays.toString(edge))) continue;
+            int left = find(roots, edge[0]);
+            int right = find(roots, edge[1]);
+            if (left != right) {
+                n--;
+                roots[left] = right;
+            }
+        }
+        int res = 0;
+        Arrays.sort(edgesToRepair, (a, b) -> a[2] - b[2]);
+        for (int[] edge : edgesToRepair) {
+            if (n == 1) break;
+            int left = find(roots, edge[0]);
+            int right = find(roots, edge[1]);
+            if (left == right) continue;
+            roots[left] = right;
+            n--;
+            res += edge[2];
+        }
+        return n == 1 ? res : -1; //return -1 if the graph is not connected, (not possible in the problem)
+    }
+
+    private static int find(int[] roots, int i) {
+        while (roots[i] != -1) {
+            i = roots[i];
+        }
+        return i;
+    }
+}
