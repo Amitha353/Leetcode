@@ -1,0 +1,26 @@
+// https://leetcode.com/problems/partition-labels/
+
+import java.util.*;
+
+public class Solution {
+    public static List<String> partitionString(String S) {
+		if(S.length() == 0 || S == null) return null;
+        int[] arr = new int[26];
+        
+        for(int i = 0; i < S.length(); i++) {
+            arr[S.charAt(i) - 'a'] = i;
+        }
+        
+        int start = 0, end = 0;
+         List<String> result = new ArrayList<>();
+
+        for(int i = 0; i < S.length(); i++) {
+            end = Math.max(end, arr[S.charAt(i) - 'a']);
+            if(i == end) {
+                result.add(S.substring(start, end+1));
+                start = end+1;
+            }
+        }
+        return result;
+    }
+}
