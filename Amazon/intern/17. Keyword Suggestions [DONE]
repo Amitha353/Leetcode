@@ -47,10 +47,15 @@ class Solution {
 Approach: Trie + DFS
 Complexity Analysis
 
-Time complexity : O(M)O(M) to build the trie where M is total number of characters in products For each prefix we find its representative node in 
+Time complexity : O(M) to build the trie where M is total number of characters in products For each prefix we find its representative node in 
 O(\text{len(prefix)})O(len(prefix)) and dfs to find at most 3 words which is an O(1) operation. Thus the overall complexity is dominated by the time 
 required to build the trie.
 
 In Java there is an additional complexity of O(m^2) due to Strings being immutable, here m is the length of searchWord.
 Space complexity : O(26n)=O(n). Here n is the number of nodes in the trie. 26 is the alphabet size. Space required for output is O(m) where m is the length of the search word.
+
+Whenever we come across questions with multiple strings, it is best to think if Trie can help us. What we need here is a way to search for all the words with given prefix, 
+this is a well known problem that trie can solve. The question also asks for a sorted results, if you look closely a trie word is represented by it's preorder traversal. 
+It is also worth noting that a preorder traversal of a trie will always result in a sorted traversal of results, thus all we need to do is limit the word traversal to 3.
+
 */
