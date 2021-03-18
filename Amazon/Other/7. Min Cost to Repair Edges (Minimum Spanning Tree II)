@@ -1,3 +1,68 @@
+https://leetcode.com/discuss/interview-question/357310
+
+import java.util.*;
+
+public class Solution {
+    int[] parents;
+    public int minCostToRepairEdges(int n, int[][] edges, int[][] edgesToRepair) {
+        if (n == 0) return -1;
+        if(edges.length == 0 && edgesToRepair.length == 0) return -1;
+    
+        int connect=n, totalCost=0;
+        parents=new int[n+1];
+        Set<String> set=new HashSet<>();
+    
+        for(int i=0; i<n; i++) {
+            parents[i]=i;
+        }
+        
+        for(int[] edge : edgesToRepair) {
+            StringBuilder sb=new StringBuilder();
+            sb.append(edge[0]).append("#").append(edge[1]);
+            set.add(sb.toString());
+        }
+        
+        for(int[] edge : edges) {
+            StringBuilder sb=new StringBuilder();
+            sb.append(edge[0]).append("#").append(edge[1]);
+            if(!set.contains(sb.toString())) {
+                this.union(edge[0], edge[1]);
+                connect--;
+            }
+        }
+        
+        Arrays.sort(edgesToRepair,(a, b) -> a[2] - b[2]);
+        
+        for(int[] edge : edgesToRepair) {
+            if(this.union(edge[0], edge[1])) {
+                totalCost += edge[2];
+                connect--;
+            }
+            if(connect==1) {
+                return totalCost;
+            }
+        }
+        return connect==1 ? totalCost : -1;
+    }
+    
+    private boolean union(int x, int y) {
+        int setX=find(x);
+        int setY=find(y);
+        if(setX!=setY) {
+            parents[setY]=setX;
+            return true;
+        }
+        return false;
+    }
+    
+    private int find(int num) {
+        if(parents[num]!=num) {
+            parents[num]=find(parents[num]);
+        }
+        return parents[num];
+    }
+}
+==============================================================================
 import java.util.*;
 
 public class Solution {
