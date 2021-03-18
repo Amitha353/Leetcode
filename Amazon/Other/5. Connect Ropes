@@ -1,0 +1,22 @@
+import java.util.*;
+
+public class Solution {
+    public int connectRopes(int[] ropes) {
+        PriorityQueue<Integer> pQueue = new PriorityQueue<>(); //priority queue based on min heap
+		    for(int rope: ropes) {
+            System.out.println("rope = " + rope);
+			      pQueue.offer(rope);
+		    }
+		
+        System.out.println("~~");
+		    int cost = 0;
+		    if(pQueue.size() == 0) return cost;
+		    while(pQueue.size() != 1) {
+			      int temp = pQueue.poll() + pQueue.poll(); // takes lowest values and adds
+            // 			System.out.println("temp = " + temp);
+			      cost += temp;
+			      pQueue.offer(temp);
+		    }
+		  return cost;
+    }
+}
