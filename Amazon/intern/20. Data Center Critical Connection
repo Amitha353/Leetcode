@@ -1,0 +1,51 @@
+// https://leetcode.com/problems/critical-connections-in-a-network/
+
+import java.util.*;
+
+public class Solution {
+    private int time = 0; //current time of discovery
+    public List<List<Integer>> findCriticalConn(int serversNum, int connectionsNum, int[][] connections) {
+		 //create an graph that stores the adjacent nodes for each node - graph
+        // a critical node is identified based on its discover, if it is discovered after the root discovery, then it is critical - this must be added to the output.
+        int n = serversNum;
+        List<Integer>[] graph = new ArrayList[n+1];
+        for(int i = 0; i <= n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for(int[] conn: connections) {
+            graph[conn[0]].add(conn[1]);
+            graph[conn[1]].add(conn[0]);
+        }
+        
+        int[] disc = new int[n+1];
+        int[] low = new int[n+1];
+        boolean[] visited = new boolean[n+1];
+        List<List<Integer>> result = new ArrayList<>();
+        
+        for(int i = 0; i <= n; i++) {
+            if(!visited[i]) {
+                dfs(i, -1, disc, low, visited, graph, result);
+            }
+        }
+        return result;
+    }
+    
+    private void dfs(int root, int parent, int[] disc, int[] low, boolean[] visited, List<Integer>[] graph, List<List<Integer>> result) {
+        visited[root] = true;
+        disc[root] = time++;
+        low[root] = disc[root];
+        for(Integer neig: graph[root]) {
+            if(neig == parent) continue;
+            if(!visited[neig]) {
+                dfs(neig, root, disc, low, visited, graph, result);
+                low[root] = Math.min(low[root], low[neig]);
+                if(disc[root] < low[neig]) {
+                    result.add(Arrays.asList(root, neig));
+                }
+            } else {
+                low[root] = Math.min(low[root], disc[neig]);
+            }
+        }
+    }
+}
