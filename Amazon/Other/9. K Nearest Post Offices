@@ -1,0 +1,56 @@
+// https://algo.monster/problems/k_nearest_post_offices
+
+import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+class Solution {
+    public static List<List<Integer>> nearestPostOffices(List<Integer> you, List<List<Integer>> offices, int k) {
+        // WRITE YOUR BRILLIANT CODE HERE
+        int n = offices.size();
+        int[] distance = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            int x = offices.get(i).get(0), y = offices.get(i).get(1);
+            distance[i] = (x * x) + (y * y);
+        }
+ 
+        Arrays.sort(distance);
+     
+        // Find the k-th distance
+        int distk = distance[k - 1];
+        List<List<Integer>> result = new ArrayList<>();
+        for(int i = 0; i < n; i++)
+        {
+            int x = offices.get(i).get(0), y = offices.get(i).get(1);
+            int dist = (x * x) + (y * y);
+         
+            if (dist <= distk) {
+                List<Integer> temp = new ArrayList<>();
+                temp.add(x);
+                temp.add(y);
+                result.add(temp);
+            }
+        }
+        Collections.sort(result, (a, b) -> a.get(0) - b.get(0));
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> you = Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        int officesLength = Integer.parseInt(scanner.nextLine());
+        List<List<Integer>> offices = new ArrayList<>();
+        for (int i = 0; i < officesLength; i++) {
+            offices.add(Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList()));
+        }
+        int k = Integer.parseInt(scanner.nextLine());
+        scanner.close();
+        List<List<Integer>> res = nearestPostOffices(you, offices, k);
+        for (List<Integer> row : res) {
+            System.out.println(row.stream().map(String::valueOf).collect(Collectors.joining(" ")));
+        }
+    }
+}
