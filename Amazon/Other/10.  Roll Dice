@@ -1,0 +1,40 @@
+// https://algo.monster/problems/roll_dice
+// https://blog.csdn.net/qq_35175413/article/details/98751076
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Solution {
+    public static int numberOfRotations(List<Integer> N){
+        // WRITE YOUR BRILLIANT CODE HERE
+        int result = Integer.MAX_VALUE;
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for(int n: N) {
+            map.put(n, map.getOrDefault(n, 0)+1);
+        }
+        
+        for(int i = 1; i < 7; i++) {
+            int temp = 0;
+            for(int k: map.keySet()) {
+                int w = 0;
+                if(i+k == 7)
+                    w = 2;
+                else if(i == k)
+                    w = 0;
+                else
+                    w = 1;
+                temp += w * map.get(k);
+            }
+            result = Math.min(result, temp);
+        }
+        return result;
+    }
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> N = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        scanner.close();
+        System.out.println(numberOfRotations(N));
+    }
+}
