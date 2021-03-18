@@ -25,7 +25,7 @@ public class Solution {
         
         PriorityQueue<Point> pq = new PriorityQueue<>((a, b) -> (b.score - a.score));
         pq.offer(new Point(0, 0, matrix[0][0]));
-        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int[][] dirs = {{1, 0}, {0, 1}};
         
         
         while(!pq.isEmpty()){
