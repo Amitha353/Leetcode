@@ -1,0 +1,49 @@
+//https://leetcode.com/problems/path-with-maximum-minimum-value/
+
+import java.util.*;
+
+class Point {
+    int x;
+    int y;
+    int score;
+    Point(int x, int y, int score) {
+        this.x = x;
+        this.y = y;
+        this.score = score;
+    }
+}
+
+public class Solution {
+	public int maxPathScore(int[][] matrix) {
+		int n = matrix.length;
+		int m = matrix[0].length;
+		int[][] score = new int[n][m];
+        for(int[] s : score) Arrays.fill(s, Integer.MAX_VALUE);
+        score[0][0] = matrix[0][0];
+        boolean[][] vis = new boolean[n][m];
+        vis[0][0] = true;
+        
+        PriorityQueue<Point> pq = new PriorityQueue<>((a, b) -> (b.score - a.score));
+        pq.offer(new Point(0, 0, matrix[0][0]));
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        
+        
+        while(!pq.isEmpty()){
+            Point curPoint = pq.poll();
+            if(curPoint.x == n -1 && curPoint.y == m -1) return curPoint.score;
+            for(int[] dir : dirs){
+                int x = curPoint.x + dir[0];
+                int y = curPoint.y + dir[1];
+                if(x < 0 || x >= n || y < 0 || y >= m || vis[x][y]) continue;
+                int nextScore = Math.min(curPoint.score, matrix[x][y]);
+                if(score[x][y] > nextScore){
+                    vis[x][y] = true;
+                    score[x][y] = nextScore;
+                    pq.offer(new Point(x, y, nextScore));
+                }
+            }
+            
+        }
+        return -1;
+    }
+}
