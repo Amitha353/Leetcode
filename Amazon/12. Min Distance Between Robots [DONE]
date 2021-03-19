@@ -42,6 +42,162 @@ magnetically attach to the floor of the station, eliminating the need for artifi
     Euclidean distance is (1-0)^2+(1-0)^2 = 2
 */
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+==========================================================================================================================================
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        Point[] a = new Point[3];
+		a[0] = new Point(0, 0);
+		a[1] = new Point(1, 1);
+		a[2] = new Point(2, 4);
+		Point[] closestPair = closestPair(a);
+		System.out.println("The distances between them is " + distance(closestPair[0], closestPair[1]));
+		
+		System.out.println();
+		
+		Point[] b = new Point[7];
+		b[0] = new Point(1, 1);
+		b[1] = new Point(1, 9);
+		b[2] = new Point(2, 5);
+		b[3] = new Point(3, 1);
+		b[4] = new Point(4, 4);
+		b[5] = new Point(5, 8);
+		b[6] = new Point(6, 2);
+		closestPair = closestPair(b);
+		
+		System.out.println("The distances between them is " + distance(closestPair[0], closestPair[1]));
+		
+		Point[] c = new Point[30];
+		Random ran = new Random();
+		for (int i=0;i<30;i++){
+			c[i] = new Point(ran.nextInt(10),ran.nextInt(10));
+		}
+		closestPair = closestPair(c);
+		System.out.println("By the divide and conquer method of O(nlog(n)), the closest points are:");
+		System.out.println("Point:    x = " + closestPair[0].x + " y= " + closestPair[0].y);
+		System.out.println("Point:    x = " + closestPair[1].x + " y= " + closestPair[1].y);
+		System.out.println("The distances between them is " + distance(closestPair[0],closestPair[1]));
+		
+		Point[] d = new Point[3];
+		d[0] = new Point(0, 0);
+		d[1] = new Point(5, 5);
+		d[2] = new Point(2, 8);
+		closestPair = closestPair(d);
+		System.out.println("The distances between them is " + distance(closestPair[0], closestPair[1]));
+		
+	}
+
+	public static Point[] closestPair(Point[] a) {
+		Point[] sortByX = new Point[a.length];
+		Point[] sortByY = new Point[a.length];
+		for (int i = 0; i < a.length; i++) {
+			sortByX[i] = a[i];
+			sortByY[i] = a[i];
+		}
+		Arrays.sort(sortByX, Point.sortX);
+		Arrays.sort(sortByY, Point.sortY);
+		return closest(sortByX, sortByY);
+	}
+
+	public static Point[] closest(Point[] sortByX, Point[] sortByY) {
+		if (sortByX.length <= 3)
+			return bruteForce(sortByX, sortByY);
+
+		Point[] pair = new Point[2];
+		double min;
+		int center = sortByX.length / 2;
+
+		Point[] leftHalfX = new Point[center];
+		Point[] rightHalfX = new Point[sortByX.length - center];
+
+		Point[] leftHalfY = new Point[center];
+		Point[] rightHalfY = new Point[sortByX.length - center];
+	
+		for(int i= 0; i < center; i++) {
+			leftHalfX[i] = sortByX[i];
+			leftHalfY[i] = sortByY[i];
+		}
+		
+		for (int i = center; i < sortByX.length; i++) {
+			rightHalfX[i - center] = sortByX[i];
+			rightHalfY[i - center] = sortByY[i];
+		}
+		
+		Point[] pair1 = closest(leftHalfX, leftHalfY);
+		double min1 = distance(pair1[0], pair1[1]);
+		Point[] pair2 = closest(rightHalfX, rightHalfY);
+		double min2 = distance(pair2[0], pair2[1]);
+
+		if (min1 < min2) {
+			pair = pair1;
+			min = min1;
+		} else {
+			pair = pair2;
+			min = min2;
+		}
+		return pair;
+	}
+	
+	public static double distance(Point a, Point b) {
+		double xDiff = a.x + b.x;
+		double yDiff = a.y + b.y;
+		return (xDiff * xDiff + yDiff * yDiff);
+	}
+	
+	public static Point[] bruteForce(Point[] sortByX, Point[] sortByY) {
+		double min = distance(sortByX[0], sortByX[1]);
+		Point[] pair = new Point[2];
+		pair[0] = sortByX[0];
+		pair[1] = sortByX[1];
+		
+		for(int i = 0; i < sortByX.length; i++) {
+			for(int j = i+1; j < sortByX.length; j++) {
+				double dist1 = distance(sortByX[i], sortByX[j]);
+				double dist2 = distance(sortByY[i], sortByY[j]);
+				
+				if (dist1 < min) {
+					min = dist1;
+					pair[0] = sortByX[i];
+					pair[1] = sortByX[j];
+				} 
+				
+				if(dist2 < min) {
+					min = dist2;
+					pair[0] = sortByY[i];
+					pair[1] = sortByY[j];
+				}
+			}
+		}
+		return pair;
+	}
+}
+
+class Point {
+	int x;
+	int y;
+	static final Comparator<Point> sortX = new compareX();
+	static final Comparator<Point> sortY = new compareY();
+
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	static class compareX implements Comparator<Point> {
+		public int compare(Point o1, Point o2) {
+		    return (o1.x - o2.x);
+		}
+	}
+
+	static class compareY implements Comparator<Point> {
+		public int compare(Point o1, Point o2) {
+			return (o1.y - o2.y);
+		}
+
+	}
+}
 ===========================================================================================================================================================================
 import java.util.*;
 class Solution {
