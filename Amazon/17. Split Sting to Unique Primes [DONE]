@@ -62,21 +62,21 @@ class Solution {
 		dp[0] = 1;
 
 		for (int i = 1; i <= n; i++) {
-			if (s.charAt(i - 1) != '0') {
+			if (i-1 >= 0) { //s.charAt(i - 1) != '0') {
 				int idx1 = Integer.parseInt(s.substring(i - 1, i));
 				if (primes.contains(idx1)) {
 					dp[i] = dp[i - 1];
 				}
 			}
 
-			if (i - 2 >= 0 && s.charAt(i - 2) != '0') {
+			if (i - 2 >= 0) {// && s.charAt(i - 2) != '0') {
 				int idx2 = Integer.parseInt(s.substring(i - 2, i));
 				if (primes.contains(idx2)) {
 					dp[i] = (dp[i] + dp[i - 2]);// % mod;
 				}
 			}
 
-			if (i - 3 >= 0 && s.charAt(i - 3) != '0') {
+			if (i - 3 >= 0) { // && s.charAt(i - 3) != '0') {
 				int idx3 = Integer.parseInt(s.substring(i - 3, i));
 				if (primes.contains(idx3)) {
 					dp[i] = (dp[i] + dp[i - 3]);// % mod;
