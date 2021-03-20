@@ -1,7 +1,32 @@
 # https://leetcode.com/problems/number-of-provinces/
 # https://www.youtube.com/watch?v=p3Iz0Ed3oD0
-
-
+===================================================================================================
+ int n = isConnected.length;
+        Set<Integer> visited = new HashSet<>();
+        int count = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i = 0; i < n; i++) {
+            if(!visited.contains(i)) {
+                queue.offer(i);
+                while(!queue.isEmpty()) {
+                    int curr = queue.poll();
+                    visited.add(curr);
+                    for(int j = 0; j < n; j++) {
+                        if(isConnected[curr][j] == 1 && !visited.contains(j)) {
+                            queue.offer(j);
+                        }
+                    }
+                }
+                count++;
+            }
+        }
+        return count;
+     }
+  }
+  
+  Time: O(n^2) - The complete matrix of n^2 is traversed.
+  Space: O(n) - A queue and visited array of size n.
+===================================================================================================
 class Solution {
     class UF {
         int[] parent;
