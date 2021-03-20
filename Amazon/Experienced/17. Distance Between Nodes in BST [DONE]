@@ -184,3 +184,11 @@ class Node {
         this.right = null;
     }
 }
+=====================================================================================================================================
+/*
+- Givem the array -> create a binary tree - inserting based on level order.
+- Find the Distance between the nodes in the tree
+  - Identify the LCA for both the nodes 
+  - Identify the levels for both nodes 
+  - compute the distance : d1 + d2
+*/
