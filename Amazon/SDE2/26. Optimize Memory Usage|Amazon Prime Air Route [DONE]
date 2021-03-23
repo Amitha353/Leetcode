@@ -156,3 +156,48 @@ public class HelloWorld{
             }
       }
 }
+
+=====================================================================================================
+	TreeMap<Integer, List<int[]>> map = new TreeMap<>();
+		Set<String> present = new HashSet();
+		
+		for(int i = 0; i < foregroundTasks.length; i++) {
+		    for(int j = 0; j < backgroundTasks.length; j++) {
+		        int sum = foregroundTasks[i] + backgroundTasks[j];
+		        int x = i, y = j;
+		        if(K == foregroundTasks[i]){
+		            sum = K;
+		            y = -1;
+		        }
+		        else if(K == backgroundTasks[j]) {
+		            sum = K;
+		            x = -1;
+		        }
+		        
+		        if(sum <= K) {
+		            String val = "#"+x+"#"+y;
+		            if(!present.contains(val)) {
+		                present.add(val);
+		                if(map.containsKey(sum)){
+		                    List<int[]> temp = map.get(sum);
+		                    temp.add(new int[]{x, y});
+		                    map.put(sum, temp);
+		                } else {
+		                    List<int[]> temp = new ArrayList<>();
+		                    temp.add(new int[]{x, y});
+		                    map.put(sum, temp);
+		                }
+		            }
+		        }
+		    }
+		}
+		if(map.size() == 0) {
+		    List<int[]> temp = new ArrayList<int[]>();
+		    temp.add(new int[]{-1, -1});
+		    return temp;
+		}
+		Map.Entry<Integer, List<int[]>> entry = map.floorEntry(K);
+		return entry.getValue();
+	}
+}
+=====================================================================================		
