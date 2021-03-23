@@ -1,5 +1,48 @@
 // https://algo.monster/problems/substrings_of_size_K_with_K_distinct_chars
 
+===================================================================================================================================
+import java.util.*;
+class Solution {
+    public static String[] subString(String s, int k){
+       // WRITE YOUR BRILLIANT CODE HERE
+        int l = 0, r = 1;
+        Set<String> set = new LinkedHashSet<>();
+        
+        while(r < s.length()) {
+            if(r-l+1 < k) {
+                if(s.charAt(l) == s.charAt(r)) {
+                    l++;
+                    r = l+1;
+                } else {
+                    r++;
+                }
+            } else if(r-l+1 == k) {
+                String temp = s.substring(l, r);
+                if(temp.indexOf(s.charAt(r)) == -1) {
+                    set.add(s.substring(l, r+1));
+                }
+                l++;
+            }
+        }
+        
+        String[] result = new String[set.size()];
+        int idx = 0;
+        for(String res: set) {
+            result[idx++] = res;
+        }
+        
+        return result;
+    }
+  public static void main(String[] args){
+      Scanner scanner = new Scanner(System.in);
+      String s = scanner.nextLine().trim();
+      int k = Integer.parseInt(scanner.nextLine());
+      scanner.close();
+      System.out.println(String.join(" ", subString(s,k)));
+  }
+}
+
+===================================================================================================================================
 import java.util.*;
 class Solution {
     public static String[] subString(String s, int k){
