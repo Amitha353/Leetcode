@@ -1,0 +1,55 @@
+Q. Given an integer array, print all subarrays with zero-sum.
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args) {
+        int[] nums = { 3, 4, -7, 3, 1, 3, 1, -4, -2, -2 };
+        hasZeroSumSubarray(nums);
+     }
+     
+     public static void hasZeroSumSubarray(int[] nums) {
+         Map<Integer, List<Integer>> map = new HashMap<>();
+         
+         int sum = 0;
+         map.put(0, new ArrayList<>());
+         map.get(0).add(-1);
+         
+         for(int i = 0; i < nums.length; i++) {
+             sum += nums[i];
+             
+             if(map.containsKey(sum)) {
+                 List<Integer> ids = map.get(sum);
+                 ids.add(i);
+                 map.put(sum, ids);
+             } else {
+                 map.put(sum, new ArrayList<>());
+                 map.get(sum).add(i);
+             }
+         }
+         
+         for(Integer k : map.keySet()) {
+             List<Integer> ids = map.get(k);
+             if(ids.size() > 1) {
+                for(int i = 0; i < ids.size(); i++) {
+                    for(int j = 1; j < ids.size(); j++) {
+                        int start = ids.get(i), end = ids.get(j);
+                        if(start < end) {
+                            if(i < ids.size()-1) {
+                                start++;
+                            }
+                            System.out.println(start + " **** " + end);
+                        
+                            for(int l = start; l <= end; l++) {
+                                System.out.print(nums[l] + " | ");
+                            }
+                        }
+                        System.out.println();
+                    }
+                }
+                System.out.println();
+             }
+         }
+     }
+}
