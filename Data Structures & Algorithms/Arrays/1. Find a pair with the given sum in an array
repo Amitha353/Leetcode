@@ -1,1 +1,30 @@
+Q. Given an unsorted integer array, find a pair with the given sum in it. 
 
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        int[] nums = { 8, 7, 2, 5, 3, 1 };
+        int target = 10;
+ 
+        findPairs(nums, target);
+     }
+     
+     public static void findPairs(int[] nums, int target) {
+         List<int[]> result = new ArrayList<>();
+         Set<Integer> container = new HashSet<>();
+         container.add(nums[0]);
+         
+         for(int i = 1; i < nums.length; i++) {
+             if(container.contains(target - nums[i])) {
+                 result.add(new int[]{nums[i], target - nums[i]});
+             }
+             container.add(nums[i]);
+         }
+         
+         for(int[] res : result) {
+             System.out.println(res[0] + " : " + res[1]);
+         }
+     }
+}
