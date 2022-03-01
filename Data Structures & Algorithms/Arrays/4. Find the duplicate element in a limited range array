@@ -1,0 +1,26 @@
+Q. Given a limited range array of size n containing elements between 1 and n-1 with one element repeating, find the duplicate number in it without using any extra space.
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        int[] nums = { 1, 2, 3, 4, 4 };
+ 
+        System.out.println("The duplicate element is " + findDuplicate(nums));
+        
+        nums = new int[]{ 1, 2, 3, 4, 2 };
+ 
+        System.out.println("The duplicate element is " + findDuplicate(nums));
+     }
+     
+     public static int findDuplicate(int[] nums) {
+         int[] result = new int[nums.length];
+         
+         for(int i = 0; i < nums.length; i++) {
+             if(result[nums[i]] > 0) {
+                 return nums[i];
+             }
+             result[nums[i]]++;
+         }
+         return -1;
+     }
+}
