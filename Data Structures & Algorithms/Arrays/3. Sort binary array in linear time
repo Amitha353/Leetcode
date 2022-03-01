@@ -1,0 +1,29 @@
+Q. Given a binary array, sort it in linear time and constant space. The output should print all zeroes, followed by all ones.
+
+import java.util.*;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        int[] A = { 0, 0, 1, 0, 1, 1, 0, 1, 0, 0 };
+ 
+        sort(A);
+        
+        System.out.println(Arrays.toString(A));
+     }
+     
+     public static void sort(int[] A) {
+         int firstnumcounter = 0;
+         
+         for(int i = 0; i < A.length; i++) {
+             if(A[i] == 0) {
+                 firstnumcounter++;
+             }
+         }
+         
+         Arrays.fill(A, 1);
+         for(int i = 0; i < firstnumcounter; i++) {
+             A[i] = 0;
+         }
+     }
+}
