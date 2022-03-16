@@ -1,0 +1,66 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node next;
+    
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class HelloWorld{
+
+     public static void main(String []args){
+        Node head = new Node(0);
+        Node first = new Node(1);
+        Node second = new Node(2);
+        Node third = new Node(3);
+        Node fourth = new Node(4);
+        
+        head.next = first;
+        first.next = second;
+        second.next = third;
+        third.next = fourth;
+        
+        Node ptr = head;
+        
+        while(ptr != null) {
+            System.out.print(ptr.data + " -> ");
+            ptr = ptr.next;
+        }
+        System.out.print("null");
+        
+        head = AppendNode(head, new Node(5));
+        
+        System.out.println();
+        ptr = head;
+        
+        while(ptr != null) {
+            System.out.print(ptr.data + " -> ");
+            ptr = ptr.next;
+        }
+        System.out.print("null");
+     }
+     
+     public static Node AppendNode(Node head, Node node) {
+         Node current = head;
+         
+         if (current == null) {
+             head = node;
+         } else {
+             while(current.next != null) {
+                 current = current.next;
+             }
+             current.next = node;
+         }
+         return head;
+     }
+}
+
+
+=========================
+Output :
+0 -> 1 -> 2 -> 3 -> 4 -> null
+0 -> 1 -> 2 -> 3 -> 4 -> 5 -> null
